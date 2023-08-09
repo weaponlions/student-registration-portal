@@ -14,6 +14,7 @@ import Courses from "./components/User/Courses";
 function App() {
   return (
     <>
+    {/*--------------------- this is main page ------------- */}
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
