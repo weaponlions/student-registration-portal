@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import loginImg from "../assets/images/srp2.png";
-import nielitLogo from "../assets/images/nielit.png";
-import { Outlet, Link } from "react-router-dom";
+import loginImg from "./../../assets/images/srp2.png";
+import nielitLogo from "./../../assets/images/nielit.png";
+import { Link } from "react-router-dom";
+import { UserContext } from './../../context-api/UserState';
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -17,18 +18,22 @@ function SingnUp() {
     password: "",
   });
   const [CaptchaValue, setCaptchaValue] = useState("");
+  const navigate = useNavigate();
+  const { getUser } = useContext(UserContext);
 
   const onchangeButton = (e) => {
-    setCredientials({ ...credientials, [e.target.name]: e.target.value });
-    setCaptchaValue(e.target.value);
+    if (e.target.name == "user_captcha_input") {
+      setCaptchaValue(e.target.value);
+    } else {
+      setCredientials({ ...credientials, [e.target.name]: e.target.value });
+    }
   };
-  let navigate = useNavigate();
+
 
   const submitButton = async (e) => {
     e.preventDefault();
 
-    if (validateCaptcha(CaptchaValue) === true) {
-      // alert('Captcha Matched');
+    if (validateCaptcha(CaptchaValue) === true) { 
       loadCaptchaEnginge(6);
       setCaptchaValue("");
 
@@ -47,8 +52,7 @@ function SingnUp() {
       const jso = await response.json();
       console.log(jso);
       if (jso.jwtToken) {
-        localStorage.setItem("jwtToken", jso.jwtToken);
-
+        localStorage.setItem("jwtToken", jso.jwtToken); 
         alert("please check your email");
         navigate("/login");
       } else {
@@ -60,7 +64,14 @@ function SingnUp() {
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { 
+    const jwtVerify = async () => {
+      const result = await getUser()
+      if (result == true) {
+        navigate('/dashboard')
+      }  
+    }
+    jwtVerify()
     loadCaptchaEnginge(6);
   }, []);
 

@@ -1,29 +1,20 @@
 import {useContext,useEffect} from 'react'
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from '../context-api/UserState';
+import { UserContext } from './../../context-api/UserState';
 
 
 export default function Navbar() {
 
-
   const context = useContext(UserContext)
-  const {userdata,getUser} = context;
+  const {userdata, getUser} = context;
 
   let navigate= useNavigate();
+
   const LogoutBtn =()=>{
     localStorage.removeItem('jwtToken');
     navigate("/login");
   }
-
- 
- 
-useEffect(() => {
-  if(localStorage.getItem('jwtToken')){
-
-    getUser();
-  }
-})
 
   return (
 

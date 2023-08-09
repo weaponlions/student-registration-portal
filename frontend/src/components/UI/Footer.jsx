@@ -1,7 +1,7 @@
 import React from 'react'
-import fb from '../assets/images/social-logo/fb.png'
-import tw from '../assets/images/social-logo/tw.png'
-import yt from '../assets/images/social-logo/yt.png'
+import fb from './../../assets/images/social-logo/fb.png'
+import tw from './../../assets/images/social-logo/tw.png'
+import yt from './../../assets/images/social-logo/yt.png'
 
 export default function Footer() {
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import logo1 from '../assets/images/nielit.png'
-import emblem33 from '../assets/images/emblem33.png'
+import logo1 from './../../assets/images/nielit.png'
+import emblem33 from './../../assets/images/emblem33.png'
 
 
 

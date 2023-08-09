@@ -1,0 +1,29 @@
+const mongoose = require('mongoose');
+
+const courseSchema = mongoose.Schema({
+    course_name: { type: String, required: true },
+    course_duration: { type: Number, required: true },
+    course_fees: { type: Number, required: true },
+    eligibility: { type: [String], required: true },
+    course_category: { type: String, required: true },
+    introduced_at: { type: Date, required: true, default: Date.now },
+})
+
+const batchSchema = mongoose.Schema({
+    course_id: { type: Object, required: true },
+    batch_name: { type: String, required: true },
+    batch_fees: { type: Number, required: true },
+    start_date: { type: Date, required: true },
+    end_date: { type: Date, required: true },
+    actual_end_date: { type: Date },
+    status: { type: String, required: true, enum: ['upcoming', 'ended', 'ongoing', 'cancel'] },
+    user_list: { type: [Object] },
+    created_at: { type: Date, required: true, default: Date.now },
+    updated_at: { type: Date, required: true, default: Date.now },
+})
+
+
+const courseModel = mongoose.model('Courses', courseSchema);
+const batchModel = mongoose.model('Batches', batchSchema);
+
+module.exports = { courseModel, batchModel }
