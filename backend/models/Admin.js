@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const adminSchema = new mongoose.Schema({
  
@@ -6,6 +6,7 @@ const adminSchema = new mongoose.Schema({
     password: {type: mongoose.Mixed, require : true},
     date: {type: Date, default : Date.now},
 })
-const Aadmin = mongoose.model('Admin', adminSchema);
 
-module.exports = Aadmin;
+
+export const Aadmin = mongoose.model('Admin', adminSchema);
+ 

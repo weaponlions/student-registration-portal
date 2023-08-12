@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name : {type : String, require : true },
@@ -7,10 +7,7 @@ const userSchema = new mongoose.Schema({
     status: {type:  String, require : true, enum: ['NEW', 'lvl1', 'lvl2', 'lvl3', 'unverified', 'verified', 'admin'], default: 'lvl1' },
     created_at: {type: Date, default : Date.now },
 })
-
-const newScheme = new mongoose.Schema({
-    user:{type : ObjectId, ref : 'userSchema'}
-})
+  
 
 const userInfoSchema = new mongoose.Schema({
     user_id: {type: Object, required: true, unique: true },
@@ -60,9 +57,8 @@ const userDocSchema = mongoose.Schema({
 })
 
 
-const User = mongoose.model('Users', userSchema);
-const userQualificationModel = mongoose.model('User_Qualification', userQualificationSchema)
-const userDocModel = mongoose.model('User_Documents', userDocSchema)
-const userInfoModel = mongoose.model('User_Information', userInfoSchema) 
-
-module.exports = { User, userDocModel, userInfoModel, userQualificationModel };
+export const User = mongoose.model('Users', userSchema);
+export const userQualificationModel = mongoose.model('User_Qualification', userQualificationSchema)
+export const userDocModel = mongoose.model('User_Documents', userDocSchema)
+export const userInfoModel = mongoose.model('User_Information', userInfoSchema) 
+ 
