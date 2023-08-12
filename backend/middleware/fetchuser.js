@@ -1,7 +1,8 @@
-let jwt = require("jsonwebtoken");
+import jwt from 'jsonwebtoken'
+ 
 const jwt_sing = "nielit_123";
 
-const fetUser = (req, res, next) => {
+export const verifyUser = (req, res, next) => {
   const jwtToken = req.header("jwtToken");
   if (!jwtToken) {
     res.status(401).json({ error: "please enter valid credientials" });
@@ -13,4 +14,4 @@ const fetUser = (req, res, next) => {
     return res.json({'result': false})
   }
 };
-module.exports = fetUser;
+

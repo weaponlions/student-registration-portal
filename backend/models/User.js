@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name : {type : String, require : true },
@@ -57,9 +57,8 @@ const userDocSchema = mongoose.Schema({
 })
 
 
-const User = mongoose.model('Users', userSchema);
-const userQualificationModel = mongoose.model('User_Qualification', userQualificationSchema)
-const userDocModel = mongoose.model('User_Documents', userDocSchema)
-const userInfoModel = mongoose.model('User_Information', userInfoSchema) 
-
-module.exports = { User, userDocModel, userInfoModel, userQualificationModel };
+export const User = mongoose.model('Users', userSchema);
+export const userQualificationModel = mongoose.model('User_Qualification', userQualificationSchema)
+export const userDocModel = mongoose.model('User_Documents', userDocSchema)
+export const userInfoModel = mongoose.model('User_Information', userInfoSchema) 
+ 

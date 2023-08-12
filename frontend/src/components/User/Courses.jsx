@@ -5,6 +5,7 @@ import Itliteracy from "./Courses/ItLiteracy";
 
 const Courses = () => {
   const [CATEGORY, setCATEGORY] = useState('')
+ 
 
   const GetCourse = () => {
     switch (CATEGORY) {

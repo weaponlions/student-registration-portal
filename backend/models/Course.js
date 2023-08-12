@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const courseSchema = mongoose.Schema({
     course_name: { type: String, required: true },
@@ -27,7 +27,6 @@ const batchSchema = mongoose.Schema({
 })
 
 
-const courseModel = mongoose.model('Courses', courseSchema);
-const batchModel = mongoose.model('Batches', batchSchema);
-
-module.exports = { courseModel, batchModel }
+export const courseModel = mongoose.model('Courses', courseSchema);
+export const batchModel = mongoose.model('Batches', batchSchema);
+ 
