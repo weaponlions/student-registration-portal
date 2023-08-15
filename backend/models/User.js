@@ -16,7 +16,7 @@ const userInfoSchema = new mongoose.Schema({
     m_name: {type : String, require : true },
     dob: {type : Date, require : true },
     mobile_num: {type : String, require : true },
-    whatsapp_num: {type : String, require : true },
+    whatsapp_num: {type : String },
     gender: {type : String, require : true, enum: ['M', 'F', 'T'] },
     category: {type : String, require : true, enum: ['OBC', 'SC', 'ST', 'GENERAL', 'OTHERS'] },
     marital_status: {type : String, require : true, enum: ['UN-MARRIED', 'MARRIED', 'DIVORCED'] },
@@ -33,6 +33,7 @@ const userInfoSchema = new mongoose.Schema({
     updated_at: {type: Date, default : Date.now},
 })
 
+
 const userQualificationSchema = mongoose.Schema({ 
     user_id: {type: Object, required: true },
     qualification: {type : String, require : true },
@@ -44,6 +45,7 @@ const userQualificationSchema = mongoose.Schema({
     division: {type : String, require : true },
     updated_at: {type: Date, default : Date.now},
 })
+
 
 const userDocSchema = mongoose.Schema({
     user_id: {type: Object, required: true, unique: true },

@@ -23,9 +23,9 @@ function App() {
           <Route exact path="/login" element={<Login />}></Route>
           <Route exact path="/dashboard" element={<StudentDashboard />}>
             <Route exact path="/dashboard/courses" element={<Courses />}></Route>
-            <Route exact path="/dashboard/step1" element={<Personal />}></Route>
-            <Route exact path="/dashboard/step2" element={<Qualification />}></Route> 
-            <Route exact path="/dashboard/step3" element={<Documents />}></Route>
+            <Route exact path="/dashboard/user/step_one" element={<Personal />}></Route>
+            <Route exact path="/dashboard/user/step_two" element={<Qualification />}></Route> 
+            <Route exact path="/dashboard/user/step_three" element={<Documents />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

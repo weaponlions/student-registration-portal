@@ -29,7 +29,7 @@ const Courses = () => {
           <option value={'it'}>IT COURSES</option>
           <option value={'it_leteracy'}>IT LETERACY COURSES</option>
           <option value={'short_term'}>SHORT TERM COURSES</option> 
-        </select>
+        </select> 
       </div>
       </div>
 

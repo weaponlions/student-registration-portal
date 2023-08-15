@@ -9,7 +9,7 @@ export default function StudentDashboard() {
   const context = useContext(UserContext)
   const { getUser, userdata } = context;
   let navigate= useNavigate();
-
+ 
   useEffect(() => {
     const jwtVerify = async () => {
       const result = await getUser()
@@ -22,13 +22,13 @@ export default function StudentDashboard() {
             navigate('/dashboard/courses')
             break;
           case 'lvl1':
-            navigate('/dashboard/step1')
+            navigate('/dashboard/user/step_one')
             break;
           case 'lvl2':
-            navigate('/dashboard/step2')
+            navigate('/dashboard/user/step_two')
             break;
           case 'lvl3':
-            navigate('/dashboard/step3')
+            navigate('/dashboard/user/step_three')
             break;
           default:
             break;

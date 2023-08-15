@@ -168,9 +168,10 @@ export const adminSignIn = async (req, res) => {
       };
       const jwtAdmin = jwt.sign(data, jwt_sing);
 
-      res.send({ jwtAdmin });
-    } catch (error) {
-      console.log(error);
+      return res.json({ jwtAdmin, status: 'done' });
+    } catch (err) {
+      console.log(err);
       console.log("inernal server error");
+      return res.json({ error: err.message, status: 'done' });
     }
   }
