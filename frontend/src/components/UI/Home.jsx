@@ -13,8 +13,8 @@ export default function Home() {
 <>
     <Header/>
   <Navbar/>
- <main>
- <div className='my-1'>
+ <main >
+ <div className=''>
           <div id="carouselExampleInterval" className="carousel slide " data-bs-ride="carousel">
   <div className="carousel-inner">
     <div className="carousel-item active" data-bs-interval="10000">

@@ -66,6 +66,7 @@ function Login() {
     const jwtVerify = async () => {
       const result = await getUser()
       if (result == true) {
+        // console.log('login true')
         navigate('/dashboard')
       }  
     }

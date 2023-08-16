@@ -5,9 +5,10 @@ const UserContext = createContext();
 
 export default function UserState(props) {
   let user = localStorage.getItem('jwtToken') && jwtDecode(localStorage.getItem('jwtToken')) || {}
-  if (user.name) { 
-    user = {name: user.name, email: user.email, status: user.status}
-  }
+  // if (user.name) { 
+  //   console.log(user,'this is ')
+  //   user = {name: user.name, email: user.email, status: user.status}
+  // }
   const [userdata, setUserdata] = useState(user);
   const [Allusers, setAllusers] = useState([]);
 

@@ -1,12 +1,12 @@
 import mongoose from "mongoose"; 
 /////////////---------------connection string to mongodb------------//////////////////////////
 
-// const uri = "mongodb+srv://nick4800:hellonicK847786@cluster0.kgr8onc.mongodb.net/Student_RP?retryWrites=true&w=majority";
-const uri = "mongodb://0.0.0.0:27017";
+const uri = "mongodb+srv://nick4800:hellonicK847786@cluster0.kgr8onc.mongodb.net/Student_RP?retryWrites=true&w=majority";
+// const uri = "mongodb://0.0.0.0:27017";
 
 export const connectToDataBase = () => {
   mongoose
-    .connect(uri, { dbName: "STUDENT_PORTAL" })
+    .connect(uri, { dbName: "Student_RP" })
     .then(async () => {
       console.log("conncection successful to database");
       // return

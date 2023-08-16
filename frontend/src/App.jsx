@@ -11,6 +11,7 @@ import Personal from "./components/User/Personal";
 import Qualification from "./components/User/Qualification";
 import Courses from "./components/User/Courses";
 
+
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
+          
           <Route exact path="/about" element={<About />}></Route>
           <Route exact path="/admin" element={<Admin />}></Route>
           <Route exact path="/signup" element={<SingnUp />}></Route> 

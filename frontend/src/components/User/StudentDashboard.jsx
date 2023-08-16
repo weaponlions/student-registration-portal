@@ -11,9 +11,11 @@ export default function StudentDashboard() {
   let navigate= useNavigate();
 
   useEffect(() => {
+   
     const jwtVerify = async () => {
       const result = await getUser()
-      if (!result) { 
+      if (result==false) {
+       
         navigate("/login");
       }
       else{
@@ -36,7 +38,7 @@ export default function StudentDashboard() {
       }
     }
     jwtVerify()
-  }, [])
+  },[])
   
   return (
 <>

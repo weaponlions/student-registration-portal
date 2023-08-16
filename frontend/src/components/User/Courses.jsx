@@ -21,7 +21,7 @@ const Courses = () => {
   }
 
   return (
-    <div className="m-5">
+    <div className="m-5 " >
       <div className="d-flex justify-content-center" >
       <div className="form-inline d-flex justify-content-between w-50 "> 
         <select className="form-control w-75" onChange={(e) => setCATEGORY(e.target.value)} >

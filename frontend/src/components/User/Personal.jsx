@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Personal() {
   return (
-    <div className='container'>
+    <div className='container my-4'>
 <form className="row g-3">
 
 

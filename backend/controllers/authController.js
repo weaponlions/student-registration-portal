@@ -3,6 +3,7 @@ import { Aadmin } from "../models/Admin.js";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
+import { body, validationResult } from 'express-validator'
 
 const jwt_sing = "nielit_123";
 

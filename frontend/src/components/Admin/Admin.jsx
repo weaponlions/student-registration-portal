@@ -1,6 +1,6 @@
 import {useEffect,useContext,useState} from 'react'
 import Users from './Users'
-import { Link,useNavigate } from "react-router-dom";
+import { Link,useNavigate,Outlet } from "react-router-dom";
 import { UserContext } from '../../context-api/UserState';
 
 export default function Admin() {
@@ -19,7 +19,7 @@ export default function Admin() {
 
 useEffect(() => {
   if(localStorage.getItem('jwtAdmin')){
-    fetchAllusers();
+    // fetchAllusers();
 
   }
   if(!localStorage.getItem('jwtAdmin')){
@@ -31,6 +31,8 @@ useEffect(() => {
  
   return (
     <>
+
+
    <nav className="navbar  navbar-expand-lg bg-body-tertiary py-0">
   <div className="container-fluid d-flex justify-content-end nav p-2   ">
     <div>
@@ -76,6 +78,7 @@ useEffect(() => {
   </div>
 </nav>
     <section>
+    
           <div className='conatiner my-4 '>
 
       {/* ---------------------Add Button here -------------- */}

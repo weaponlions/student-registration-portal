@@ -7,7 +7,7 @@ const courseSchema = mongoose.Schema({
     eligibility: { type: [String] },
     course_category: { type: String, required: true }, 
     introduced_at: { type: Date, required: true, default: Date.now },
-})
+});
 
 const batchSchema = mongoose.Schema({
     course_id: { type: mongoose.Schema.ObjectId , required: true },
@@ -24,7 +24,7 @@ const batchSchema = mongoose.Schema({
         }
     ]},
     created_at: { type: Date, required: true, default: Date.now },
-})
+});
 
 
 export const courseModel = mongoose.model('Courses', courseSchema);

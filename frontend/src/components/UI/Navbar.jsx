@@ -1,5 +1,5 @@
 import {useContext,useEffect} from 'react'
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useFetcher } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './../../context-api/UserState';
 
@@ -11,16 +11,22 @@ export default function Navbar() {
 
   let navigate= useNavigate();
 
-  const LogoutBtn =()=>{
-    localStorage.removeItem('jwtToken');
-    navigate("/login");
+  const LogoutBtn = async()=>{
+  
+    await localStorage.removeItem('jwtToken');
+     navigate('/login')
+  
+    
   }
+  
+ 
+
 
   return (
 
    
    <nav className="navbar  navbar-expand-lg bg-body-tertiary py-0">
-  <div className="container-fluid d-flex justify-content-end nav p-2   ">
+  <div className="container-fluid d-flex justify-content-end nav p-2 px-4">
     <div>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
@@ -29,20 +35,20 @@ export default function Navbar() {
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
       {!localStorage.getItem('jwtToken')? <div className='d-flex '> <li className="nav-item  mx-2">
-          <Link className="nav-link active h3 text-light" aria-current="page" to="/">Home</Link>
+          <Link className="nav-link active  text-light m-0 "  aria-current="page" to="/">Home</Link>
         </li>
         <li className="nav-item mx-2">
-          <Link className="nav-link active  text-light" aria-current="page" to="/about">About</Link>
+          <Link className="nav-link active  text-light m-0" aria-current="page" to="/about">About</Link>
         </li>
       
-        <li  className="nav-item mx-2"><Link className="nav-link text-light " to="/signup" >Signup</Link></li>
+        <li  className="nav-item mx-2"><Link className="nav-link text-light m-0" to="/signup" >Signup</Link></li>
           
     
 
-          <li className="nav-item mx-2"><Link className="nav-link  text-light " to="/login">Login</Link></li> </div>:
+          <li className="nav-item mx-2"><Link className="nav-link  text-light m-0" to="/login">Login</Link></li> </div>:
           <>
              <li className="nav-item dropdown p-0 m-0 ">
-          <a className="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a className="nav-link dropdown-toggle active text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {`Hi, ${userdata.name}`}
           </a>
           <ul className="dropdown-menu  " >

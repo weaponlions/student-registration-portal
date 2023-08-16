@@ -1,6 +1,11 @@
+*{
+    font-family: 'REM', sans-serif;
+   
+}
+
+
 .logo1-nav img{
-    /* width: 1rem; */
-    /* background-color: antiquewhite; */
+
     width: 15rem;
     height: 7rem;
 
@@ -8,18 +13,21 @@
 
 
 .logo2-nav img{
-    /* background-color: rgb(70, 133, 189); */
+
     width: 8rem;
     height: 7rem;
     
 }
-
+.footer{
+    bottom: 0;
+}
 .header{
-    background-color: rgb(102, 102, 226);
+    /* background-color: rgb(102, 102, 226); */
 }
 .nav{
-    background-color: rgb(53, 158, 114);
+    background-color: rgb(34, 34, 51);
 }
+
 
 .logoSize{
     width: 3rem;

@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     name : {type : String, require : true },
     email: {type:  String, require : true, unique: true },
     password: {type: mongoose.Mixed, require : true },
-    status: {type:  String, require : true, enum: ['NEW', 'lvl1', 'lvl2', 'lvl3', 'unverified', 'verified', 'admin'], default: 'lvl1' },
+    status: {type:  String, require : true, enum: ['NEW', 'lvl1', 'lvl2', 'lvl3', 'unverified', 'verified', 'admin'], default: 'NEW' },
     created_at: {type: Date, default : Date.now },
 })
   
