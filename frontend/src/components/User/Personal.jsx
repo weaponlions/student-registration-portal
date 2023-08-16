@@ -1,167 +1,155 @@
 import React from "react";
 
 export default function Personal() {
+
+  const handleValidation = (e) => { 
+    const currEle = e.target
+    if (currEle.value == '' || currEle.validationMessage != ''){
+      currEle.classList.remove('is-valid');
+      currEle.classList.add('is-invalid');
+      let warnBox = e.target.nextElementSibling;
+      warnBox.innerHTML = e.target.validationMessage;
+    }
+    else{
+      currEle.classList.remove('is-invalid');
+      currEle.classList.add('is-valid');
+    } 
+    
+  }
+  
   return (
     <div className="container">
-      <form className="row g-3">
+      <form className="row g-3 needs-validation">
         {/* -----------/////////////////////// Course Name ///////////////////////////////---------------------------- */}
         <div className="col-md-4">
-          <label htmlFor="validationDefault18" className="form-label mandatory">
-            Course Name
-          </label>
+          <label htmlFor="validationCourse" className="form-label mandatory"> Course Name </label>
           <input
             type="text"
             className="form-control"
-            id="validationDefault18"
+            id="validationCourse"
             required
+            disabled
           />
+          <div className="invalid-feedback"></div>
         </div>
 
         {/* -----------/////////////////////// Name ///////////////////////////////---------------------------- */}
         <div className="col-md-4">
-          <label htmlFor="validationDefault01" className="form-label mandatory">
-            Applicant's full name
-          </label>
+          <label htmlFor="validationFullName" className="form-label"> Applicant's full name </label>
           <input
             type="text"
             className="form-control"
-            id="validationDefault01"
+            id="validationFullName"
             required
-          />
+            onBlur={(e) => handleValidation}
+          /> 
+          <div className="invalid-feedback"></div>
         </div>
 
         {/* ------------------------//////////////////// father Name ////////////////////////////----------------------- */}
         <div className="col-md-4">
-          <label htmlFor="validationDefault02" className="form-label mandatory">
+          <label htmlFor="validationFname" className="form-label mandatory">
             Father Name
           </label>
           <input
             type="text"
             className="form-control"
-            id="validationDefault02"
+            id="validationFname"
             required
+            onBlur={(e) => handleValidation}
           />
+          <div className="invalid-feedback"></div>
         </div>
 
         {/* -----------------------/////////////////////// Mother name //////////////////---------------------- */}
         <div className="col-md-4">
-          <label htmlFor="validationDefault03" className="form-label mandatory">
+          <label htmlFor="validationMname" className="form-label mandatory">
             Mother Name{" "}
           </label>
           <input
             type="text"
             className="form-control"
-            id="validationDefault03"
+            id="validationMname"
             required
+            onBlur={(e) => handleValidation}
           />
+          <div className="invalid-feedback"></div>
         </div>
 
         {/* ----------------------- ///////////////// gender ///////////////////////////-------------------------- */}
 
         <div className="col-md-4">
-          <label htmlFor="validationDefault04" className="form-label mandatory">
-            Gender
-          </label>
-          <select className="form-select" id="validationDefault04" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Transgender</option>
+          <label className="form-label mandatory"> Gender </label>
+          <select className="form-select" required> 
+            <option selected value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="T">Transgender</option>
           </select>
         </div>
 
         {/* ------------------//////////////////////// DOB /////////////////=------------------------ */}
         <div className="col-md-4">
-          <label htmlFor="validationDefault05" className="form-label mandatory">
-            DOB{" "}
-          </label>
+          <label htmlFor="validationDOB" className="form-label mandatory"> DOB </label>
           <input
             type="date"
             className="form-control"
-            id="validationDefault05"
+            id="validationDOB"
             required
           />
-        </div>
-
+        </div> 
+        <div className="invalid-feedback"></div>
         {/* ------------/////////////////////////// email ///////////////-------------------- */}
 
         <div className="col-md-4">
-          <label htmlFor="validationDefault12" className="form-label mandatory">
-            Email Address{" "}
-          </label>
+          <label htmlFor="validationEmail" className="form-label mandatory"> Email Address{" "} </label>
           <input
             type="email"
             className="form-control"
-            id="validationDefault12"
+            id="validationEmail"
             required
           />
         </div>
-
+        <div className="invalid-feedback"></div>
         {/* --------------------/////////////////////// Marital Status /////////////////--------------------- */}
         <div className="col-md-4">
           <label htmlFor="validationDefault06" className="form-label mandatory">
             Marital Status
           </label>
-          <select className="form-select" id="validationDefault06" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>Single</option>
-            <option>Married</option>
-            <option>Divorced</option>
-            <option>Widowed</option>
+          <select className="form-select" required> 
+            <option selected value={'Single'} >Single</option>
+            <option value={'Married'}>Married</option>
+            <option value={'Divorced'}>Divorced</option>
+            <option value={'Widowed'}>Widowed</option>
           </select>
         </div>
 
         {/* --------------------/////////////////////// Category  /////////////////--------------------- */}
         <div className="col-md-4">
-          <label htmlFor="validationDefault07" className="form-label mandatory">
-            Category
-          </label>
-          <select className="form-select" id="validationDefault07" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>General</option>
-            <option>Schedule Caste</option>
-            <option>Schedule Tribe</option>
-            <option>Other Backward classes</option>
+          <label className="form-label mandatory"> Category </label>
+          <select className="form-select" required> 
+            <option selected value={'OBC'}>OBC</option>
+            <option value={'General'}>General</option>
+            <option value={'SC'}>SC</option>
+            <option value={'ST'}>ST</option>
           </select>
         </div>
 
         {/* --------------------/////////////////////// handicapped  /////////////////--------------------- */}
 
         <div className="col-md-4">
-          <label htmlFor="validationDefault08" className="form-label mandatory">
-            Handicapped
-          </label>
-          <select className="form-select" id="validationDefault8" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>Yes</option>
-            <option>No</option>
+          <label className="form-label mandatory"> Pwd </label>
+          <select className="form-select" required> 
+            <option selected value={'false'}>No</option>
+            <option value={'true'}>Yes</option>
           </select>
         </div>
 
         {/* --------------------/////////////////////// Religion  /////////////////--------------------- */}
 
         <div className="col-md-4">
-          <label htmlFor="validationDefault09" className="form-label mandatory">
-            Religion
-          </label>
-          <select
-            name="religion"
-            className="form-select"
-            id="validationDefault09"
-            required
-          >
-            <option selected disabled value="">
-              Choose...
-            </option>
-
+          <label className="form-label mandatory"> Religion </label>
+          <select name="religion" className="form-select" required >
+            <option >select a option</option>
             <option value="hindu">Hinduism</option>
             <option value="christian">Christianity</option>
             <option value="islam">Islam</option>
@@ -174,45 +162,37 @@ export default function Personal() {
         {/* ---------------------////////////////  Personal Phone No. /////////////////------------------- */}
 
         <div className="col-md-4">
-          <label htmlFor="validationDefault10" className="form-label mandatory">
-            Personal Phone No.{" "}
-          </label>
+          <label htmlFor="validationPhone" className="form-label mandatory"> Phone No.{" "}</label>
           <input
             type="text"
             placeholder="Number"
             maxLength="10"
             className="form-control"
-            id="validationDefault10"
+            id="validationPhone"
             required
           />
         </div>
+          <div className="invalid-feedback"></div>
 
         {/* ------------/////////////////////////// Parent Phone No. ///////////////-------------------- */}
 
         <div className="col-md-4">
-          <label htmlFor="validationDefault11" className="form-label mandatory">
-            Parent Phone No.{" "}
-          </label>
+          <label htmlFor="validationPphone" className="form-label mandatory"> Parent Phone No. </label>
           <input
             type="text"
             placeholder="Number"
             maxLength="10"
             className={`form-control `}
-            id="validationDefault11"
+            id="validationPphone"
             required
           />
-          {/* <div className="invalid-feedback">
-          Please enter a number
-        </div> */}
+          <div className="invalid-feedback"></div>
         </div>
 
         {/* ------------/////////////////////////// Permanent Address ///////////////-------------------- */}
 
         <div className="col-md-12">
-          <label htmlFor="validationDefault13" className="form-label mandatory">
-            {" "}
-            Permanent Address{" "}
-          </label>
+          <label htmlFor="validationDefault13" className="form-label mandatory"> Permanent Address </label>
           <textarea
             className="form-control"
             id="validationDefault13"
@@ -220,6 +200,7 @@ export default function Personal() {
             rows="2"
           ></textarea>
         </div>
+          <div className="invalid-feedback"></div>
 
         {/* ------------/////////////////////////// Correspond Address ///////////////-------------------- */}
 

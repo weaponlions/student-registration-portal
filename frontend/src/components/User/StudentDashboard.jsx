@@ -18,7 +18,7 @@ export default function StudentDashboard() {
       }
       else{
         switch (userdata.status) {
-          case 'NEW':
+          case 'NEWO':
             navigate('/dashboard/courses')
             break;
           case 'lvl1':
@@ -31,6 +31,7 @@ export default function StudentDashboard() {
             navigate('/dashboard/user/step_three')
             break;
           default:
+            navigate('/dashboard/user/step_one')
             break;
         }
       }
