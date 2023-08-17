@@ -1,18 +1,20 @@
 import { userDocModel, userInfoModel, userQualificationModel } from '../models/User.js';
 import { isRequired } from '../middleware/fieldMiddleware.js';
 
-// user_id, name, f_name, m_name, mobile_num, mobile_num, whatsapp_num, gender
-// category, marital_status, religion, pwd, ews, address, full_address, state
+// user_id, name, father, mother, mobile, whatsapp, gender
+// category, marital, religion, pwd, ews, address, full_address, state
 // district, city, pincode
 
 export const userStepOne = async (req, res) => {
     try {
-        const data = isRequired(req.body, ['user_id', 'name', 'f_name', 'm_name', 'mobile_num', 'gender', 'category', 'marital_status', 'religion', 'pwd', 'ews'])
-        const address = isRequired(req.body, ['state', 'district', 'city', 'pincode', 'full_address'])
+        const data = isRequired(req.body, ['user_id', 'name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews'])
+        const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address'])
+        const correspond = isRequired(req.body.correspond, ['state', 'district', 'city', 'pincode', 'full_address'])
         const old = await userInfoModel.findOne({user_id: data.user_id}) || undefined
         if (old) 
             throw Error('User Info is Exists')
-        data.address = address
+        data.permanent = permanent
+        data.correspond = correspond
         const new_data = userInfoModel(data)
         console.log(new_data);
         return res.json({status: 'success', data: [new_data]})

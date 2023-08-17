@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import Field from "./Items/Field";
+import Select from "./Items/Select";
+import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "./Items/List"; 
+
+const details = {
+  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', email: '', marital: '', category: '', pwd: '', religion: '', mobile: '', whatsapp: '', 
+}
+const address1 = {
+  permanent: '', state: '', city: '', district: '', pincode: ''
+}
+const address2 = {
+  correspond: '', state: '', city: '', district: '', pincode: ''
+}
 
 export default function Personal() {
 
-  const handleValidation = (e) => { 
-    const currEle = e.target
-    if (currEle.value == '' || currEle.validationMessage != ''){
+  const [userData, setUserData] = useState(details)
+  const [userAdrs1, setUserAdrs1] = useState(address1)
+  const [userAdrs2, setUserAdrs2] = useState(address2)
+
+  const isFieldValid = (e) => { 
+    const currEle = e.target;
+    if (currEle.value == '' || currEle.validationMessage != '' || currEle.value == "-----------------"){
       currEle.classList.remove('is-valid');
       currEle.classList.add('is-invalid');
       let warnBox = e.target.nextElementSibling;
@@ -14,272 +31,89 @@ export default function Personal() {
       currEle.classList.remove('is-invalid');
       currEle.classList.add('is-valid');
     } 
-    
-  }
+  } 
   
+  const handleChange = (e, num) => { 
+    if (num == 1) {
+      setUserAdrs1({...userAdrs1, [e.target.name]: e.target.value});
+    }
+    else if (num == 2){
+      setUserAdrs2({...userAdrs2, [e.target.name]: e.target.value}) 
+    }
+    else{
+      setUserData({...userData, [e.target.name]: e.target.value});
+    }
+  }
+ 
+
+  const handleSubmit = (e) => { 
+    e.preventDefault();
+    console.log(userData);
+    console.log(userAdrs1);
+    console.log(userAdrs2);
+  }
+
   return (
     <div className="container">
-      <form className="row g-3 needs-validation">
-        {/* -----------/////////////////////// Course Name ///////////////////////////////---------------------------- */}
-        <div className="col-md-4">
-          <label htmlFor="validationCourse" className="form-label mandatory"> Course Name </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationCourse"
-            required
-            disabled
-          />
-          <div className="invalid-feedback"></div>
-        </div>
+      <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
 
-        {/* -----------/////////////////////// Name ///////////////////////////////---------------------------- */}
-        <div className="col-md-4">
-          <label htmlFor="validationFullName" className="form-label"> Applicant's full name </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationFullName"
-            required
-            onBlur={(e) => handleValidation}
-          /> 
-          <div className="invalid-feedback"></div>
-        </div>
+      <Field name={'course_name'} label={'Course Name'} value={''} required={'required'} disabled={true} isValid={isFieldValid} handleChange={handleChange} />
+      
+      <Field name={'name'} label={'Full Name'} value={userData.name} isValid={isFieldValid} handleChange={handleChange} />
+      
+      <Field name={'father'} label={'Father Name'} value={userData.father} isValid={isFieldValid} handleChange={handleChange} />
+      
+      <Field name={'mother'} label={'Mother Name'} value={userData.mother} isValid={isFieldValid} handleChange={handleChange} />
+            
+      <Select label={'Gender'} name={'gender'} value={userData.gender} multi={genderList} isValid={isFieldValid} handleChange={handleChange} />  
+           
+      <Field name={'dob'} label={'Date of Birth'} type={'date'} value={userData.dob} isValid={isFieldValid} handleChange={handleChange} />
+      
+      <Field name={'email'} label={'Email Address'} type={'email'} value={userData.email} isValid={isFieldValid} handleChange={handleChange} disabled={true} />
+         
+      <Select label={'Marital Status'} name={'marital'} isValid={isFieldValid} value={userData.marital} simple={maritalList} handleChange={handleChange} /> 
 
-        {/* ------------------------//////////////////// father Name ////////////////////////////----------------------- */}
-        <div className="col-md-4">
-          <label htmlFor="validationFname" className="form-label mandatory">
-            Father Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationFname"
-            required
-            onBlur={(e) => handleValidation}
-          />
-          <div className="invalid-feedback"></div>
-        </div>
-
-        {/* -----------------------/////////////////////// Mother name //////////////////---------------------- */}
-        <div className="col-md-4">
-          <label htmlFor="validationMname" className="form-label mandatory">
-            Mother Name{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationMname"
-            required
-            onBlur={(e) => handleValidation}
-          />
-          <div className="invalid-feedback"></div>
-        </div>
-
-        {/* ----------------------- ///////////////// gender ///////////////////////////-------------------------- */}
-
-        <div className="col-md-4">
-          <label className="form-label mandatory"> Gender </label>
-          <select className="form-select" required> 
-            <option selected value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="T">Transgender</option>
-          </select>
-        </div>
-
-        {/* ------------------//////////////////////// DOB /////////////////=------------------------ */}
-        <div className="col-md-4">
-          <label htmlFor="validationDOB" className="form-label mandatory"> DOB </label>
-          <input
-            type="date"
-            className="form-control"
-            id="validationDOB"
-            required
-          />
-        </div> 
-        <div className="invalid-feedback"></div>
-        {/* ------------/////////////////////////// email ///////////////-------------------- */}
-
-        <div className="col-md-4">
-          <label htmlFor="validationEmail" className="form-label mandatory"> Email Address{" "} </label>
-          <input
-            type="email"
-            className="form-control"
-            id="validationEmail"
-            required
-          />
-        </div>
-        <div className="invalid-feedback"></div>
-        {/* --------------------/////////////////////// Marital Status /////////////////--------------------- */}
-        <div className="col-md-4">
-          <label htmlFor="validationDefault06" className="form-label mandatory">
-            Marital Status
-          </label>
-          <select className="form-select" required> 
-            <option selected value={'Single'} >Single</option>
-            <option value={'Married'}>Married</option>
-            <option value={'Divorced'}>Divorced</option>
-            <option value={'Widowed'}>Widowed</option>
-          </select>
-        </div>
-
-        {/* --------------------/////////////////////// Category  /////////////////--------------------- */}
-        <div className="col-md-4">
-          <label className="form-label mandatory"> Category </label>
-          <select className="form-select" required> 
-            <option selected value={'OBC'}>OBC</option>
-            <option value={'General'}>General</option>
-            <option value={'SC'}>SC</option>
-            <option value={'ST'}>ST</option>
-          </select>
-        </div>
-
-        {/* --------------------/////////////////////// handicapped  /////////////////--------------------- */}
-
+      <Select label={'Category'} name={'category'} isValid={isFieldValid} value={userData.category} simple={categoryList} handleChange={handleChange} />  
+             
+ 
         <div className="col-md-4">
           <label className="form-label mandatory"> Pwd </label>
-          <select className="form-select" required> 
-            <option selected value={'false'}>No</option>
-            <option value={'true'}>Yes</option>
-          </select>
+
+          <input type={'radio'} name={'pwd'} value={false} />
+          <label className="form-label mandatory"> No </label>
+
+          <input type={'radio'} name={'pwd'} value={true} />
+          <label className="form-label mandatory"> Yes </label>
         </div>
+ 
 
-        {/* --------------------/////////////////////// Religion  /////////////////--------------------- */}
+      <Select label={'Religion'} name={'religion'} isValid={isFieldValid} value={userData.religion} multi={religionList} handleChange={handleChange} />   
+ 
+      <Field name={'mobile'} label={'Mobile No.'} value={userData.mobile} isValid={isFieldValid} handleChange={handleChange} />
+      
+      <Field name={'whatsapp'} label={'Whatsapp No.'} required={false} value={userData.whatsapp} isValid={isFieldValid} handleChange={handleChange} />
+             
+      <div className="row g-3">
+        <Field name={'permanent'} label={'Permanent Address'} adrs={1} value={userAdrs1.permanent} isValid={isFieldValid} handleChange={handleChange} />
+        <Select label={'State'} name={'state'} isValid={isFieldValid} value={userAdrs1.state} multi={stateList} handleChange={handleChange} />
+        {/* <Select label={'District'} name={'per_district'} isValid={isFieldValid} simple={districtList} handleChange={handleChange} /> */}
+        <Field name={'city'} label={'City'} adrs={1} value={userAdrs1.city} isValid={isFieldValid} handleChange={handleChange} />
+        <Field name={'pincode'} label={'Pincode'} adrs={1} value={userAdrs1.pincode} isValid={isFieldValid} handleChange={handleChange} />
+      </div>
 
-        <div className="col-md-4">
-          <label className="form-label mandatory"> Religion </label>
-          <select name="religion" className="form-select" required >
-            <option >select a option</option>
-            <option value="hindu">Hinduism</option>
-            <option value="christian">Christianity</option>
-            <option value="islam">Islam</option>
-            <option value="sikh">Jainism</option>
-            <option value="sikh"> Sikhism</option>
-            <option value="sikh">Buddhism</option>
-          </select>
-        </div>
+      <div className="row g-3">
+        <Field name={'correspond'} label={'Correspond Address'} value={userAdrs2.correspond} isValid={isFieldValid} handleChange={handleChange} />
+        <Select label={'State'} name={'state'} isValid={isFieldValid} value={userAdrs2.state} multi={stateList} handleChange={handleChange} />
+        {/* <Select label={'District'} isValid={isFieldValid} name={'cor_district'} simple={districtList} handleChange={handleChange} /> */}
+        <Field name={'city'} label={'City'} value={userAdrs2.city} isValid={isFieldValid} handleChange={handleChange} />
+        <Field name={'pincode'} label={'Pincode'} value={userAdrs2.pincode} isValid={isFieldValid} handleChange={handleChange} />
+      </div>
 
-        {/* ---------------------////////////////  Personal Phone No. /////////////////------------------- */}
-
-        <div className="col-md-4">
-          <label htmlFor="validationPhone" className="form-label mandatory"> Phone No.{" "}</label>
-          <input
-            type="text"
-            placeholder="Number"
-            maxLength="10"
-            className="form-control"
-            id="validationPhone"
-            required
-          />
-        </div>
-          <div className="invalid-feedback"></div>
-
-        {/* ------------/////////////////////////// Parent Phone No. ///////////////-------------------- */}
-
-        <div className="col-md-4">
-          <label htmlFor="validationPphone" className="form-label mandatory"> Parent Phone No. </label>
-          <input
-            type="text"
-            placeholder="Number"
-            maxLength="10"
-            className={`form-control `}
-            id="validationPphone"
-            required
-          />
-          <div className="invalid-feedback"></div>
-        </div>
-
-        {/* ------------/////////////////////////// Permanent Address ///////////////-------------------- */}
-
-        <div className="col-md-12">
-          <label htmlFor="validationDefault13" className="form-label mandatory"> Permanent Address </label>
-          <textarea
-            className="form-control"
-            id="validationDefault13"
-            cols="9"
-            rows="2"
-          ></textarea>
-        </div>
-          <div className="invalid-feedback"></div>
-
-        {/* ------------/////////////////////////// Correspond Address ///////////////-------------------- */}
-
-        <div className="col-md-12">
-          <label htmlFor="validationDefault14" className="form-label mandatory">
-            {" "}
-            Correspond Address{" "}
-          </label>
-          <textarea
-            className="form-control"
-            id="validationDefault14"
-            cols="9"
-            rows="2"
-          ></textarea>
-        </div>
-
-        {/* ------------/////////////////////////// State ///////////////-------------------- */}
-
-        <div className="col-md-3">
-          <label htmlFor="validationDefault15" className="form-label mandatory">
-            State
-          </label>
-          <select className="form-select" id="validationDefault15" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>Uttarakhand</option>
-            <option>Delhi</option>
-          </select>
-        </div>
-
-        {/* ------------/////////////////////////// District///////////////-------------------- */}
-
-        <div className="col-md-3">
-          <label htmlFor="validationDefault16" className="form-label mandatory">
-            District
-          </label>
-          <select className="form-select" id="validationDefault16" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>haridwar</option>
-            <option>New Delhi</option>
-          </select>
-        </div>
-
-        {/* ------------/////////////////////////// City ///////////////-------------------- */}
-
-        <div className="col-md-3">
-          <label htmlFor="validationDefault17" className="form-label mandatory">
-            City
-          </label>
-          <input
-            type="text"
-            className={`form-control  `}
-            id="validationDefault17"
-            required
-          />
-        </div>
-
-        {/* ------------/////////////////////////// Pin code ///////////////-------------------- */}
-
-        <div className="col-md-3">
-          <label htmlFor="validationDefault17" className="form-label mandatory">
-            pin code
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault17"
-            required
-          />
-        </div>
-
-        <div className="col-12">
-          <button className="btn btn-primary" type="submit">
-            Submit form
-          </button>
-        </div>
+      <div className="col-12">
+        <button className="btn btn-primary" type="submit">
+          Submit form
+        </button>
+      </div>
       </form>
     </div>
   );
