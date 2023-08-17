@@ -1,8 +1,10 @@
 import  { useEffect,useContext } from 'react'
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet,Link } from "react-router-dom";
 import { UserContext } from '../../context-api/UserState';
 import Navbar from '../UI/Navbar';
 import Footer from '../UI/Footer';
+import nielit from "../../assets/images/nielit.png";
+
 
 export default function StudentDashboard() {
 
@@ -16,7 +18,7 @@ export default function StudentDashboard() {
       const result = await getUser()
       if (result==false) {
        
-        navigate("/login");
+        // navigate("/login");
       }
       else{
         switch (userdata.status) {
@@ -42,10 +44,48 @@ export default function StudentDashboard() {
   
   return (
 <>
-<Navbar/> 
-  <Outlet /> 
-<Footer/> 
-</>
+
+     <Navbar title={"Dashboard"} />
+
+
+      <div className="row w-100 h-100">
+
+{/* ------------////////////////////// SideBAr //////////////////////////----------------/ */}
+
+        <div className="col-md-2">
+          <nav
+            class="nav flex-column "
+            style={{
+              height: "100vh",
+              position: "fixed",
+              width: "auto",
+              backgroundColor: "var(--primary)",
+            }}
+          >
+            <Link class="nav-link active " to="#">
+              <img
+                src={nielit}
+                alt="nielit"
+                style={{ width: "9rem", color: "white" }}
+              />
+            </Link>
+            <Link class="nav-link text-light" to="/dashboard" >
+              NIELIT Courses
+            </Link>
+            <Link class="nav-link text-light" to="/dashboard/history">
+              Last Applied
+            </Link>
+          </nav>
+        </div>
+
+{/* -------------------////////////// Content ///////////////////------------------------------- */}
+<div className="col-md-10">
+<Outlet/>
+</div>
+        </div>
+        <footer/>
+      </>
+
   )
 }
 

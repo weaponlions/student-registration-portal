@@ -8,7 +8,7 @@ import bcg from './../../assets/images/headerbackground.jpg'
 
 export default function Header() {
   return (
-  <header>
+  <header >
     
      {/* <div className='conatiner-fluid d-flex header pt-2'>
 
@@ -25,7 +25,7 @@ export default function Header() {
     </div> */}
 
 <div style={{ backgroundImage:`url(${bcg})`,
-}}>
+}}  >
         
 		<table className="container-fluid" >
 			<tr>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from './../../context-api/UserState';
 
 
-export default function Navbar() {
+export default function Navbar(props) {
 
   const context = useContext(UserContext)
   const {userdata, getUser} = context;
@@ -24,10 +24,18 @@ export default function Navbar() {
 
   return (
 
-   
-   <nav className="navbar  navbar-expand-lg bg-body-tertiary py-0">
-  <div className="container-fluid d-flex justify-content-end nav p-2 px-4">
+
+
+ 
+   <nav className="navbar sticky-top navbar-expand-lg bg-body-tertiary py-0 "   >
+  <div className="container-fluid d-flex justify-content-between nav p-2 px-4" >
     <div>
+  <p className='text-light h3'>{props.title}</p>   
+
+    </div>
+  
+    <div >
+     
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
@@ -70,6 +78,7 @@ export default function Navbar() {
     </div>
   </div>
 </nav>
+
 
   )
 }

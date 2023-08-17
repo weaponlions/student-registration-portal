@@ -1,8 +1,13 @@
 *{
     font-family: 'REM', sans-serif;
-   
+  
 }
 
+:root {
+    --primary: #01324f;;
+    --secondary:  #135b85;;
+    --RedColor: #d84b4b;
+  }
 
 .logo1-nav img{
 
@@ -19,16 +24,20 @@
     
 }
 .footer{
-    bottom: 0;
+    background-color: var(--primary);
+    bottom:0;
+     
 }
-.header{
-    /* background-color: rgb(102, 102, 226); */
-}
+
 .nav{
-    background-color: rgb(34, 34, 51);
+background-color: var(--primary);
+    
 }
 
-
+.mandatory::after{
+content: '*';
+color: #ff0000;
+}
 .logoSize{
     width: 3rem;
     height: 3rem;
@@ -65,4 +74,23 @@
 
     justify-content: center;
     align-items: center;
+}
+
+
+
+/* dasbboard css ------------/////////////////////////////// */
+
+.nav-link:hover{
+    background-color: #4f2001;
+
+    transition: .8s;
+}
+
+input[type]{
+    background-color: rgb(236, 236, 236);
+}
+
+.form-select{
+    background-color: rgb(236, 236, 236);
+
 }
