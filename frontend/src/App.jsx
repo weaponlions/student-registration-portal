@@ -11,6 +11,7 @@ import Personal from "./components/User/Personal";
 import Qualification from "./components/User/Qualification";
 import Courses from "./components/User/Courses";
 
+
 function App() {
   return (
     <>
