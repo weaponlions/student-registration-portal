@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
 })
   
 
-const userInfoSchema = new mongoose.Schema({
+const infoSchema = new mongoose.Schema({
     user_id: {type: Object, required: true, unique: true },
     name: {type : String, require : true },
     father: {type : String, require : true },
@@ -41,33 +41,33 @@ const userInfoSchema = new mongoose.Schema({
 })
 
 
-const userQualificationSchema = mongoose.Schema({ 
+const educationSchema = mongoose.Schema({ 
     user_id: {type: Object, required: true },
-    qualification: {type : String, require : true },
-    subject: {type : String, require : true },
+    exam_name: {type : String, require : true },
+    exam_type: {type : String, require : true, enum: ['Graduation', 'Post Graduation', '10', '12', 'Under 10'] },
+    subject: {type : [String]},
     institute: {type : String, require : true },
     university: {type : String, require : true },
     passing_year: {type : Number, require : true }, 
-    percentage: {type : Number, require : true },
+    percentage: {type : Number, require : true }, 
     division: {type : String, require : true },
+    doc_path: {type: String, required: true },
     updated_at: {type: Date, default : Date.now},
 })
 
 
-const userDocSchema = mongoose.Schema({
+const docSchema = mongoose.Schema({
     user_id: {type: Object, required: true, unique: true },
     aadhar_path: {type: String, required: true },
     photo_path: {type: String, required: true },
     leftThumb_path: {type: String, required: true },
-    sign_path: {type: String, required: true },
-    tenth_path: {type: String, required: true },
-    twelfth_path: {type: String},
+    sign_path: {type: String, required: true }, 
     updated_at: {type: Date, default : Date.now},
 })
 
 
 export const User = mongoose.model('Users', userSchema);
-export const userQualificationModel = mongoose.model('User_Qualification', userQualificationSchema)
-export const userDocModel = mongoose.model('User_Documents', userDocSchema)
-export const userInfoModel = mongoose.model('User_Information', userInfoSchema) 
+export const educationModel = mongoose.model('Education', educationSchema)
+export const docModel = mongoose.model('User_Documents', docSchema)
+export const infoModel = mongoose.model('Information', infoSchema) 
  

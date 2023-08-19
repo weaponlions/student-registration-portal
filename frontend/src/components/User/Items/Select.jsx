@@ -2,28 +2,26 @@ import React from "react";
 
 const Select = ({
   label,
-  name,
-  required,
+  name, 
   simple,
   multi,
   value,
   handleChange,
-  isValid
+  isValid,
+  adrs
 }) => {
-
-
+ 
   return (
     <div className="col-md-4">
       <label className="form-label mandatory"> {label} </label>
       <select
         name={name}
         id={`validation${name}`}
-        className="form-select"
-        required={required || true}
+        className="form-select" 
         value={value || ""}
-        onChange={handleChange}
+        onChange={(adrs && adrs == 1 ? (e)=>handleChange(e, 1) : adrs == 2 ? (e)=>handleChange(e, 2) : handleChange) || handleChange }
         onChangeCapture={isValid}
-        onBlur={isValid}
+        onBlur={isValid} 
       >
         <option>-----------------</option>
         {simple &&

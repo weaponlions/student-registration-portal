@@ -29,7 +29,7 @@ router.post(
 
 // #####---------------Endpoint for get the data of user ----------------------------------->
 
-router.get("/getuser", verifyUser);
+router.post("/getuser", verifyUser);
 
 // ---------------//////////////////////// Endpoint for add admin -----------///////////////////
 

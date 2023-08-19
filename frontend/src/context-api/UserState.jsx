@@ -1,6 +1,8 @@
 import React from "react";
 import { createContext, useState } from "react";
 import jwtDecode from "jwt-decode";
+import { verifyUser } from "../api";
+
 const UserContext = createContext();
 
 export default function UserState(props) {
@@ -8,54 +10,25 @@ export default function UserState(props) {
   if (user.name) { 
     user = {name: user.name, email: user.email, status: user.status}
   }
-  const [userdata, setUserdata] = useState(user);
-  const [Allusers, setAllusers] = useState([]);
+  const [userdata, setUserdata] = useState(user); 
 
   // ----------------------///////////////////// Get user details function /////////////////////////////////----------------------
 
-  const getUser = async () => {
-    const response = await fetch("http://localhost:5000/auth/getuser", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        jwtToken: localStorage.getItem("jwtToken"),
-      },
-    });
-    const { result } = await response.json(); 
+  const getUser = async () => { 
+    const { data } = await verifyUser()
+    const { result } = data;  
     if (result == false) {
       localStorage.removeItem('jwtToken')
     }
     return result;
   };
-
-  ////////////////////////////----------------- Fetch all users state-----------=---/////////////////
-
-  const fetchAllusers = async () => {
-    const response = await fetch("http://localhost:5000/auth/fetchallusers", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        jwtAdmin: localStorage.getItem("jwtAdmin"),
-      },
-    });
-    const Allusers = await response.json();
-    setAllusers(Allusers);
-    // console.log(Allusers);
-  };
-
-  // ####---/////////////////------- Update user details -------------////////////////////////////////////
-  const updateUser = (val) => {};
-
+  
   return (
     <UserContext.Provider
       value={{
         getUser,
         userdata,
-        setUserdata,
-        Allusers,
-        setAllusers,
-        fetchAllusers,
-        updateUser,
+        setUserdata, 
       }}
     >
       {props.children}

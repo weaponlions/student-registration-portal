@@ -18,21 +18,21 @@ export default function StudentDashboard() {
       }
       else{
         switch (userdata.status) {
-          case 'NEWO':
-            navigate('/dashboard/courses')
-            break;
-          case 'lvl1':
-            navigate('/dashboard/user/step_one')
-            break;
-          case 'lvl2':
-            navigate('/dashboard/user/step_two')
-            break;
-          case 'lvl3':
-            navigate('/dashboard/user/step_three')
-            break;
-          default:
-            navigate('/dashboard/user/step_one')
-            break;
+          // case 'NEW':
+          //   navigate('/dashboard/courses')
+          //   break;
+          // case 'lvl1':
+          //   navigate('/dashboard/user/step_one')
+          //   break;
+          // case 'lvl2':
+          //   navigate('/dashboard/user/step_two')
+          //   break;
+          // case 'lvl3':
+          //   navigate('/dashboard/user/step_three')
+          //   break; 
+          // default:
+          //   // navigate('/dashboard')
+          //   break;
         }
       }
     }

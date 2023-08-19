@@ -10,6 +10,7 @@ import Documents from "./components/User/Documents";
 import Personal from "./components/User/Personal";
 import Qualification from "./components/User/Qualification";
 import Courses from "./components/User/Courses";
+import Table from "./components/User/Table/Table";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route exact path="/dashboard/user/step_one" element={<Personal />}></Route>
             <Route exact path="/dashboard/user/step_two" element={<Qualification />}></Route> 
             <Route exact path="/dashboard/user/step_three" element={<Documents />}></Route>
+            <Route exact path="/dashboard/step/preview" element={<Table />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

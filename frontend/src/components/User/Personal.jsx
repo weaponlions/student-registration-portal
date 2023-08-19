@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Field from "./Items/Field";
 import Select from "./Items/Select";
 import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "./Items/List"; 
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context-api/UserState";
+ 
 const details = {
-  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', email: '', marital: '', category: '', pwd: '', religion: '', mobile: '', whatsapp: '', 
+  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: '', religion: '', mobile: '', whatsapp: '', 
 }
 const address1 = {
-  permanent: '', state: '', city: '', district: '', pincode: ''
+  full_address: '', state: '', city: '', district: '', pincode: ''
 }
 const address2 = {
-  correspond: '', state: '', city: '', district: '', pincode: ''
+  full_address: '', state: '', city: '', district: '', pincode: ''
 }
 
 export default function Personal() {
+  const { userdata } = useContext(UserContext)
+  const [userData, setUserData] = useState(details);
+  const [userAdrs1, setUserAdrs1] = useState(address1); // permanent addrs
+  const [userAdrs2, setUserAdrs2] = useState(address2); // corespond addrs
+  const location = useLocation()
+  const course_name = location.state.course_name
+  const navigate = useNavigate()
 
-  const [userData, setUserData] = useState(details)
-  const [userAdrs1, setUserAdrs1] = useState(address1)
-  const [userAdrs2, setUserAdrs2] = useState(address2)
+
+  useEffect(() => {
+     console.log(location.state);
+     console.log(userdata);
+  }, [])
+  
 
   const isFieldValid = (e) => { 
     const currEle = e.target;
@@ -33,31 +45,44 @@ export default function Personal() {
     } 
   } 
   
-  const handleChange = (e, num) => { 
+  const handleChange = (e, num) => {
+    const currEle = e.target; 
+    if(currEle.name == 'pincode' || currEle.name == 'mobile' || currEle.name == 'whatsapp'){
+      currEle.value = (currEle.value.replaceAll(' ', ''));
+      if(isNaN(currEle.value)) 
+        return;
+      
+      let len = currEle.value.split('').length;
+      if (currEle.name == 'pincode' && len > 6)
+        return;
+      else if ((currEle.name == 'mobile' || currEle.name == 'whatsapp') && len > 10)
+        return; 
+    }
+
     if (num == 1) {
-      setUserAdrs1({...userAdrs1, [e.target.name]: e.target.value});
+      setUserAdrs1({...userAdrs1, [currEle.name]: currEle.value});
     }
     else if (num == 2){
-      setUserAdrs2({...userAdrs2, [e.target.name]: e.target.value}) 
+      setUserAdrs2({...userAdrs2, [currEle.name]: currEle.value}) 
     }
     else{
-      setUserData({...userData, [e.target.name]: e.target.value});
+      setUserData({...userData, [currEle.name]: currEle.value});
     }
   }
- 
 
   const handleSubmit = (e) => { 
     e.preventDefault();
     console.log(userData);
     console.log(userAdrs1);
     console.log(userAdrs2);
+    navigate('/dashboard/step/preview', {state: {userData, userAdrs1, userAdrs2}})
   }
 
   return (
     <div className="container">
       <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
 
-      <Field name={'course_name'} label={'Course Name'} value={''} required={'required'} disabled={true} isValid={isFieldValid} handleChange={handleChange} />
+      <Field name={'course_name'} label={'Course Name'} value={course_name} required={false} disabled={true} />
       
       <Field name={'name'} label={'Full Name'} value={userData.name} isValid={isFieldValid} handleChange={handleChange} />
       
@@ -69,20 +94,20 @@ export default function Personal() {
            
       <Field name={'dob'} label={'Date of Birth'} type={'date'} value={userData.dob} isValid={isFieldValid} handleChange={handleChange} />
       
-      <Field name={'email'} label={'Email Address'} type={'email'} value={userData.email} isValid={isFieldValid} handleChange={handleChange} disabled={true} />
+      <Field name={'email'} label={'Email Address'} type={'email'} value={userdata.email} disabled={true} />
          
       <Select label={'Marital Status'} name={'marital'} isValid={isFieldValid} value={userData.marital} simple={maritalList} handleChange={handleChange} /> 
 
       <Select label={'Category'} name={'category'} isValid={isFieldValid} value={userData.category} simple={categoryList} handleChange={handleChange} />  
              
- 
+
         <div className="col-md-4">
           <label className="form-label mandatory"> Pwd </label>
 
-          <input type={'radio'} name={'pwd'} value={false} />
+          <input type={'radio'} name={'pwd'} required value={false} />
           <label className="form-label mandatory"> No </label>
 
-          <input type={'radio'} name={'pwd'} value={true} />
+          <input type={'radio'} name={'pwd'} required value={true} />
           <label className="form-label mandatory"> Yes </label>
         </div>
  
@@ -91,22 +116,22 @@ export default function Personal() {
  
       <Field name={'mobile'} label={'Mobile No.'} value={userData.mobile} isValid={isFieldValid} handleChange={handleChange} />
       
-      <Field name={'whatsapp'} label={'Whatsapp No.'} required={false} value={userData.whatsapp} isValid={isFieldValid} handleChange={handleChange} />
+      <Field name={'whatsapp'} label={'Whatsapp No.'} required={false} value={userData.whatsapp} handleChange={handleChange} />
              
       <div className="row g-3">
-        <Field name={'permanent'} label={'Permanent Address'} adrs={1} value={userAdrs1.permanent} isValid={isFieldValid} handleChange={handleChange} />
-        <Select label={'State'} name={'state'} isValid={isFieldValid} value={userAdrs1.state} multi={stateList} handleChange={handleChange} />
-        {/* <Select label={'District'} name={'per_district'} isValid={isFieldValid} simple={districtList} handleChange={handleChange} /> */}
+        <Field name={'full_address'} label={'Permanent Address'} adrs={1} value={userAdrs1.full_address} isValid={isFieldValid} handleChange={handleChange} />
+        <Select label={'State'} name={'state'} adrs={1} isValid={isFieldValid} value={userAdrs1.state} multi={stateList} handleChange={handleChange} />
+        <Select label={'District'} name={'district'} adrs={1} isValid={isFieldValid} value={userAdrs1.district} simple={userAdrs1.state != '' && districtList[userAdrs1.state]} handleChange={handleChange} />
         <Field name={'city'} label={'City'} adrs={1} value={userAdrs1.city} isValid={isFieldValid} handleChange={handleChange} />
         <Field name={'pincode'} label={'Pincode'} adrs={1} value={userAdrs1.pincode} isValid={isFieldValid} handleChange={handleChange} />
       </div>
 
       <div className="row g-3">
-        <Field name={'correspond'} label={'Correspond Address'} value={userAdrs2.correspond} isValid={isFieldValid} handleChange={handleChange} />
-        <Select label={'State'} name={'state'} isValid={isFieldValid} value={userAdrs2.state} multi={stateList} handleChange={handleChange} />
-        {/* <Select label={'District'} isValid={isFieldValid} name={'cor_district'} simple={districtList} handleChange={handleChange} /> */}
-        <Field name={'city'} label={'City'} value={userAdrs2.city} isValid={isFieldValid} handleChange={handleChange} />
-        <Field name={'pincode'} label={'Pincode'} value={userAdrs2.pincode} isValid={isFieldValid} handleChange={handleChange} />
+        <Field name={'full_address'} label={'Correspond Address'} adrs={2} value={userAdrs2.full_address} isValid={isFieldValid} handleChange={handleChange} />
+        <Select label={'State'} name={'state'} isValid={isFieldValid} adrs={2} value={userAdrs2.state} multi={stateList} handleChange={handleChange} />
+        <Select label={'District'} isValid={isFieldValid} adrs={2} name={'district'} value={userAdrs2.district} simple={userAdrs2.state != '' && districtList[userAdrs2.state]} handleChange={handleChange} />
+        <Field name={'city'} label={'City'} adrs={2} value={userAdrs2.city} isValid={isFieldValid} handleChange={handleChange} />
+        <Field name={'pincode'} label={'Pincode'} adrs={2} value={userAdrs2.pincode} isValid={isFieldValid} handleChange={handleChange} />
       </div>
 
       <div className="col-12">

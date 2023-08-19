@@ -1,4 +1,4 @@
-import { userDocModel, userInfoModel, userQualificationModel } from '../models/User.js';
+import { docModel, infoModel, educationModel } from '../models/User.js';
 import { isRequired } from '../middleware/fieldMiddleware.js';
 
 // user_id, name, father, mother, mobile, whatsapp, gender
@@ -10,12 +10,12 @@ export const userStepOne = async (req, res) => {
         const data = isRequired(req.body, ['user_id', 'name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews'])
         const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address'])
         const correspond = isRequired(req.body.correspond, ['state', 'district', 'city', 'pincode', 'full_address'])
-        const old = await userInfoModel.findOne({user_id: data.user_id}) || undefined
+        const old = await infoModel.findOne({user_id: data.user_id}) || undefined
         if (old) 
             throw Error('User Info is Exists')
         data.permanent = permanent
         data.correspond = correspond
-        const new_data = userInfoModel(data)
+        const new_data = infoModel(data)
         console.log(new_data);
         return res.json({status: 'success', data: [new_data]})
     } catch (err) {
@@ -25,10 +25,10 @@ export const userStepOne = async (req, res) => {
 }
 
 
-// user_id, qualification, subject, institute, university, passing_year, percentage, division
+// user_id, exam_name, subject, institute, university, passing_year, percentage, division, exam_type
 export const userStepTwo = async (req, res) => {
     try {
-        const data = isRequired(req.body, ['user_id', 'qualification', 'subject', 'institute', 'university', 'passing_year', 'percentage', 'division'])
+        const data = isRequired(req.body, ['user_id', 'exam_name', 'subject', 'institute', 'university', 'passing_year', 'percentage', 'division', 'exam_type'])
          console.log(data);
         return res.json({status: 'success', data: []})
     } catch (err) {
