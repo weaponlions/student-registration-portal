@@ -12,6 +12,7 @@ import Qualification from "./components/User/Qualification";
 import Courses from "./components/User/Courses";
 import Table from "./components/User/Table/Table";
 
+
 function App() {
   return (
     <>
