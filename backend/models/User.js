@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     name : {type : String, require : true },
     email: {type:  String, require : true, unique: true },
     password: {type: mongoose.Mixed, require : true },
-    status: {type:  String, require : true, enum: ['NEW', 'lvl1', 'lvl2', 'lvl3', 'unverified', 'verified', 'admin'], default: 'lvl1' },
+    status: {type:  String, require : true, enum: ['unverified', 'verified', 'admin'], default: 'unverified' },
     created_at: {type: Date, default : Date.now },
 })
   
@@ -21,8 +21,8 @@ const infoSchema = new mongoose.Schema({
     category: {type : String, require : true, enum: ['OBC', 'SC', 'ST', 'GENERAL', 'OTHERS'] },
     marital: {type : String, require : true, enum: ['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED'] },
     religion : {type : String, require : true },
-    pwd : {type : Boolean, require : true, default: false },
-    ews : {type : Boolean, require : true, default: false },
+    pwd : {type : String, require : true, enum: ['YES', 'NO'] },
+    ews : {type : String, require : true, enum: ['YES', 'NO'] },
     correspond: {
         full_address: {type : String, require : true },
         state: {type : String, require : true },
@@ -45,7 +45,6 @@ const educationSchema = mongoose.Schema({
     user_id: {type: Object, required: true },
     exam_name: {type : String, require : true },
     exam_type: {type : String, require : true, enum: ['Graduation', 'Post Graduation', '10', '12', 'Under 10'] },
-    subject: {type : [String]},
     institute: {type : String, require : true },
     university: {type : String, require : true },
     passing_year: {type : Number, require : true }, 
@@ -58,10 +57,10 @@ const educationSchema = mongoose.Schema({
 
 const docSchema = mongoose.Schema({
     user_id: {type: Object, required: true, unique: true },
-    aadhar_path: {type: String, required: true },
-    photo_path: {type: String, required: true },
-    leftThumb_path: {type: String, required: true },
-    sign_path: {type: String, required: true }, 
+    aadhar: {type: String, required: true },
+    photo: {type: String, required: true },
+    leftThumb: {type: String, required: true },
+    sign: {type: String, required: true }, 
     updated_at: {type: Date, default : Date.now},
 })
 

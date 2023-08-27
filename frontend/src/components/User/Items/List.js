@@ -1,6 +1,6 @@
 export const genderList = [{short: 'M', full: 'Male'}, {short: 'F', full: 'Female'}, {short: 'T', full: 'Transgender'}];
 
-export const maritalList = ["Single", "Married", "Divorced", "Widowed"];
+export const maritalList = ['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED'];
 
 export const categoryList = ["OBC", "General", "SC", "ST"];
 

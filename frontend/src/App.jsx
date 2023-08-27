@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/UI/Home";
-import StudentDashboard from "./components/User/StudentDashboard";
+import Structure from "./components/User/Structure";
 import SingnUp from "./components/Auth/SingnUp";
 import Login from "./components/Auth/Login";
 import About from "./components/UI/About";
@@ -11,7 +11,7 @@ import Personal from "./components/User/Personal";
 import Qualification from "./components/User/Qualification";
 import Courses from "./components/User/Courses";
 import Table from "./components/User/Table/Table";
-
+import { Dashboard } from "./components/User/Dashboard";
 
 function App() {
   return (
@@ -23,12 +23,13 @@ function App() {
           <Route exact path="/admin" element={<Admin />}></Route>
           <Route exact path="/signup" element={<SingnUp />}></Route> 
           <Route exact path="/login" element={<Login />}></Route>
-          <Route exact path="/dashboard" element={<StudentDashboard />}>
+          <Route exact path="/dashboard" element={<Structure />}>
+            <Route exact path="/dashboard" element={<Dashboard />}></Route>
             <Route exact path="/dashboard/courses" element={<Courses />}></Route>
             <Route exact path="/dashboard/user/step_one" element={<Personal />}></Route>
             <Route exact path="/dashboard/user/step_two" element={<Qualification />}></Route> 
             <Route exact path="/dashboard/user/step_three" element={<Documents />}></Route>
-            <Route exact path="/dashboard/step/preview" element={<Table />}></Route>
+            <Route exact path="/dashboard/user/preview" element={<Table />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,325 +1,212 @@
-import React from "react";
-
+import React, { useContext, useState } from "react";
+import Field from "./Items/Field";
+import Select from "./Items/Select";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context-api/UserState";
+ 
 export default function Qualification() {
+  const { formTwo, setFormTwo } = useContext(UserContext)
+  const [examData, setExamData] = useState({other: {}, tenth: formTwo.tenth || { exam_name: 10}, twelfth: formTwo.twelfth || {exam_name: 12}, graduation: {}, postGraduation: {}, highest: ''}) 
+  const navigate = useNavigate()
+  
+  const isValid = (e) => { 
+    const currEle = e.target; 
+    if (currEle.value == '' || currEle.validationMessage != '' || currEle.value == "-----------------"){ 
+      currEle.classList.remove('is-valid');
+      currEle.classList.add('is-invalid');
+      let warnBox = currEle.nextElementSibling; 
+      warnBox.innerHTML = currEle.validationMessage;
+    }
+    else{
+      currEle.classList.remove('is-invalid');
+      currEle.classList.add('is-valid');
+    } 
+  } 
+
+  const handleChange = (e, num) => { 
+    const currEle = e.target; 
+    console.log(currEle.value);
+    console.log(num);
+    if(currEle.name == 'pincode' || currEle.name == 'mobile' || currEle.name == 'whatsapp'){
+      currEle.value = (currEle.value.replaceAll(' ', ''));
+      if(isNaN(currEle.value)) 
+        return;
+      
+      let len = currEle.value.split('').length;
+      if (currEle.name == 'pincode' && len > 6)
+        return;
+      else if ((currEle.name == 'mobile' || currEle.name == 'whatsapp') && len > 10)
+        return; 
+    }
+    // { 1: other, 2: 10th, 3: 12th, 4: graduation, 5: postGraduation } for handle data in same onChange Function
+    switch (num) {
+      case 1:
+        setExamData({...examData, other: {...examData.other, [e.target.name]: e.target.value}}) 
+        break;
+      case 2:
+        setExamData({...examData, tenth: {...examData.tenth, [e.target.name]: e.target.value}}) 
+        break;
+      case 3:
+        setExamData({...examData, twelfth: {...examData.twelfth, [e.target.name]: e.target.value}}) 
+        break;
+      case 4:
+        setExamData({...examData, graduation: {...examData.graduation, [e.target.name]: e.target.value}}) 
+        break;
+      case 5:
+        setExamData({...examData, postGraduation: {...examData.postGraduation, [e.target.name]: e.target.value}}) 
+        break; 
+      default:
+        setExamData({...examData, highest: e.target.value})
+        break; 
+
+    } 
+  } 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(examData.tenth);
+    console.log(examData.twelfth);
+    setFormTwo({tenth: examData.tenth, twelfth: examData.twelfth})
+    navigate('../user/step_three')
+  }
+ 
+  
+  const educ_list = [ 
+    {short: 'other', full: 'Other'},
+    {short: '10', full: 'High School'},
+    {short: '12', full: 'Inderediate School'},
+    {short: 'GA', full: 'Graduation'},
+    {short: 'PG', full: 'Post Graduation'},
+  ]
+
+  const division_list = [ 
+    'First',
+    'Second',
+    'Third'
+  ]
+  
   return (
-    <div className="container">
-      <div className="d-flex justify-content-center ">
-        <h4>Educational Qualification</h4>
+    <>
+      <div className="container my-5" style={{border: '20px solid #e7e7e7', borderRadius: 5}}>
+        <div className="row p-4" style={{border: '1px solid #0d6efd', borderRadius: 2}}>
+          <form onSubmit={handleSubmit}>
+            <div className="col-12 d-flex justify-content-center">
+              <Select value={examData.highest} required={false} {...{handleChange}} label={'Select Highest Qualification'} multi={educ_list} name={'highest'} />
+            </div> 
+            
+             {/* Other Detail  */}
+            {/* <div className="col-lg-12 p-4 my-3" style={{border: '1px solid #e7e7e7', borderRadius: 5}}>
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h5 className="panel-title text-center">Highest Education Detail*</h5>
+                </div>
+                <div className="panel-body">
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Class Name'} adrs={1} value={examData.other.exam_name} name={'exam_name'} {...{handleChange, isValid}} />  
+                    <Field label={'Year of Passing'} adrs={1} min={1950} max={2023} type={'number'} value={examData.other.passing_year} name={'passing_year'} {...{handleChange, isValid}} />
+                    <Field label={'Percentage'} adrs={1} min={1} max={100} step={0.01} type={'number'} value={examData.other.percentage} name={'percentage'} {...{handleChange, isValid}} />
+                  </div> 
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'School Name'} adrs={1} value={examData.other.institute} name={'institute'} {...{handleChange, isValid}} />  
+                    <Field label={'Board Name'} adrs={1} value={examData.other.university} name={'university'} {...{handleChange, isValid}} />
+                    <Select label={'Division'} adrs={1} simple={division_list} value={examData.other.division} name={'division'} {...{handleChange, isValid}} />
+                  </div> 
+                </div>
+              </div>
+            </div> */}
+
+            {/* Tenth  */}
+            <div className="col-lg-12 p-4 my-3" style={{border: '1px solid #e7e7e7', borderRadius: 5}}>
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h5 className="panel-title text-center">High School*</h5>
+                </div>
+                <div className="panel-body">
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Class Name'} adrs={2} disabled={true} value={examData.tenth.exam_name} name={'exam_name'} {...{handleChange, isValid}} />  
+                    <Field label={'Year of Passing'} min={1950} max={2023} adrs={2} type={'number'} value={examData.tenth.passing_year} name={'passing_year'} {...{handleChange, isValid}} />
+                    <Field label={'Percentage'} adrs={2} min={1} max={100} step={0.01} type={'number'} value={examData.tenth.percentage} name={'percentage'} {...{handleChange, isValid}} />
+                  </div> 
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'School Name'} adrs={2} value={examData.tenth.institute} name={'institute'} {...{handleChange, isValid}} />  
+                    <Field label={'Board Name'} adrs={2} value={examData.tenth.university} name={'university'} {...{handleChange, isValid}} />
+                    <Select label={'Division'} adrs={2} simple={division_list} value={examData.tenth.division} name={'division'} {...{handleChange, isValid}} />
+                  </div> 
+                </div>
+              </div>
+            </div>
+
+            {/* twelfth */}
+            <div className="col-lg-12 p-4 my-3" style={{border: '1px solid #e7e7e7', borderRadius: 5}}>
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h5 className="panel-title text-center">Intermediate School*</h5>
+                </div>
+                <div className="panel-body">
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Class Name'} adrs={3} disabled={true} value={examData.twelfth.exam_name} name={'exam_name'} {...{handleChange, isValid}} />  
+                    <Field label={'Year of Passing'} min={1950} max={2023} type={'number'} adrs={3} value={examData.twelfth.passing_year} name={'passing_year'} {...{handleChange, isValid}} />
+                    <Field label={'Percentage'} adrs={3} min={1} max={100} type={'number'} step={0.01} value={examData.twelfth.percentage} name={'percentage'} {...{handleChange, isValid}} />
+                  </div> 
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'School Name'} adrs={3} value={examData.twelfth.institute} name={'institute'} {...{handleChange, isValid}} />  
+                    <Field label={'Board Name'} adrs={3} value={examData.twelfth.university} name={'university'} {...{handleChange, isValid}} />
+                    <Select label={'Division'} adrs={3} simple={division_list} value={examData.twelfth.division} name={'division'} {...{handleChange, isValid}} />
+                  </div> 
+                </div>
+              </div>
+            </div>
+
+            {/* graduation */}
+            {/* <div className="col-lg-12 p-4 my-3" style={{border: '1px solid #e7e7e7', borderRadius: 5}}>
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h5 className="panel-title text-center">Graduation Level*</h5>
+                </div>
+                <div className="panel-body">
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Degree Name'} adrs={4} value={examData.graduation.exam_name} name={'exam_name'} {...{handleChange, isValid}} />  
+                    <Field label={'Year of Passing'} adrs={4} value={examData.graduation.passing_year} name={'passing_year'} {...{handleChange, isValid}} />
+                    <Field label={'Percentage'} adrs={4} value={examData.graduation.percentage} name={'percentage'} {...{handleChange, isValid}} />
+                  </div> 
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Institute'} adrs={4} value={examData.graduation.institute} name={'institute'} {...{handleChange, isValid}} />  
+                    <Field label={'University'} adrs={4} value={examData.graduation.university} name={'university'} {...{handleChange, isValid}} />
+                    <Select label={'Division'} adrs={1} simple={division_list} value={examData.other.division} name={'division'} {...{handleChange, isValid}} />
+                  </div> 
+                </div>
+              </div>
+            </div> */}
+
+            {/* post graduation */}
+            {/* <div className="col-lg-12 p-4 my-3" style={{border: '1px solid #e7e7e7', borderRadius: 5}}>
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h5 className="panel-title text-center">Post Graduation Level*</h5>
+                </div>
+                <div className="panel-body">
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Degree Name'} adrs={5} value={examData.postGraduation.exam_name} name={'exam_name'} {...{handleChange, isValid}} />  
+                    <Field label={'Year of Passing'} adrs={5} value={examData.postGraduation.passing_year} name={'passing_year'} {...{handleChange, isValid}} />
+                    <Field label={'Percentage'} adrs={5} value={examData.postGraduation.percentage} name={'percentage'} {...{handleChange, isValid}} />
+                  </div> 
+                  <div className="row g-5 mt-1"> 
+                    <Field label={'Institute'} adrs={5} value={examData.postGraduation.institute} name={'institute'} {...{handleChange, isValid}} />  
+                    <Field label={'University'} adrs={5} value={examData.postGraduation.university} name={'university'} {...{handleChange, isValid}} />
+                    <Select label={'Division'} adrs={1} simple={division_list} value={examData.other.division} name={'division'} {...{handleChange, isValid}} />
+                  </div> 
+                </div>
+              </div>
+            </div> */}
+            
+            <div className="col-12 d-flex justify-content-center">
+              <button className="btn btn-primary" type="submit">
+                Submit form
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <form className="row g-3"> 
-
-        <div className="col-md-12">
-          <label htmlFor="validationDefault01" className="form-label mandatory">
-            Highest Qualification
-          </label>
-
-          <select className="form-select" id="validationDefault01" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>10th</option>
-            <option>12th</option>
-            <option>below 10th</option>
-            <option>Gradugate or Higher</option>
-          </select>
-        </div>
-
-        {/* --------------///////////////////////   Marticulation(10th) Qualification ///////////////------------------- */}
-        <h5 className="text-danger">Marticulation(10th) Qualification</h5>
-        <div className="col-md-4">
-          <label htmlFor="validationDefault02" className="form-label mandatory">
-            Marticulation(10th) Board
-          </label>
-
-          <select className="form-select" id="validationDefault02" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>State Boards</option>
-            <option>CBSE</option>
-            <option>ICSE</option>
-            <option>CISCE</option>
-            <option>NIOS</option>
-          </select>
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault03" className="form-label mandatory">
-            School Name{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault03"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault04" className="form-label mandatory">
-            Year of passing{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault04"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault05" className="form-label mandatory">
-            Percentage
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault05"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault06" className="form-label mandatory">
-            Division
-          </label>
-          <select className="form-select" id="validationDefault06" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-
-            <option>first</option>
-            <option>second</option>
-            <option>third</option>
-          </select>
-        </div>
-
-        {/* --------------///////////////////////   12th Qualification ///////////////------------------- */}
-        <h5 className="text-danger">12th Qualification</h5>
-        <div className="col-md-4">
-          <label htmlFor="validationDefault07" className="form-label mandatory">
-            12th Board
-          </label>
-
-          <select className="form-select" id="validationDefault07" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>State Boards</option>
-            <option>CBSE</option>
-            <option>ICSE</option>
-            <option>CISCE</option>
-            <option>NIOS</option>
-          </select>
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault08" className="form-label mandatory">
-            School Name{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault08"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault09" className="form-label mandatory">
-            Year of passing{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault09"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault10" className="form-label mandatory">
-            Percentage
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault10"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault11" className="form-label mandatory">
-            Division
-          </label>
-          <select className="form-select" id="validationDefault11" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-
-            <option>first</option>
-            <option>second</option>
-            <option>third</option>
-          </select>
-        </div>
-
-        {/* --------------///////////////////////   Graduation Qualification ///////////////------------------- */}
-        <h5 className="text-danger">Graduation</h5>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault22" className="form-label mandatory">
-            Bachelor degree
-          </label>
-          <select className="form-select" id="validationDefault22" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-
-            <option>BSc</option>
-            <option>BA</option>
-            <option>BCom</option>
-            <option>Btech </option>
-            <option>BCA</option>
-            <option>Others</option>
-          </select>
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault12" className="form-label mandatory">
-            {" "}
-            University
-          </label>
-
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault12"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault13" className="form-label mandatory">
-            Institute Name{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault13"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault14" className="form-label mandatory">
-            Year of passing{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault14"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault15" className="form-label mandatory">
-            Percentage
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault15"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault16" className="form-label mandatory">
-            Division
-          </label>
-          <select className="form-select" id="validationDefault16" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-
-            <option>first</option>
-            <option>second</option>
-            <option>third</option>
-          </select>
-        </div>
-
-        {/* --------------///////////////////////   Other Qualification ///////////////------------------- */}
-        <h5 className="text-danger"> Other Qualification Below 10th</h5>
-        <div className="col-md-4">
-          <label htmlFor="validationDefault17" className="form-label mandatory">
-            class
-          </label>
-
-          <select className="form-select" id="validationDefault17" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-            <option>6th</option>
-
-            <option>7th</option>
-            <option>8th</option>
-            <option>9th</option>
-          </select>
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault18" className="form-label mandatory">
-            School Name{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault18"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault19" className="form-label mandatory">
-            Year of passing{" "}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault19"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault20" className="form-label mandatory">
-            Percentage
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="validationDefault20"
-            required
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="validationDefault21" className="form-label mandatory">
-            Division
-          </label>
-          <select className="form-select" id="validationDefault21" required>
-            <option selected disabled value="">
-              Choose...
-            </option>
-
-            <option>first</option>
-            <option>second</option>
-            <option>third</option>
-          </select>
-        </div>
-      </form>
-    </div>
+    </>
   );
 }

@@ -11,7 +11,17 @@ export default function UserState(props) {
     user = {name: user.name, email: user.email, status: user.status}
   }
   const [userdata, setUserdata] = useState(user); 
+  const [loader, setLoader] = useState(false)
 
+  const personalData = {
+    userData: {course_id: '', name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '08/13/2003', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
+    userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
+    userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
+  }
+  const [formOne, setFormOne] = useState(personalData)
+  // const [formOne, setFormOne] = useState(null)
+  const [formTwo, setFormTwo] = useState({})
+  
   // ----------------------///////////////////// Get user details function /////////////////////////////////----------------------
 
   const getUser = async () => { 
@@ -26,9 +36,8 @@ export default function UserState(props) {
   return (
     <UserContext.Provider
       value={{
-        getUser,
-        userdata,
-        setUserdata, 
+        getUser, userdata, setUserdata, setFormOne,
+        formOne, loader, setLoader, formTwo, setFormTwo
       }}
     >
       {props.children}

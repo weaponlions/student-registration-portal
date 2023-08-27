@@ -3,6 +3,7 @@ import { Aadmin } from "../models/Admin.js";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
+import { validationResult } from "express-validator";
 
 const jwt_sing = "nielit_123";
 
@@ -95,7 +96,7 @@ export const singIn = async (req, res) => {
   if (!error.isEmpty) {
     return res.status(400).json({ error: "please enter valid credientials" });
   }
-
+  
   try {
     const { email, password } = req.body;
 
@@ -127,17 +128,16 @@ export const singIn = async (req, res) => {
       },
       jwt_sing
     );
-    res.json({ jwtToken });
+    return res.json({ jwtToken });
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: "Internal server error" });
-    console.log(error);
+    return res.status(500).json({ error: "Internal server error" }); 
   }
 }
 
 
 export const adminSignIn = async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });

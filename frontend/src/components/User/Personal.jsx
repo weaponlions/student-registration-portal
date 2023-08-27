@@ -4,9 +4,10 @@ import Select from "./Items/Select";
 import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "./Items/List"; 
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context-api/UserState";
+import { initialize_StepOne } from "../../api";
  
 const details = {
-  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: '', religion: '', mobile: '', whatsapp: '', 
+  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: '', religion: '', mobile: '', whatsapp: '', ews: ''
 }
 const address1 = {
   full_address: '', state: '', city: '', district: '', pincode: ''
@@ -16,20 +17,14 @@ const address2 = {
 }
 
 export default function Personal() {
-  const { userdata } = useContext(UserContext)
-  const [userData, setUserData] = useState(details);
-  const [userAdrs1, setUserAdrs1] = useState(address1); // permanent addrs
-  const [userAdrs2, setUserAdrs2] = useState(address2); // corespond addrs
+  const { userdata, setFormOne, formOne, setLoader } = useContext(UserContext)
+  const [userData, setUserData] = useState(formOne && formOne.userData || details);
+  const [userAdrs1, setUserAdrs1] = useState(formOne && formOne.userAdrs1 || address1); // permanent addrs
+  const [userAdrs2, setUserAdrs2] = useState(formOne && formOne.userAdrs2 || address2); // corespond addrs
+  const [trigger, setTrigger] = useState(true); // corespond addrs
   const location = useLocation()
-  const course_name = location.state.course_name
-  const navigate = useNavigate()
-
-
-  useEffect(() => {
-     console.log(location.state);
-     console.log(userdata);
-  }, [])
-  
+  const course_name = location.state?.course_name || ''
+  const navigate = useNavigate() 
 
   const isFieldValid = (e) => { 
     const currEle = e.target;
@@ -71,75 +66,108 @@ export default function Personal() {
   }
 
   const handleSubmit = (e) => { 
-    e.preventDefault();
-    console.log(userData);
-    console.log(userAdrs1);
-    console.log(userAdrs2);
-    navigate('/dashboard/step/preview', {state: {userData, userAdrs1, userAdrs2}})
+    e.preventDefault(); 
+    const prom = new Promise( async(res, rej) => {
+      try {
+        const { data } = await initialize_StepOne({userData, permanent: userAdrs1, correspond: userAdrs2})
+        console.log(data);
+        res()
+      } catch (error) {
+        rej(error)
+      } 
+    })
+    prom.then(()=> {
+      setFormOne({userData, userAdrs1, userAdrs2})
+      navigate('../user/preview', {state: { userData: {...userData, email: userdata.email}, userAdrs1, userAdrs2 }})
+    }).catch((err) => { 
+      console.log(err);
+    })
+  }
+
+  const sameAdrs = (e) => { 
+    if (e.target.value == 'true') {
+      setUserAdrs2(userAdrs1)
+    }
+    else{
+      setUserAdrs2(address2)
+    }
+    setTrigger(prev => !prev)
   }
 
   return (
-    <div className="container">
-      <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
+    <>
+      <div style={{position: 'relative'}}>
+        <div className="container my-5">
+          <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
 
-      <Field name={'course_name'} label={'Course Name'} value={course_name} required={false} disabled={true} />
-      
-      <Field name={'name'} label={'Full Name'} value={userData.name} isValid={isFieldValid} handleChange={handleChange} />
-      
-      <Field name={'father'} label={'Father Name'} value={userData.father} isValid={isFieldValid} handleChange={handleChange} />
-      
-      <Field name={'mother'} label={'Mother Name'} value={userData.mother} isValid={isFieldValid} handleChange={handleChange} />
+          <Field name={'course_name'} label={'Course Name'} value={course_name} required={false} disabled={true} />
+          
+          <Field name={'name'} label={'Full Name'} value={userData.name} isValid={isFieldValid} handleChange={handleChange} />
+          
+          <Field name={'father'} label={'Father Name'} value={userData.father} isValid={isFieldValid} handleChange={handleChange} />
+          
+          <Field name={'mother'} label={'Mother Name'} value={userData.mother} isValid={isFieldValid} handleChange={handleChange} />
+                
+          <Select label={'Gender'} name={'gender'} value={userData.gender} multi={genderList} isValid={isFieldValid} handleChange={handleChange} />  
+              
+          <Field name={'dob'} label={'Date of Birth'} type={'date'} value={userData.dob} isValid={isFieldValid} handleChange={handleChange} />
+          
+          <Field name={'email'} label={'Email Address'} type={'email'} value={userdata.email} handleChange={handleChange} disabled={true} />
             
-      <Select label={'Gender'} name={'gender'} value={userData.gender} multi={genderList} isValid={isFieldValid} handleChange={handleChange} />  
-           
-      <Field name={'dob'} label={'Date of Birth'} type={'date'} value={userData.dob} isValid={isFieldValid} handleChange={handleChange} />
-      
-      <Field name={'email'} label={'Email Address'} type={'email'} value={userdata.email} disabled={true} />
-         
-      <Select label={'Marital Status'} name={'marital'} isValid={isFieldValid} value={userData.marital} simple={maritalList} handleChange={handleChange} /> 
+          <Select label={'Marital Status'} name={'marital'} isValid={isFieldValid} value={userData.marital} simple={maritalList} handleChange={handleChange} /> 
 
-      <Select label={'Category'} name={'category'} isValid={isFieldValid} value={userData.category} simple={categoryList} handleChange={handleChange} />  
-             
+          <Select label={'Category'} name={'category'} isValid={isFieldValid} value={userData.category} simple={categoryList} handleChange={handleChange} />  
+          
+          <div className="col-md-4">
+            <label className="form-label mandatory"> Pwd </label>  
+            <input type={'radio'} name={'pwd'} required value={'YES'} onChange={handleChange} />
+            <label className="form-label mandatory"> Yes </label> 
+            <input type={'radio'} name={'pwd'} required checked value={'NO'} onChange={handleChange} />
+            <label className="form-label mandatory" > No </label>
+          </div>
 
-        <div className="col-md-4">
-          <label className="form-label mandatory"> Pwd </label>
+          <div className="col-md-4">
+            <label className="form-label mandatory"> EWS </label>  
+            <input type={'radio'} name={'ews'} required value={'YES'} onChange={handleChange} />
+            <label className="form-label mandatory"> Yes </label> 
+            <input type={'radio'} name={'ews'} required checked value={'NO'} onChange={handleChange} />
+            <label className="form-label mandatory" > No </label>
+          </div>
 
-          <input type={'radio'} name={'pwd'} required value={false} />
-          <label className="form-label mandatory"> No </label>
+          <Select label={'Religion'} name={'religion'} isValid={isFieldValid} value={userData.religion} multi={religionList} handleChange={handleChange} />   
+    
+          <Field name={'mobile'} label={'Mobile No.'} value={userData.mobile} isValid={isFieldValid} handleChange={handleChange} />
+          
+          <Field name={'whatsapp'} label={'Whatsapp No.'} required={false} value={userData.whatsapp} handleChange={handleChange} />
+                
+          <div className="row g-3">
+            <Field name={'full_address'} label={'Permanent Address'} adrs={1} value={userAdrs1.full_address} isValid={isFieldValid} handleChange={handleChange} />
+            <Select label={'State'} name={'state'} adrs={1} isValid={isFieldValid} value={userAdrs1.state} multi={stateList} handleChange={handleChange} />
+            <Select label={'District'} name={'district'} adrs={1} isValid={isFieldValid} value={userAdrs1.district} simple={userAdrs1.state != '' && districtList[userAdrs1.state]} handleChange={handleChange} />
+            <Field name={'city'} label={'City'} adrs={1} value={userAdrs1.city} isValid={isFieldValid} handleChange={handleChange} />
+            <Field name={'pincode'} label={'Pincode'} adrs={1} value={userAdrs1.pincode} isValid={isFieldValid} handleChange={handleChange} />
+          </div>
 
-          <input type={'radio'} name={'pwd'} required value={true} />
-          <label className="form-label mandatory"> Yes </label>
+          <div className="row g-3">
+            <div className="form-switch w-100 d-flex justify-content-end">
+              <label className="form-check-label mx-5" htmlFor="flexSwitchCheckChecked">Same as Permanent Address</label>
+              <input className="form-check-input" type="checkbox" onClick={sameAdrs} value={trigger} role="switch" id="flexSwitchCheckChecked" />
+            </div>
+            <Field name={'full_address'} label={'Correspond Address'} adrs={2} value={userAdrs2.full_address} isValid={isFieldValid} handleChange={handleChange} />
+            <Select label={'State'} name={'state'} isValid={isFieldValid} adrs={2} value={userAdrs2.state} multi={stateList} handleChange={handleChange} />
+            <Select label={'District'} isValid={isFieldValid} adrs={2} name={'district'} value={userAdrs2.district} simple={userAdrs2.state != '' && districtList[userAdrs2.state]} handleChange={handleChange} />
+            <Field name={'city'} label={'City'} adrs={2} value={userAdrs2.city} isValid={isFieldValid} handleChange={handleChange} />
+            <Field name={'pincode'} label={'Pincode'} adrs={2} value={userAdrs2.pincode} isValid={isFieldValid} handleChange={handleChange} />
+          </div>
+
+          <div className="col-12 d-flex justify-content-center">
+            <button className="btn btn-primary" type="submit">
+              Submit form
+            </button>
+          </div>
+          </form>
         </div>
- 
-
-      <Select label={'Religion'} name={'religion'} isValid={isFieldValid} value={userData.religion} multi={religionList} handleChange={handleChange} />   
- 
-      <Field name={'mobile'} label={'Mobile No.'} value={userData.mobile} isValid={isFieldValid} handleChange={handleChange} />
-      
-      <Field name={'whatsapp'} label={'Whatsapp No.'} required={false} value={userData.whatsapp} handleChange={handleChange} />
-             
-      <div className="row g-3">
-        <Field name={'full_address'} label={'Permanent Address'} adrs={1} value={userAdrs1.full_address} isValid={isFieldValid} handleChange={handleChange} />
-        <Select label={'State'} name={'state'} adrs={1} isValid={isFieldValid} value={userAdrs1.state} multi={stateList} handleChange={handleChange} />
-        <Select label={'District'} name={'district'} adrs={1} isValid={isFieldValid} value={userAdrs1.district} simple={userAdrs1.state != '' && districtList[userAdrs1.state]} handleChange={handleChange} />
-        <Field name={'city'} label={'City'} adrs={1} value={userAdrs1.city} isValid={isFieldValid} handleChange={handleChange} />
-        <Field name={'pincode'} label={'Pincode'} adrs={1} value={userAdrs1.pincode} isValid={isFieldValid} handleChange={handleChange} />
       </div>
-
-      <div className="row g-3">
-        <Field name={'full_address'} label={'Correspond Address'} adrs={2} value={userAdrs2.full_address} isValid={isFieldValid} handleChange={handleChange} />
-        <Select label={'State'} name={'state'} isValid={isFieldValid} adrs={2} value={userAdrs2.state} multi={stateList} handleChange={handleChange} />
-        <Select label={'District'} isValid={isFieldValid} adrs={2} name={'district'} value={userAdrs2.district} simple={userAdrs2.state != '' && districtList[userAdrs2.state]} handleChange={handleChange} />
-        <Field name={'city'} label={'City'} adrs={2} value={userAdrs2.city} isValid={isFieldValid} handleChange={handleChange} />
-        <Field name={'pincode'} label={'Pincode'} adrs={2} value={userAdrs2.pincode} isValid={isFieldValid} handleChange={handleChange} />
-      </div>
-
-      <div className="col-12">
-        <button className="btn btn-primary" type="submit">
-          Submit form
-        </button>
-      </div>
-      </form>
-    </div>
+    </>
   );
 }

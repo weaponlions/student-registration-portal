@@ -11,17 +11,17 @@ const PORT = 5000;
 
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({limit: '2mb'}));
 
 app.use("/auth", authRoute);
-app.use("/course", multer().array() , courseRoute)
-app.use("/user", multer().array() , userRoute)
+app.use("/course", multer().array() , courseRoute);
+app.use("/user", multer().any(['image']) , userRoute);
 
 
 connectToDataBase
   .then(async () => {
     app.listen(PORT, () => {
-      console.log(`app is running on http://localhost:${PORT}`);
+      console.log(`app is running on http://localhost:${PORT}`); 
     }); 
   })
   .catch((err) => {

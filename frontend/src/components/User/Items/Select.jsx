@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const Select = ({
   label,
@@ -8,8 +8,27 @@ const Select = ({
   value,
   handleChange,
   isValid,
-  adrs
+  adrs,
+  required
 }) => {
+
+  
+  useEffect(() => { 
+    let ele = document.getElementById(`validation${name}`); 
+    if (required == false) {
+      ele.removeAttribute('required') 
+    } 
+  }, [])
+
+  
+  const handleAdrs = (e) => {
+    if(adrs && adrs != ''){
+      handleChange(e, adrs)
+    }
+    else{
+      handleChange(e)
+    }
+  }
  
   return (
     <div className="col-md-4">
@@ -19,11 +38,12 @@ const Select = ({
         id={`validation${name}`}
         className="form-select" 
         value={value || ""}
-        onChange={(adrs && adrs == 1 ? (e)=>handleChange(e, 1) : adrs == 2 ? (e)=>handleChange(e, 2) : handleChange) || handleChange }
+        onChange={handleAdrs}
         onChangeCapture={isValid}
         onBlur={isValid} 
+        required
       >
-        <option>-----------------</option>
+        <option disabled value={''}>-----------------</option>
         {simple &&
           simple.map((ele, i) => {
             return (
