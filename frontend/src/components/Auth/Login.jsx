@@ -11,6 +11,7 @@ import {
   validateCaptcha,
 } from "react-simple-captcha"; 
 import jwtDecode from "jwt-decode";
+import { loginUser } from "../../api";
 
 function Login() {
   const [credientials, setCredientials] = useState({ email: "sainfans@gmail.com", password: "12345" });
@@ -27,35 +28,18 @@ function Login() {
   };
 
   const submitButton = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault(); 
     if (!(validateCaptcha(CaptchaValue) === true)) {
       loadCaptchaEnginge(6);
-      setCaptchaValue("");
-
-      try {
-        const response = await fetch("http://localhost:5000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credientials.email,
-            password: credientials.password,
-          }),
-        });
-        const jso = await response.json();
-        if (jso.jwtToken) {  
-          localStorage.setItem("jwtToken", jso.jwtToken);
-          const result = jwtDecode(jso.jwtToken)
+      setCaptchaValue(""); 
+      loginUser({ email: credientials.email, password: credientials.password })
+        .then(async ({data}) => {
+          localStorage.setItem("jwtToken", data.jwtToken);
+          const result = jwtDecode(data.jwtToken)
           setUserdata({name: result.name, email: result.email, status: result.status}) 
           navigate("/dashboard");
-        } else {
-          alert(jso.error);
-        }
-      } catch (error) {
-        alert("internal server error", error.message);
-      }
+        })
+        .catch((err) => console.log("Message", err)) 
     } else {
       alert("Captcha Does Not Match");
       setCaptchaValue("");

@@ -9,12 +9,13 @@ const Select = ({
   handleChange,
   isValid,
   adrs,
-  required
+  required,
+  disabled
 }) => {
 
   
   useEffect(() => { 
-    let ele = document.getElementById(`validation${name}`); 
+    let ele = document.getElementById(`validation${name}_${adrs}`); 
     if (required == false) {
       ele.removeAttribute('required') 
     } 
@@ -32,16 +33,17 @@ const Select = ({
  
   return (
     <div className="col-md-4">
-      <label className="form-label mandatory"> {label} </label>
+      <label htmlFor={`validation${name}_${adrs}`} className="form-label mandatory"> {label} </label>
       <select
         name={name}
-        id={`validation${name}`}
+        id={`validation${name}_${adrs}`}
         className="form-select" 
         value={value || ""}
         onChange={handleAdrs}
         onChangeCapture={isValid}
         onBlur={isValid} 
         required
+        disabled={disabled || false}
       >
         <option disabled value={''}>-----------------</option>
         {simple &&

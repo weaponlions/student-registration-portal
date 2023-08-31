@@ -3,46 +3,35 @@ import { Aadmin } from "../models/Admin.js";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
-import { validationResult } from "express-validator";
+import { isRequired } from "../middleware/fieldMiddleware.js";
 
 const jwt_sing = "nielit_123";
+const jwt_time = "1h";
 
-export const signUp = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    //////// --------------------display error for for duplicate email-------///////////------->
+export const signUp = async (req, res) => { 
 
     try {
-      let user = await User.findOne({ email: req.body.email });
+      const { email, password, name } = isRequired(req.body, ['email', 'password', 'name'])
+      let user = await User.findOne({ email: email });
       if (user) {
         return res.status(400).json({ error: "user already exists" });
-      }
-
-      // ------------------making salt and hash function for secure password-------------->
+      } 
 
       const salt = await bcrypt.genSalt(10);
-      const secPass = await bcrypt.hash(req.body.password, salt);
+      const encryptPass = await bcrypt.hash(password, salt);
 
       user = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: secPass,
-      });
-
-      /////////// ---------------- jwt token -------------------------------------------->
+        name: name,
+        email: email,
+        password: encryptPass,
+      }); 
 
       const data = {
         user: {
           id: user.id,
         },
       };
-      const jwtToken = jwt.sign(data, jwt_sing);
-
-      ///////----------------------  res.json(user)-------------->
-
+      const jwtToken = jwt.sign(data, jwt_sing); 
       res.json({ jwtToken });
 
       /////////////////////////// sending mail to the user ////////////////////////////////////////////////////////////
@@ -56,7 +45,6 @@ export const signUp = async (req, res) => {
           },
         });
 
-        const { email, password } = req.body;
         async function main() {
           const info = await transporter.sendMail({
             from: "<nk999549@gmail.com>",
@@ -88,36 +76,23 @@ export const signUp = async (req, res) => {
       res.status(500).json({ error: "Internal Server error" });
       console.log(error);
     }
-  }
+}
 
 
-export const singIn = async (req, res) => {
-  const error = validationResult(req);
-  if (!error.isEmpty) {
-    return res.status(400).json({ error: "please enter valid credientials" });
-  }
-  
-  try {
-    const { email, password } = req.body;
-
-    // //////----------------verify email of user --------------------------------------/////////-------->
+export const singIn = async (req, res) => { 
+  try { 
+    const { email, password } = isRequired(req.body, ['email', 'password']); 
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ error: "Email is not register Please Signup" });
-    }
-
-    //////////--------- verify password of user -------------------------------------------------------->
+      return res .status(404) .json({ error: "User Not Found" });
+    } 
 
     const comparePass = await bcrypt.compare(password, user.password);
     if (!comparePass) {
       return res.status(400).json({ error: "Incorrect password" });
     }
-
-    ///////////////////------- jwt token ----------------------------------------------------------------->
 
     const jwtToken = jwt.sign(
       {
@@ -126,9 +101,13 @@ export const singIn = async (req, res) => {
         email: user.email,
         status: user.status,
       },
-      jwt_sing
+      jwt_sing,
+      {
+        expiresIn: jwt_time
+      }
     );
-    return res.json({ jwtToken });
+
+    return res.status(200).json({ jwtToken });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ error: "Internal server error" }); 
@@ -136,30 +115,22 @@ export const singIn = async (req, res) => {
 }
 
 
-export const adminSignIn = async (req, res) => {
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    /////////////////-----------display error for for duplicate email-------////////////////////------->
+export const adminSignIn = async (req, res) => { 
 
     try {
-      let admin = await Aadmin.findOne({ email: req.body.email });
+      const { email, password } = isRequired(req.body, ['email', 'password']);
+      let admin = await Aadmin.findOne({ email: email });
 
       if (!admin) {
         return res.status(400).json("not allowed");
       }
-
-      const { email, password } = req.body;
+ 
 
       const comparePassword = await bcrypt.compare(password, admin.password);
       if (!comparePassword) {
         return res.status(400).json({ error: "Incorrect password" });
       }
-
-      /////////// ---------------- jwt token -------------------------------------------->
+ 
 
       const data = {
         user: {
@@ -174,4 +145,4 @@ export const adminSignIn = async (req, res) => {
       console.log("inernal server error");
       return res.json({ error: err.message, status: 'done' });
     }
-  }
+}

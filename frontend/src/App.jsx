@@ -1,4 +1,4 @@
-import "./App.css";
+import "./style/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/UI/Home";
 import Structure from "./components/User/Structure";
@@ -23,6 +23,7 @@ function App() {
           <Route exact path="/admin" element={<Admin />}></Route>
           <Route exact path="/signup" element={<SingnUp />}></Route> 
           <Route exact path="/login" element={<Login />}></Route>
+
           <Route exact path="/dashboard" element={<Structure />}>
             <Route exact path="/dashboard" element={<Dashboard />}></Route>
             <Route exact path="/dashboard/courses" element={<Courses />}></Route>
@@ -31,6 +32,7 @@ function App() {
             <Route exact path="/dashboard/user/step_three" element={<Documents />}></Route>
             <Route exact path="/dashboard/user/preview" element={<Table />}></Route>
           </Route>
+          
         </Routes>
       </BrowserRouter>
     </>

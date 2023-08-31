@@ -44,23 +44,23 @@ const infoSchema = new mongoose.Schema({
 const educationSchema = mongoose.Schema({ 
     user_id: {type: Object, required: true },
     exam_name: {type : String, require : true },
-    exam_type: {type : String, require : true, enum: ['Graduation', 'Post Graduation', '10', '12', 'Under 10'] },
+    exam_type: {type : String, require : true, enum: ['Graduation', 'Post Graduation', '10', '12', 'other'] },
     institute: {type : String, require : true },
     university: {type : String, require : true },
     passing_year: {type : Number, require : true }, 
     percentage: {type : Number, require : true }, 
     division: {type : String, require : true },
-    doc_path: {type: String, required: true },
+    // doc_path: {type: String, required: false },
     updated_at: {type: Date, default : Date.now},
 })
 
 
 const docSchema = mongoose.Schema({
     user_id: {type: Object, required: true, unique: true },
-    aadhar: {type: String, required: true },
-    photo: {type: String, required: true },
-    leftThumb: {type: String, required: true },
-    sign: {type: String, required: true }, 
+    aadhar: {type: String },
+    photo: {type: String },
+    leftThumb: {type: String },
+    sign: {type: String }, 
     updated_at: {type: Date, default : Date.now},
 })
 

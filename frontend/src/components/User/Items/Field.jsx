@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-const Field = ({label, name, type, disabled, value, isValid, handleChange, adrs, required=true, min, max, step }) => {
+const Field = ({label, name, disabled, value, isValid, handleChange, adrs, required=true, min, max, step, type='text'}) => {
 
   useEffect(() => { 
-    let ele = document.getElementById(`validation${name}`); 
+    let ele = document.getElementById(`validation${name}_${adrs}`); 
     if (required == false) {
       ele.removeAttribute('required') 
     } 
@@ -20,13 +20,13 @@ const Field = ({label, name, type, disabled, value, isValid, handleChange, adrs,
    
   return (
     <div className="col-md-4">
-      <label htmlFor={`validation${name}`} className="form-label mandatory">
+      <label htmlFor={`validation${name}_${adrs}`} className="form-label mandatory">
         {label}
       </label>
       <input
-        type={type || 'text'}
+        type={type}
         className="form-control"
-        id={`validation${name}`}
+        id={`validation${name}_${adrs}`}
         name={name}
         disabled={disabled || false}
         value={value || ''}

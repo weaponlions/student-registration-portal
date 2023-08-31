@@ -1,38 +1,49 @@
-import React from "react";
 import { createContext, useState } from "react";
-import jwtDecode from "jwt-decode";
-import { verifyUser } from "../api";
+import jwtDecode from "jwt-decode"; 
 
 const UserContext = createContext();
 
 export default function UserState(props) {
-  let user = localStorage.getItem('jwtToken') && jwtDecode(localStorage.getItem('jwtToken')) || {}
-  if (user.name) { 
-    user = {name: user.name, email: user.email, status: user.status}
+  const [userdata, setUserdata] = useState({});
+  
+  const func = async () => {
+    const user = await localStorage.getItem('jwtToken') && jwtDecode(localStorage.getItem('jwtToken')) || {}
+    setUserdata({name: user.name, email: user.email, status: user.status});
   }
-  const [userdata, setUserdata] = useState(user); 
+  func()
+
   const [loader, setLoader] = useState(false)
 
   const personalData = {
-    userData: {course_id: '', name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '08/13/2003', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
+    userData: {course_id: '', name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '2003-08-13', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
     userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
     userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
   }
   const [formOne, setFormOne] = useState(personalData)
-  // const [formOne, setFormOne] = useState(null)
+  
   const [formTwo, setFormTwo] = useState({})
   
   // ----------------------///////////////////// Get user details function /////////////////////////////////----------------------
 
   const getUser = async () => { 
-    const { data } = await verifyUser()
-    const { result } = data;  
-    if (result == false) {
-      localStorage.removeItem('jwtToken')
-    }
-    return result;
+    try { 
+      let token = localStorage.getItem('jwtToken') || undefined; 
+      if (!token) {
+        localStorage.removeItem('jwtToken')
+        throw Error("Token Not Found")
+      }
+      const { exp } = jwtDecode(token);
+      if (exp < (Math.round(Date.now()/1000)) ) {
+        throw Error("Token Expire")
+      }
+      return true;
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    } 
   };
-  
+ 
+ 
   return (
     <UserContext.Provider
       value={{

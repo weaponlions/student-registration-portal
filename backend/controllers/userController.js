@@ -7,12 +7,12 @@ import { isRequired } from '../middleware/fieldMiddleware.js';
 
 export const userStepOne = async (req, res) => {
     try {
+        const old = await infoModel.findOne({user_id: req.body.user_id}) || undefined
+        if (old) 
+            return res.json({message: 'Please user is old', error: 'exist'}) 
         const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews'])
         const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address'])
         const correspond = isRequired(req.body.correspond, ['state', 'district', 'city', 'pincode', 'full_address'])
-        const old = await infoModel.findOne({user_id: req.body.user_id}) || undefined
-        if (old) 
-            throw Error('User Info is Exists')
         data.permanent = permanent
         data.correspond = correspond
         data.user_id = req.body.user_id;
@@ -30,12 +30,22 @@ export const userStepOne = async (req, res) => {
 // user_id, exam_name, institute, university, passing_year, percentage, division, exam_type
 export const userStepTwo = async (req, res) => {
     try {
-        const data = isRequired(req.body, ['user_id', 'exam_name', 'institute', 'university', 'passing_year', 'percentage', 'division', 'exam_type'])
-         console.log(data);
-        return res.json({status: 'success', data: []})
+        const old = await educationModel.findOne({user_id: req.body.user_id}) || undefined
+        if (old) 
+            return res.json({message: 'Please user is old', error: 'exist'}) 
+        
+        let { tenth, twelfth } = req.body;
+        tenth = isRequired(tenth, ['exam_name', 'institute', 'university', 'passing_year', 'percentage', 'division', 'exam_type'])
+        twelfth = isRequired(twelfth, ['exam_name', 'institute', 'university', 'passing_year', 'percentage', 'division', 'exam_type'])
+        
+        let mod = await educationModel.create({...tenth, user_id: req.body.user_id});
+        console.log(mod);
+        mod = await educationModel.create({...twelfth, user_id: req.body.user_id});
+        console.log(mod);
+        return res.json({data: []})
     } catch (err) {
         console.log(err.message);
-        return res.json({status: 'failed', error: err.message})
+        return res.json({error: err.message})
     }
 }
 
@@ -51,13 +61,40 @@ export const userStepThree = async (req, res) => {
     }
 }
 
-import fs from 'fs';
 
-export const fileReciever =  (req, res) => {
+export const userInformation = async (req, res) => {
     try {
-         
+        const { user_id } = req.body;
+        const user = await infoModel.findOne({user_id})
+        return res.json({result: [user]})
     } catch (err) {
         console.log(err.message);
+        return res.status(400).json({error: err.message})
     }
-    return res.json({})
+}
+
+import fs from 'fs';
+
+export const fileReciever = async (req, res) => {
+    try {
+        const file = req.files[0];
+        const { fieldname, user_id } = req.body;
+        const path = `./upload/images/${user_id}_${file.originalname}`;
+        
+        let model = await docModel.find({user_id});
+
+        if (model.length == 1) {
+            model = await docModel.findOneAndUpdate({user_id}, {[fieldname]: path});
+            model.save();
+        }
+        else{
+            model = await docModel.create({user_id, [fieldname]: path}) 
+        } 
+        fs.writeFileSync(path, file.buffer); 
+        return res.status(200).json({message: 'done'})
+
+    } catch (err) {
+        console.log(err.message);
+        return res.status(401).json({error: err.message})
+    }
 }
