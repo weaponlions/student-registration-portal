@@ -10,3 +10,5 @@ export const userInfo = async () => axios.post('user/user_info')
 export const initialize_StepOne = async (data) => axios.post('/user/step_one', data)
 export const initialize_StepTwo = async (data) => axios.post('/user/step_two', data)
 export const initialize_StepThree = async (data) => axios.post('/user/step_three', data)
+
+export const createOrder = async (data) => axios.post('/payment/createOrder', data)

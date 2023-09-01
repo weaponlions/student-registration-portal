@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import It from "./Courses/It";
 import ShortTerm from "./Courses/ShortTerm";
 import Itliteracy from "./Courses/ItLiteracy";
+import { UserContext } from "../../context-api/UserState";
 
 const Courses = () => {
   const [CATEGORY, setCATEGORY] = useState('')
- 
+  const { setSelectedCourse } = useContext(UserContext)
+
+  useEffect(() => { 
+    setSelectedCourse({}) 
+  }, [])
+  
 
   const GetCourse = () => {
     switch (CATEGORY) {

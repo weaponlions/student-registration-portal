@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Field from "./Items/Field";
 import Select from "./Items/Select";
 import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "./Items/List"; 
-import { useLocation, useNavigate } from "react-router-dom";
+import { unstable_HistoryRouter, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context-api/UserState";
 import { initialize_StepOne } from "../../api";
  
@@ -17,7 +17,7 @@ const address2 = {
 }
 
 export default function Personal() {
-  const { userdata, setFormOne, formOne, setLoader } = useContext(UserContext);
+  const { userdata, setFormOne, formOne, setLoader, setSelectedCourse } = useContext(UserContext);
 
   const [userData, setUserData] = useState(formOne && formOne.userData || details);
   const [userAdrs1, setUserAdrs1] = useState(formOne && formOne.userAdrs1 || address1); // permanent addrs
@@ -25,8 +25,18 @@ export default function Personal() {
   const [disabled, setDisabled] = useState(false)
   const [trigger, setTrigger] = useState(true); // corespond addrs
   const location = useLocation()
-  const course_name = location.state?.course_name || ''
-  const navigate = useNavigate() 
+  const { course_name, course_id } = {...location.state}
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(location);
+     if (!course_id) {
+      navigate('../courses')
+     }
+     else{
+      setSelectedCourse({course_name, course_id})
+     }
+  }, [])
 
   const isFieldValid = (e) => { 
     const currEle = e.target;
@@ -72,15 +82,15 @@ export default function Personal() {
     
     const prom = new Promise( async(res, rej) => {
       try {
-        const { data } = await initialize_StepOne({userData, permanent: userAdrs1, correspond: userAdrs2})
+        const { data } = await initialize_StepOne({userData, permanent: userAdrs1, correspond: userAdrs2});
         console.log(data); 
-          res() 
+        res();
       } catch (error) {
         rej(error)
       } 
     })
     prom.then(()=> {
-      // setFormOne({userData, userAdrs1, userAdrs2}) 
+      // setFormOne({userData, userAdrs1, userAdrs2})
       navigate('../user/step_two');
     }).catch((err) => { 
       console.log(err);
@@ -97,13 +107,15 @@ export default function Personal() {
     setTrigger(prev => !prev)
   }
 
+  
+
   return (
     <>
       <div style={{position: 'relative'}}>
         <div className="container my-5">
           <form className="row g-3 needs-validation" onSubmit={handleForm}>
 
-          <Field name={'course_name'} label={'Course Name'} value={course_name} required={false} disabled={true} />
+          <Field name={'course_name'} label={'Course Name'} value={course_name && course_name} required={false} disabled={true} />
           
           <Field name={'name'} label={'Full Name'} value={userData.name} isValid={isFieldValid} handleChange={handleChange} disabled={disabled} />
           

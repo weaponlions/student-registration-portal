@@ -17,8 +17,9 @@ export default function Documents() {
  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    for (let i = 0; i < e.target.length - 1; i++) {
-      const element = e.target[i]; 
+    let i = 0;
+    while (i < e.target.length - 1) {
+      const element = e.target[i++]; 
       if (element.files.length == 1) { 
         const result = await uploadFile(element.name, element.files[0]);
         if (!result) {
@@ -27,7 +28,10 @@ export default function Documents() {
         }
       }
     } 
-     
+    if(i == e.target.length - 1){
+      navigate('/online-payment')
+    }
+
   }
 
   const uploadFile = async (fieldname, file) => {
@@ -47,7 +51,7 @@ export default function Documents() {
     <> 
     <div className="container my-5" style={{border: '20px solid #e7e7e7', borderRadius: 5}}>
       <div className="row p-2" style={{border: '1px solid #0d6efd', borderRadius: 2}}>
-        <form className="row g-3"onSubmit={handleSubmit}>
+        <form className="row g-3" onSubmit={handleSubmit}>
           <div className="d-flex justify-content-center ">
             <h4>Documents </h4>
           </div> 

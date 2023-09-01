@@ -12,13 +12,27 @@ import Qualification from "./components/User/Qualification";
 import Courses from "./components/User/Courses";
 import Table from "./components/User/Table/Table";
 import { Dashboard } from "./components/User/Dashboard";
+import Payment from "./Payment";
+import { useContext, useEffect } from "react";
+import { UserContext } from "./context-api/UserState";
+import Success from "./Success";
 
 function App() {
+  const { loadUser } = useContext(UserContext)
+  useEffect(() => {
+    loadUser() 
+    return () => {
+      loadUser()
+    }
+  }, [])
+  
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/online-payment" element={<Payment />}></Route>
+          <Route exact path="/online-payment-success" element={<Success />}></Route>
           <Route exact path="/about" element={<About />}></Route>
           <Route exact path="/admin" element={<Admin />}></Route>
           <Route exact path="/signup" element={<SingnUp />}></Route> 
