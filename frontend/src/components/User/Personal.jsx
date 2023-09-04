@@ -138,7 +138,7 @@ export default function Personal() {
             <input type={'radio'} name={'pwd'} required value={'YES'} onChange={handleChange} disabled={disabled} />
             <label className="form-label mandatory"> Yes </label> 
             <input type={'radio'} name={'pwd'} required checked value={'NO'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory" > No </label>
+            <label className="form-label mandatory" value={'NO'}> No </label>
           </div>
 
           <div className="col-md-4">

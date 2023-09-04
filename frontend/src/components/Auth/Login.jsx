@@ -13,7 +13,8 @@ import {
 import jwtDecode from "jwt-decode";
 import { loginUser } from "../../api";
 
-function Login() {
+function Login(props) {
+  const {Salert}=props;
   const [credientials, setCredientials] = useState({ email: "sainfans@gmail.com", password: "12345" });
   const [CaptchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
@@ -37,11 +38,15 @@ function Login() {
           localStorage.setItem("jwtToken", data.jwtToken);
           const result = jwtDecode(data.jwtToken)
           setUserdata({name: result.name, email: result.email, status: result.status}) 
+           await Salert('SUCCESS','Successful Login','sucess');
+          
           navigate("/dashboard");
         })
-        .catch((err) => console.log("Message", err)) 
+        .catch((err) => console.log("Message", err),
+        Salert('Error',err,'error')) 
     } else {
-      alert("Captcha Does Not Match");
+      Salert( 'ERROR','Captcha Does Not Match','error')
+      // alert("Captcha Does Not Match");
       setCaptchaValue("");
     }
   };
