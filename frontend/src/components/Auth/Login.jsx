@@ -146,8 +146,10 @@ function Login(props) {
               Submit
             </button>
           </div>
-          <p>
-            Don't have an account <Link to="/signup">Sign Up</Link>
+          <p className="d-flex flex-column justify-content-center align-items-center">
+            {/* <span className="">New user</span> */}
+            <span> New user  <Link to="/signup" style={{textDecoration:'none',fontWeight:'600'}}>Create an   Account ! </Link></span>
+            
           </p>
         </form>
       </div>

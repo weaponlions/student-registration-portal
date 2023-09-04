@@ -11,7 +11,9 @@ import {
   validateCaptcha,
 } from "react-simple-captcha";
 
-function SingnUp() {
+function SingnUp(props) {
+  const {Salert}=props;
+
   const [credientials, setCredientials] = useState({
     name: "",
     email: "",
@@ -53,13 +55,18 @@ function SingnUp() {
       console.log(jso);
       if (jso.jwtToken) {
         localStorage.setItem("jwtToken", jso.jwtToken); 
-        alert("please check your email");
+      Salert( 'Success','please check your email','success')
+
+        // alert("please check your email");
         navigate("/login");
       } else {
         alert(jso.error);
+      Salert( 'Error',jso.error,'error')
+
       }
     } else {
-      alert("Captcha Does Not Match");
+      Salert( 'ERROR','Captcha Does Not Match','error')
+
       setCaptchaValue("");
     }
   };
@@ -171,8 +178,8 @@ function SingnUp() {
               Submit
             </button>
           </div>
-          <p className="mt-2">
-            Already register <Link to="/login">Sign In</Link>
+          <p className="mt-2 " >
+            Already register <Link to="/login" className="text-decoration-none" style={{fontWeight:'600'}}>Login</Link>
           </p>
         </form>
       </div>

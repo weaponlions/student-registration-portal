@@ -17,6 +17,12 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "./context-api/UserState";
 import Success from "./Success";
 import Swal from 'sweetalert2'; 
+import UserProfile from './components/User/profile/UserProfile'; 
+import AdminHome from './components/Admin/AdminHome'
+import CoursesAdmin from './components/Admin/Courses/CoursesAdmin'
+import It from "./components/Admin/Courses/IT";
+import Itliteracy from "./components/Admin/Courses/Literacy";
+import ShortTerm from "./components/Admin/Courses/ShortTerm";
 
 
 function App() {
@@ -48,12 +54,22 @@ const ShowAlert =(title,text,icon)=>{
           <Route exact path="/online-payment" element={<Payment Salert={ShowAlert}/>}></Route>
           <Route exact path="/online-payment-success" element={<Success Salert={ShowAlert} />}></Route>
           <Route exact path="/about" element={<About />}></Route>
-          <Route exact path="/admin" element={<Admin Salert={ShowAlert}/>}></Route>
+          <Route exact path="/admin" element={<Admin Salert={ShowAlert}/>}>
+          <Route exact path="/admin/home" element={<AdminHome />}></Route>
+          <Route exact path="/admin/courses" element={<CoursesAdmin />}>
+          <Route exact path="/admin/courses/it" element={<It />}></Route>
+          <Route exact path="/admin/courses/literacy" element={<Itliteracy />}></Route>
+          <Route exact path="/admin/courses/shortterm" element={<ShortTerm />}></Route>
+
+          </Route>
+
+          </Route>
           <Route exact path="/signup" element={<SingnUp Salert={ShowAlert}/>}></Route> 
           <Route exact path="/login" element={<Login Salert={ShowAlert}/>}></Route>
 
           <Route exact path="/dashboard" element={<Structure Salert={ShowAlert}/>}>
             <Route exact path="/dashboard" element={<Dashboard Salert={ShowAlert}/>}></Route>
+            <Route exact path="/dashboard/profile" element={<UserProfile Salert={ShowAlert}/>}></Route>
             <Route exact path="/dashboard/courses" element={<Courses Salert={ShowAlert}/>}></Route>
             <Route exact path="/dashboard/user/step_one" element={<Personal Salert={ShowAlert} />}></Route>
             <Route exact path="/dashboard/user/step_two" element={<Qualification Salert={ShowAlert}/>}></Route> 

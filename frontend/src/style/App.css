@@ -216,13 +216,11 @@ input[type]{
   
 
   'two-userPro four-userPro';
-
-  height: 100vh;
   gap: 1.3rem;
 }
 .one-userPro{
   grid-area:one-userPro;
-  background-color: #e9e9e9;
+  background-color: #dadada;
   border-radius: 2rem ;
   height: 20rem;
   padding: 2rem;

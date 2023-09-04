@@ -4,7 +4,7 @@ import sign from '../../../assets/images/sign.png'
 function UserProfile() {
   return (
     <section>
-    <div className='container main-userPro'>
+    <div className='container main-userPro ' >
         
         <div className='one-userPro my-4'>
             <div className='d-flex justify-content-center'>

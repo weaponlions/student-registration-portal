@@ -1,12 +1,17 @@
-import  { useEffect,useContext } from 'react'
+import  { useEffect,useContext,useState } from 'react'
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { UserContext } from '../../context-api/UserState';
 import Navbar from '../UI/Navbar';
-import Footer from '../UI/Footer';
+import Sidebar from './SidebarStudent';
 import "./Items/animation.css";
 import { initialize_StepOne, userInfo } from './../../api/index';
 
 export default function Structure() {
+  const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
+
+  const OpenSidebar = () => {
+    setOpenSidebarToggle(!openSidebarToggle)
+  }
 
   const { getUser, userdata, loader, setFormOne } = useContext(UserContext) 
   const navigate = useNavigate(); 
@@ -49,12 +54,17 @@ export default function Structure() {
   
   return (
     <>
-      <div style={{position: 'relative'}}>
-        <Navbar/> 
-          <div style={{minHeight: '50vh'}}>
+      <div >
+        <div className={!openSidebarToggle?'grid-container': 'sidebar_hide'}>
+      <Navbar hamicon={true} OpenSidebar={OpenSidebar}/>
+
+      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
+
+          <div  className='main-container m-4'>
             <Outlet />  
           </div>
-        <Footer/> 
+        
+      </div>
       </div>
         
         {

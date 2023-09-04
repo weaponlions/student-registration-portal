@@ -79,7 +79,11 @@ export const fileReciever = async (req, res) => {
     try {
         const file = req.files[0];
         const { fieldname, user_id } = req.body;
-        const path = `./upload/images/${user_id}_${file.originalname}`;
+        
+        // const path = `./upload/images/${user_id}_${ file.originalname}`;
+        const path =
+            ( new Date().toISOString().replace(/:/g, '-') +'-'+ file.originalname);
+
         
         let model = await docModel.find({user_id});
 
@@ -96,6 +100,8 @@ export const fileReciever = async (req, res) => {
     } catch (err) {
         console.log(err.message);
         return res.status(401).json({error: err.message})
+
+            
     }
 }
 
