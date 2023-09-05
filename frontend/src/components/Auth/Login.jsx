@@ -12,7 +12,8 @@ import {
 } from "react-simple-captcha"; 
 import { loginUser } from "../../api";
 
-function Login() {
+function Login(props) {
+  const {Salert}=props;
   const [credientials, setCredientials] = useState({ email: "sainfans@gmail.com", password: "12345" });
   const [CaptchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
@@ -36,9 +37,11 @@ function Login() {
           loadUser(data.jwtToken);
           navigate("/dashboard");
         })
-        .catch((err) => console.log("Message", err)) 
+        .catch((err) => console.log("Message", err),
+        Salert('Error',err,'error')) 
     } else {
-      alert("Captcha Does Not Match");
+      Salert( 'ERROR','Captcha Does Not Match','error')
+      // alert("Captcha Does Not Match");
       setCaptchaValue("");
     }
   };
@@ -138,8 +141,10 @@ function Login() {
               Submit
             </button>
           </div>
-          <p>
-            Don't have an account <Link to="/signup">Sign Up</Link>
+          <p className="d-flex flex-column justify-content-center align-items-center">
+            {/* <span className="">New user</span> */}
+            <span> New user  <Link to="/signup" style={{textDecoration:'none',fontWeight:'600'}}>Create an   Account ! </Link></span>
+            
           </p>
         </form>
       </div>

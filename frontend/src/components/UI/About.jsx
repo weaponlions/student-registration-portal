@@ -8,7 +8,7 @@ export default function About() {
     <>
     <Header/>
     <Navbar/>
-    <article>
+    <article style={{minHeight:'50vh'}}>
     <div>
       <h1>about
       </h1>

@@ -49,8 +49,8 @@ export default function Documents() {
  
   return (
     <> 
-    <div className="container my-5" style={{border: '20px solid #e7e7e7', borderRadius: 5}}>
-      <div className="row p-2" style={{border: '1px solid #0d6efd', borderRadius: 2}}>
+    <div className="container my-5" style={{border: '15px solid #e7e7e7', borderRadius: '.9rem'}}>
+      <div className="row p-2" style={{border: '1px solid #0d6efd', borderRadius: 3}}>
         <form className="row g-3" onSubmit={handleSubmit}>
           <div className="d-flex justify-content-center ">
             <h4>Documents </h4>

@@ -12,7 +12,9 @@ import {
 } from "react-simple-captcha";
 import { signUpUser } from "../../api";
 
-function SingnUp() {
+function SingnUp(props) {
+  const {Salert}=props;
+
   const [credientials, setCredientials] = useState({
     name: "",
     email: "",
@@ -48,7 +50,8 @@ function SingnUp() {
         } 
       }) 
     } else {
-      alert("Captcha Does Not Match");
+      Salert( 'ERROR','Captcha Does Not Match','error')
+
       setCaptchaValue("");
     }
   };
@@ -160,8 +163,8 @@ function SingnUp() {
               Submit
             </button>
           </div>
-          <p className="mt-2">
-            Already register <Link to="/login">Sign In</Link>
+          <p className="mt-2 " >
+            Already register <Link to="/login" className="text-decoration-none" style={{fontWeight:'600'}}>Login</Link>
           </p>
         </form>
       </div>

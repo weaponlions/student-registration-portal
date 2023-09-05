@@ -158,14 +158,10 @@ export default function Personal() {
           
           <div className="col-md-4 d-flex justify-content-around">
             <label className="form-label mandatory"> Pwd </label>  
-            <div>
-              <input type={'radio'} name={'pwd'} required value={true} onChange={handleChange} disabled={disabled} />
-              <label className="form-label"> Yes </label>  
-            </div>
-            <div>
-              <input type={'radio'} name={'pwd'} required value={false} onChange={handleChange} disabled={disabled} />
-              <label className="form-label" > No </label>
-            </div>
+            <input type={'radio'} name={'pwd'} required value={'YES'} onChange={handleChange} disabled={disabled} />
+            <label className="form-label mandatory"> Yes </label> 
+            <input type={'radio'} name={'pwd'} required checked value={'NO'} onChange={handleChange} disabled={disabled} />
+            <label className="form-label mandatory" value={'NO'}> No </label>
           </div>
 
           <div className="col-md-4 d-flex justify-content-around">

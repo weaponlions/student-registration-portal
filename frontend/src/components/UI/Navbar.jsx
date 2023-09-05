@@ -16,6 +16,8 @@ export default function Navbar(props) {
     logoutUser();
     navigate("/login");
   }
+  
+
 
   useEffect(() => {
     (async () => { setIslogin(await getUser()) })()
