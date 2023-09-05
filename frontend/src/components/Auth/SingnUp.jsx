@@ -10,6 +10,7 @@ import {
   LoadCanvasTemplateNoReload,
   validateCaptcha,
 } from "react-simple-captcha";
+import { signUpUser } from "../../api";
 
 function SingnUp() {
   const [credientials, setCredientials] = useState({
@@ -19,7 +20,7 @@ function SingnUp() {
   });
   const [CaptchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
-  const { getUser } = useContext(UserContext);
+  const { getUser, loadUser } = useContext(UserContext);
 
   const onchangeButton = (e) => {
     if (e.target.name == "user_captcha_input") {
@@ -37,27 +38,15 @@ function SingnUp() {
       loadCaptchaEnginge(6);
       setCaptchaValue("");
 
-      const response = await fetch("http://localhost:5000/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: credientials.name,
-          email: credientials.email,
-          password: credientials.password,
-        }),
-      });
-
-      const jso = await response.json();
-      console.log(jso);
-      if (jso.jwtToken) {
-        localStorage.setItem("jwtToken", jso.jwtToken); 
-        alert("please check your email");
-        navigate("/login");
-      } else {
-        alert(jso.error);
-      }
+      await signUpUser({ name: credientials.name, email: credientials.email, password: credientials.password, })
+      .then (({ data }) => {
+        if (data.jwtToken) {
+          loadUser(data.jwtToken);
+          navigate("/dashboard");
+        } else {
+          alert(jso.error);
+        } 
+      }) 
     } else {
       alert("Captcha Does Not Match");
       setCaptchaValue("");

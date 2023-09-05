@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { createOrder } from './api';
-import { UserContext } from './context-api/UserState';
+import { createOrder } from '../../api';
+import { UserContext } from '../../context-api/UserState';
 
 
 const Payment = () => { 

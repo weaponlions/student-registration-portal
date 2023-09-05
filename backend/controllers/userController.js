@@ -7,19 +7,29 @@ import { isRequired } from '../middleware/fieldMiddleware.js';
 
 export const userStepOne = async (req, res) => {
     try {
-        const old = await infoModel.findOne({user_id: req.body.user_id}) || undefined
-        if (old) 
-            return res.json({message: 'Please user is old', error: 'exist'}) 
-        const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews'])
-        const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address'])
-        const correspond = isRequired(req.body.correspond, ['state', 'district', 'city', 'pincode', 'full_address'])
-        data.permanent = permanent
-        data.correspond = correspond
+        const old = await infoModel.findOne({user_id: req.body.user_id}) || undefined;
+        const update = req.body || undefined;
+        if (old && !update)
+            return res.json({message: 'Please user is old', error: 'exist'});
+
+        const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews', 'dob']);
+        const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address']);
+        const correspond = isRequired(req.body.correspond, ['state', 'district', 'city', 'pincode', 'full_address']);
+        data.permanent = permanent;
+        data.correspond = correspond;
         data.user_id = req.body.user_id;
-        const new_data = infoModel(data)
-        console.log(new_data);
-        await new_data.save() 
-        return res.json({status: 'success', data: [new_data]}) 
+        console.log({update});
+        console.log({data});
+        if (update === true) {
+            old.updateOne(data)
+            await old.save()
+            return res.json({status: 'success', data: [old]})  
+        }
+        else {
+            const new_data = infoModel(data);
+            await new_data.save() 
+            return res.json({status: 'success', data: [new_data]})  
+        }
     } catch (err) {
         console.log(err.message); 
         return res.status(400).json({status: 'failed', error: err.message})
@@ -65,8 +75,17 @@ export const userStepThree = async (req, res) => {
 export const userInformation = async (req, res) => {
     try {
         const { user_id } = req.body;
-        const user = await infoModel.findOne({user_id})
-        return res.json({result: [user]})
+        const userData = await infoModel.findOne({user_id}).lean()
+        if (userData) {
+            const permanent = userData?.permanent
+            const correspond = userData?.correspond
+            delete userData.correspond
+            delete userData.permanent
+            console.log(userData);
+            return res.json({result: [{ userData, permanent, correspond }]});            
+        }
+        else
+            return res.json({result: []})
     } catch (err) {
         console.log(err.message);
         return res.status(400).json({error: err.message})
@@ -78,8 +97,17 @@ import fs from 'fs';
 export const fileReciever = async (req, res) => {
     try {
         const file = req.files[0];
-        const { fieldname, user_id } = req.body;
-        const path = `./upload/images/${user_id}_${file.originalname}`;
+        const { fieldname, user_id, user_name } = req.body;
+
+        console.log(file);
+        let path = `./upload/student/`;
+        if (!fs.existsSync(path))
+            fs.mkdirSync(path)
+        path = `${path}${user_name.replace(' ', '-')}-${user_id}/`;
+        if (!fs.existsSync(path))
+            fs.mkdirSync(path)
+
+        path = `${path}/${file.originalname}`;
         
         let model = await docModel.find({user_id});
 

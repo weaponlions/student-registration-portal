@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     password: {type: mongoose.Mixed, require : true },
     status: {type:  String, require : true, enum: ['unverified', 'verified', 'admin'], default: 'unverified' },
     created_at: {type: Date, default : Date.now },
+    
 })
   
 

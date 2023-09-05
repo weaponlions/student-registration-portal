@@ -1,40 +1,47 @@
 import { createContext, useState } from "react";
 import jwtDecode from "jwt-decode"; 
+import { axios } from './../api/index';
 
 const UserContext = createContext();
 
 export default function UserState(props) {
   const [userdata, setUserdata] = useState({});
+  const [formTwo, setFormTwo] = useState({})
+  const [loader, setLoader] = useState(false) 
+  const [selectedCourse, setSelectedCourse] = useState(null) 
   
-  const loadUser = async () => {
-    const user = await localStorage.getItem('jwtToken') && jwtDecode(localStorage.getItem('jwtToken')) || {}
-    setUserdata({name: user.name, email: user.email, status: user.status});
-  } 
-
-  const [loader, setLoader] = useState(false)
-
+  const loadUser = async (token=undefined) => {
+    if (token) {
+      localStorage.setItem("jwtToken", token);
+    }
+    else{
+      token = localStorage.getItem('jwtToken');
+    }
+    if (!token) {
+      return
+    }
+    axios.defaults.headers = {jwtToken: token} 
+    const user = jwtDecode(token); 
+    setUserdata({name: user.name, email: user.email, status: user.status}); 
+  }
+ 
   const personalData = {
     userData: {name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '2003-08-13', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
     userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
     userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
   }
-  const [formOne, setFormOne] = useState(personalData)
+  const [formOne, setFormOne] = useState({})
   
-  const [formTwo, setFormTwo] = useState({})
-
-  const [selectedCourse, setSelectedCourse] = useState(null)
   
-  // ----------------------///////////////////// Get user details function /////////////////////////////////----------------------
-
-  const getUser = async () => { 
+  const getUser = async () => {  
     try { 
       let token = localStorage.getItem('jwtToken') || undefined; 
       if (!token) {
-        localStorage.removeItem('jwtToken')
         throw Error("Token Not Found")
       }
       const { exp } = jwtDecode(token);
       if (exp < (Math.round(Date.now()/1000)) ) {
+        localStorage.removeItem('jwtToken')
         throw Error("Token Expire")
       }
       return true;
@@ -43,6 +50,12 @@ export default function UserState(props) {
       return false;
     } 
   };
+
+  const logoutUser = () => { 
+    localStorage.removeItem('jwtToken');
+    axios.defaults = {jwtToken: ''};
+    setUserdata({}); 
+  }
  
  
   return (
@@ -50,7 +63,7 @@ export default function UserState(props) {
       value={{
         getUser, userdata, setUserdata, setFormOne,
         formOne, loader, setLoader, formTwo, setFormTwo, loadUser,
-        selectedCourse, setSelectedCourse
+        selectedCourse, setSelectedCourse, logoutUser
       }}
     >
       {props.children}

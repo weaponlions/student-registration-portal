@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import It from "./Courses/It";
-import ShortTerm from "./Courses/ShortTerm";
-import Itliteracy from "./Courses/ItLiteracy";
-import { UserContext } from "../../context-api/UserState";
+import It from "./It";
+import ShortTerm from "./ShortTerm";
+import Itliteracy from "./ItLiteracy";
+import { UserContext } from "../../../context-api/UserState";
 
 const Courses = () => {
   const [CATEGORY, setCATEGORY] = useState('')

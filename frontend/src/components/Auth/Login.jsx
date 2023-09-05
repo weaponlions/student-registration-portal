@@ -10,14 +10,13 @@ import {
   LoadCanvasTemplateNoReload,
   validateCaptcha,
 } from "react-simple-captcha"; 
-import jwtDecode from "jwt-decode";
 import { loginUser } from "../../api";
 
 function Login() {
   const [credientials, setCredientials] = useState({ email: "sainfans@gmail.com", password: "12345" });
   const [CaptchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
-  const { getUser, setUserdata } = useContext(UserContext);
+  const { getUser, loadUser } = useContext(UserContext);
 
   const onchangeButton = (e) => {
     if (e.target.name == "user_captcha_input") {
@@ -34,9 +33,7 @@ function Login() {
       setCaptchaValue(""); 
       loginUser({ email: credientials.email, password: credientials.password })
         .then(async ({data}) => {
-          localStorage.setItem("jwtToken", data.jwtToken);
-          const result = jwtDecode(data.jwtToken)
-          setUserdata({name: result.name, email: result.email, status: result.status}) 
+          loadUser(data.jwtToken);
           navigate("/dashboard");
         })
         .catch((err) => console.log("Message", err)) 

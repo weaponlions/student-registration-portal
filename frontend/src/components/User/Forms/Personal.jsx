@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import Field from "./Items/Field";
-import Select from "./Items/Select";
-import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "./Items/List"; 
-import { unstable_HistoryRouter, useLocation, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context-api/UserState";
-import { initialize_StepOne } from "../../api";
+import Field from "../Items/Field";
+import Select from "../Items/Select";
+import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "../Items/List"; 
+import { useLocation, useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context-api/UserState";
+import { initialize_StepOne, userInfo } from "../../../api";
  
 const details = {
-  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: '', religion: '', mobile: '', whatsapp: '', ews: ''
+  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: false, religion: '', mobile: '', whatsapp: '', ews: true
 }
 const address1 = {
   full_address: '', state: '', city: '', district: '', pincode: ''
@@ -17,25 +17,46 @@ const address2 = {
 }
 
 export default function Personal() {
-  const { userdata, setFormOne, formOne, setLoader, setSelectedCourse } = useContext(UserContext);
+  const { userdata, setFormOne, formOne, setSelectedCourse } = useContext(UserContext);
+  const [userData, setUserData] = useState(details);
+  const [userAdrs1, setUserAdrs1] = useState(address1); // permanent addrs
+  const [userAdrs2, setUserAdrs2] = useState(address2); // corespond addrs
+  const [disabled, setDisabled] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [trigger, setTrigger] = useState(true); // corespond addrs same
+  const location = useLocation();
+  const { course_name, course_id } = {...location.state};
+  const navigate = useNavigate();
 
-  const [userData, setUserData] = useState(formOne && formOne.userData || details);
-  const [userAdrs1, setUserAdrs1] = useState(formOne && formOne.userAdrs1 || address1); // permanent addrs
-  const [userAdrs2, setUserAdrs2] = useState(formOne && formOne.userAdrs2 || address2); // corespond addrs
-  const [disabled, setDisabled] = useState(false)
-  const [trigger, setTrigger] = useState(true); // corespond addrs
-  const location = useLocation()
-  const { course_name, course_id } = {...location.state}
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    console.log(location);
+  // for routing
+  useEffect(() => { 
      if (!course_id) {
-      navigate('../courses')
+      navigate('../courses');
      }
      else{
-      setSelectedCourse({course_name, course_id})
+      setSelectedCourse({course_name, course_id});
+      setDisabled((formOne && formOne.userData) ? true : false);
      }
+  }, [])
+
+  // for load data 
+  useEffect(() => { 
+    if (location.state && location.state.course_id) {
+      userInfo({})
+        .then(({data}) => { 
+          const { result } = data;
+          if (result.length != 0) { 
+              setUserAdrs1(result[0].permanent);
+              setUserAdrs2(result[0].correspond); 
+              setUserData(result[0].userData);
+              setDisabled(true);
+              setUpdate(true);
+            }
+        })
+        .catch ((err) => {
+          console.log(err.message); 
+        })
+    }
   }, [])
 
   const isFieldValid = (e) => { 
@@ -53,12 +74,12 @@ export default function Personal() {
   } 
   
   const handleChange = (e, num) => {
-    const currEle = e.target; 
+    const currEle = e.target;
     if(currEle.name == 'pincode' || currEle.name == 'mobile' || currEle.name == 'whatsapp'){
       currEle.value = (currEle.value.replaceAll(' ', ''));
       if(isNaN(currEle.value)) 
         return;
-      
+
       let len = currEle.value.split('').length;
       if (currEle.name == 'pincode' && len > 6)
         return;
@@ -78,22 +99,25 @@ export default function Personal() {
   }
 
   const handleForm = (e) => { 
-    e.preventDefault(); 
-    
+    e.preventDefault();
+    setDisabled(true);
+    alert("Please check all info before next step!!!!!!!!!!!");
+  }
+
+  const handleSubmit = async () => {
     const prom = new Promise( async(res, rej) => {
       try {
-        const { data } = await initialize_StepOne({userData, permanent: userAdrs1, correspond: userAdrs2});
+        const { data } = await initialize_StepOne({userData, permanent: userAdrs1, correspond: userAdrs2, update});
         console.log(data); 
         res();
       } catch (error) {
         rej(error)
       } 
     })
-    prom.then(()=> {
-      // setFormOne({userData, userAdrs1, userAdrs2})
+    prom.then((res)=> {
       navigate('../user/step_two');
     }).catch((err) => { 
-      console.log(err);
+      console.log(err.message);
     })
   }
 
@@ -107,7 +131,6 @@ export default function Personal() {
     setTrigger(prev => !prev)
   }
 
-  
 
   return (
     <>
@@ -133,20 +156,30 @@ export default function Personal() {
 
           <Select label={'Category'} name={'category'} isValid={isFieldValid} value={userData.category} simple={categoryList} handleChange={handleChange} disabled={disabled} />  
           
-          <div className="col-md-4">
+          <div className="col-md-4 d-flex justify-content-around">
             <label className="form-label mandatory"> Pwd </label>  
-            <input type={'radio'} name={'pwd'} required value={'YES'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory"> Yes </label> 
-            <input type={'radio'} name={'pwd'} required checked value={'NO'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory" > No </label>
+            <div>
+              <input type={'radio'} name={'pwd'} required value={true} onChange={handleChange} disabled={disabled} />
+              <label className="form-label"> Yes </label>  
+            </div>
+            <div>
+              <input type={'radio'} name={'pwd'} required value={false} onChange={handleChange} disabled={disabled} />
+              <label className="form-label" > No </label>
+            </div>
           </div>
 
-          <div className="col-md-4">
-            <label className="form-label mandatory"> EWS </label>  
-            <input type={'radio'} name={'ews'} required value={'YES'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory"> Yes </label> 
-            <input type={'radio'} name={'ews'} required checked value={'NO'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory" > No </label>
+          <div className="col-md-4 d-flex justify-content-around">
+            <label className="form-label mandatory"> EWS </label>
+            <div>
+              <input type={'radio'} name={'ews'} required value={true} onChange={handleChange} disabled={disabled} />
+              <label className="form-label"> Yes </label>  
+            </div>
+            <div className="invalid-feedback"></div>
+            <div> 
+              <input type={'radio'} name={'ews'} required value={false} onChange={handleChange} disabled={disabled} />
+              <label className="form-label" > No </label>
+            </div>
+            <div className="invalid-feedback"></div>
           </div>
 
           <Select label={'Religion'} name={'religion'} isValid={isFieldValid} value={userData.religion} multi={religionList} handleChange={handleChange} disabled={disabled} />   
@@ -174,13 +207,13 @@ export default function Personal() {
             <Field name={'city'} label={'City'} adrs={2} value={userAdrs2.city} isValid={isFieldValid} handleChange={handleChange} disabled={disabled} />
             <Field name={'pincode'} label={'Pincode'} adrs={2} value={userAdrs2.pincode} isValid={isFieldValid} handleChange={handleChange} disabled={disabled} />
           </div>
-
           <div className="col-12 d-flex justify-content-center"> 
-            <button className={`btn btn-primary m-3`} type="submit">
-              Save
-            </button>
+            <button className={`btn btn-primary m-3 ${disabled ? '': 'disabled'}`} onClick={() => setDisabled(false)} type="button" > Edit </button>
+            <button className={`btn btn-primary m-3 ${disabled ? 'disabled': ''}`} type="submit" > Save </button>
+            <button className={`btn btn-primary m-3 ${disabled ? '': 'disabled'}`} type="button" onClick={handleSubmit} > Next </button>
           </div>
-          </form>
+          </form> 
+
         </div>
       </div>
     </>

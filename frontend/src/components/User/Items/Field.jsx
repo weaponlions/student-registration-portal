@@ -20,7 +20,7 @@ const Field = ({label, name, disabled, value, isValid, handleChange, adrs, requi
    
   return (
     <div className="col-md-4">
-      <label htmlFor={`validation${name}_${adrs}`} className="form-label mandatory">
+      <label htmlFor={`validation${name}_${adrs}`} className={`form-label ${required && 'mandatory'}`}>
         {label}
       </label>
       <input

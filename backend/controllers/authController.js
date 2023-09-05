@@ -25,13 +25,18 @@ export const signUp = async (req, res) => {
         email: email,
         password: encryptPass,
       }); 
-
-      const data = {
-        user: {
-          id: user.id,
+ 
+      const jwtToken = jwt.sign({
+        user_id: user.id,
+        name: user.name,
+        email: user.email,
+        // status: user.status,
         },
-      };
-      const jwtToken = jwt.sign(data, jwt_sing); 
+        jwt_sing,
+        {
+          expiresIn: jwt_time
+        }); 
+        
       res.json({ jwtToken });
 
       /////////////////////////// sending mail to the user ////////////////////////////////////////////////////////////

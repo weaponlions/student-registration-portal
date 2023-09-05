@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import Field from "./Items/Field";
-import Select from "./Items/Select";
+import Field from "../Items/Field";
+import Select from "../Items/Select";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context-api/UserState";
-import { initialize_StepTwo } from "../../api";
+import { UserContext } from "../../../context-api/UserState";
+import { initialize_StepTwo } from "../../../api";
 
 export default function Qualification() {
   const { formTwo, setFormTwo } = useContext(UserContext)

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Field from "./Items/Field";
+import Field from "../Items/Field";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
