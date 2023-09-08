@@ -1,6 +1,5 @@
 import { docModel, infoModel, educationModel } from '../models/User.js';
 import { isRequired } from '../middleware/fieldMiddleware.js';
-import fs from 'fs';
 
 // user_id, name, father, mother, mobile, whatsapp, gender
 // category, marital, religion, pwd, ews, address, full_address, state
@@ -10,7 +9,7 @@ export const userStepOne = async (req, res) => {
     try {
         const old = await infoModel.findOne({user_id: req.body.user_id}) || undefined;
         const update = req.body || undefined;
-        if (old)
+        if (old && !update)
             return res.json({message: 'Please user is old', error: 'exist'});
 
         const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews', 'dob']);
@@ -93,22 +92,7 @@ export const userInformation = async (req, res) => {
     }
 }
 
-export const userEducation = async (req, res) => {
-    try {
-        const { user_id } = req.body;
-        const userData = await educationModel.find({user_id}).lean()
-        console.log(userData);
-        if (userData) {
-            return res.json({result: userData});            
-        }
-        else
-            return res.json({result: []})
-    } catch (err) { 
-        console.log(err.message);
-        return res.status(401).json({error: err.message})
-    }
-}
-
+import fs from 'fs';
 
 export const fileReciever = async (req, res) => {
     try {
@@ -139,7 +123,9 @@ export const fileReciever = async (req, res) => {
 
     } catch (err) {
         console.log(err.message);
-        return res.status(401).json({error: err.message})            
+        return res.status(401).json({error: err.message})
+
+            
     }
 }
 

@@ -1,7 +1,7 @@
 import {React,useState }from 'react'
-import Personal from '../User/Forms/Personal'
-import Qualification from '../User/Forms/Qualification'
-import Documents from '../User/Forms/Documents'
+import Personal from '../User/Personal'
+import Qualification from '../User/Qualification'
+import Documents from '../User/Documents'
 
 
 function UserEdit() {

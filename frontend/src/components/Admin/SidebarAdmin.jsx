@@ -25,16 +25,27 @@ function Sidebar({openSidebarToggle, OpenSidebar,history}) {
 
         <ul className='sidebar-list'>
             <li className='sidebar-list-item'>
-            <Link to="/admin" style={{textDecoration:'none',color:'white'}}>
+            <Link to="/Admin/home" style={{textDecoration:'none',color:'white'}}>
                     <BsGrid1X2Fill className='icon'/>Dashboard
                     </Link> 
             </li>
             <li className='sidebar-list-item'>
-            <Link to="/admin/courses" style={{textDecoration:'none',color:'white'}}>
-                    <AiFillCaretRight className='icon'/>Courses
-                    </Link> 
+            <Link to="/Admin/courses/it" style={{textDecoration:'none',color:'white'}}>
+                    <AiFillCaretRight className='icon'/> IT COURSES
+                    </Link>
             </li>
-       
+
+            <li className='sidebar-list-item'>
+            <Link to="/Admin/courses/literacy" style={{textDecoration:'none',color:'white'}}>
+                    <AiFillCaretRight className='icon'/> IT LETERACY COURSES
+                    </Link>
+            </li>
+
+            <li className='sidebar-list-item'>
+            <Link to="/Admin/courses/shortterm" style={{textDecoration:'none',color:'white'}}>
+                    <AiFillCaretRight className='icon'/>SHORT TERM COURSES
+                    </Link>
+            </li>
 
 
            

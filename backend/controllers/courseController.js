@@ -27,19 +27,6 @@ export const tempCourse = async (req, res) => {
       }
 }
 
-
-export const getCourse = async (req, res) => {
-  try {
-    const { course_category='none' } = req.query;
-    console.log(course_category);
-    const courses = await courseModel.find({course_category: {'$regex': course_category,$options:'i'}}); 
-    return res.json({ status: "done", result: courses });
-  } catch (err) {
-    console.log(err);
-    return res.json({ status: "failed", error: err.message });
-  } 
-}
-
 export const createCourse = async (req, res) => {
   try {
     const data = isRequired(req.body, [
@@ -47,7 +34,6 @@ export const createCourse = async (req, res) => {
       "course_fees",
       "course_duration",
       "course_category",
-      "course_price",
     ]);
     const record = courseModel(data);
     await record.save();

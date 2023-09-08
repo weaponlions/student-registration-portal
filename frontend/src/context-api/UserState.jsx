@@ -6,15 +6,9 @@ const UserContext = createContext();
 
 export default function UserState(props) {
   const [userdata, setUserdata] = useState({});
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [isadmin, setIsadmin] = useState(false);
-  
-  const personalData = {
-    userData: {name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '2003-08-13', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
-    userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
-    userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
-  }
-  
+  const [formTwo, setFormTwo] = useState({})
+  const [loader, setLoader] = useState(false) 
+  const [selectedCourse, setSelectedCourse] = useState(null) 
   
   const loadUser = async (token=undefined) => {
     if (token) {
@@ -28,12 +22,17 @@ export default function UserState(props) {
     }
     axios.defaults.headers = {jwtToken: token} 
     const user = jwtDecode(token); 
-    if (user.status == 'admin') {
-      setIsadmin(true);
-    }
     setUserdata({name: user.name, email: user.email, status: user.status}); 
   }
  
+  const personalData = {
+    userData: {name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '2003-08-13', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
+    userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
+    userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
+  }
+  const [formOne, setFormOne] = useState({})
+  
+  
   const getUser = async () => {  
     try { 
       let token = localStorage.getItem('jwtToken') || undefined; 
@@ -62,8 +61,8 @@ export default function UserState(props) {
   return (
     <UserContext.Provider
       value={{
-        getUser, userdata, setUserdata, 
-        isadmin, loadUser,
+        getUser, userdata, setUserdata, setFormOne,
+        formOne, loader, setLoader, formTwo, setFormTwo, loadUser,
         selectedCourse, setSelectedCourse, logoutUser
       }}
     >

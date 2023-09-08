@@ -22,8 +22,8 @@ const infoSchema = new mongoose.Schema({
     category: {type : String, require : true, enum: ['OBC', 'SC', 'ST', 'GENERAL', 'OTHERS'] },
     marital: {type : String, require : true, enum: ['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED'] },
     religion : {type : String, require : true },
-    pwd : {type : Boolean, require : true, default: false }, 
-    ews : {type : Boolean, require : true, default: false }, 
+    pwd : {type : String, require : true, enum: ['YES', 'NO'] },
+    ews : {type : String, require : true, enum: ['YES', 'NO'] },
     correspond: {
         full_address: {type : String, require : true },
         state: {type : String, require : true },
