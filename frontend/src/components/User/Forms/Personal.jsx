@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import Field from "../Items/Field";
 import Select from "../Items/Select";
-import { genderList, maritalList, religionList, categoryList, stateList, districtList } from "../Items/List"; 
+import { genderList, maritalList, religionList, categoryList, stateList, districtList, booleanList } from "../Items/List"; 
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context-api/UserState";
 import { initialize_StepOne, userInfo } from "../../../api";
  
 const details = {
-  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: false, religion: '', mobile: '', whatsapp: '', ews: true
+  course_id: '', name: '', father: '', mother: '', gender: '', dob: '', marital: '', category: '', pwd: false, religion: '', mobile: '', whatsapp: '', ews: false
 }
 const address1 = {
   full_address: '', state: '', city: '', district: '', pincode: ''
@@ -16,8 +16,8 @@ const address2 = {
   full_address: '', state: '', city: '', district: '', pincode: ''
 }
 
-export default function Personal() {
-  const { userdata, setFormOne, formOne, setSelectedCourse } = useContext(UserContext);
+export default function Personal({Salert}) {
+  const { userdata, setSelectedCourse } = useContext(UserContext);
   const [userData, setUserData] = useState(details);
   const [userAdrs1, setUserAdrs1] = useState(address1); // permanent addrs
   const [userAdrs2, setUserAdrs2] = useState(address2); // corespond addrs
@@ -34,8 +34,7 @@ export default function Personal() {
       navigate('../courses');
      }
      else{
-      setSelectedCourse({course_name, course_id});
-      setDisabled((formOne && formOne.userData) ? true : false);
+      setSelectedCourse({course_name, course_id}); 
      }
   }, [])
 
@@ -48,9 +47,11 @@ export default function Personal() {
           if (result.length != 0) { 
               setUserAdrs1(result[0].permanent);
               setUserAdrs2(result[0].correspond); 
-              setUserData(result[0].userData);
+              const dob = (result[0].userData.dob).split('T')[0] 
+              setUserData({...result[0].userData, dob});
+              // console.log(result[0].userData);
               setDisabled(true);
-              setUpdate(true);
+              // setUpdate(true);
             }
         })
         .catch ((err) => {
@@ -101,7 +102,7 @@ export default function Personal() {
   const handleForm = (e) => { 
     e.preventDefault();
     setDisabled(true);
-    alert("Please check all info before next step!!!!!!!!!!!");
+    Salert('Info', "Please check all info before next step!!!!!!!!!!!", "info") 
   }
 
   const handleSubmit = async () => {
@@ -156,27 +157,9 @@ export default function Personal() {
 
           <Select label={'Category'} name={'category'} isValid={isFieldValid} value={userData.category} simple={categoryList} handleChange={handleChange} disabled={disabled} />  
           
-          <div className="col-md-4 d-flex justify-content-around">
-            <label className="form-label mandatory"> Pwd </label>  
-            <input type={'radio'} name={'pwd'} required value={'YES'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory"> Yes </label> 
-            <input type={'radio'} name={'pwd'} required checked value={'NO'} onChange={handleChange} disabled={disabled} />
-            <label className="form-label mandatory" value={'NO'}> No </label>
-          </div>
-
-          <div className="col-md-4 d-flex justify-content-around">
-            <label className="form-label mandatory"> EWS </label>
-            <div>
-              <input type={'radio'} name={'ews'} required value={true} onChange={handleChange} disabled={disabled} />
-              <label className="form-label"> Yes </label>  
-            </div>
-            <div className="invalid-feedback"></div>
-            <div> 
-              <input type={'radio'} name={'ews'} required value={false} onChange={handleChange} disabled={disabled} />
-              <label className="form-label" > No </label>
-            </div>
-            <div className="invalid-feedback"></div>
-          </div>
+          <Select label={'PWD'} name={'pwd'} isValid={isFieldValid} value={userData.pwd} multi={booleanList} handleChange={handleChange} disabled={disabled}/>
+          
+          <Select label={'EWS'} name={'ews'} isValid={isFieldValid} value={userData.ews} multi={booleanList} handleChange={handleChange} disabled={disabled} />
 
           <Select label={'Religion'} name={'religion'} isValid={isFieldValid} value={userData.religion} multi={religionList} handleChange={handleChange} disabled={disabled} />   
     

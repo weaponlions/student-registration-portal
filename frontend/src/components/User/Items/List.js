@@ -4,6 +4,8 @@ export const maritalList = ['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED'];
 
 export const categoryList = ["OBC", "General", "SC", "ST"];
 
+export const booleanList = [{short: 'true', full: 'Yes'}, {short: 'false', full: 'No'}]
+
 export const religionList = [   
     {short: "hindu", full: "Hinduism"}, 
     {short: "christian", full: "Christianity"},

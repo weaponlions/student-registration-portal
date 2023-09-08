@@ -11,6 +11,7 @@ import {
   validateCaptcha,
 } from "react-simple-captcha"; 
 import { loginUser } from "../../api";
+import jwtDecode from "jwt-decode";
 
 function Login(props) {
   const {Salert}=props;
@@ -35,11 +36,15 @@ function Login(props) {
       loginUser({ email: credientials.email, password: credientials.password })
         .then(async ({data}) => {
           loadUser(data.jwtToken);
+          jwtDecode(data.jwtToken);
+          Salert('Success','Login Successful','success');
           navigate("/dashboard");
         })
-        .catch((err) => console.log("Message", err),
-        Salert('Error',err,'error')) 
-    } else {
+        .catch((err) => {
+          console.log("Message", err);
+          Salert('Error',err,'error');
+        })
+      } else {
       Salert( 'ERROR','Captcha Does Not Match','error')
       // alert("Captcha Does Not Match");
       setCaptchaValue("");

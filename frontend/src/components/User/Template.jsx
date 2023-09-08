@@ -9,7 +9,7 @@ import { initialize_StepOne, userInfo } from '../../api/index';
 
 export default function Template() {
 
-  const { getUser, userdata, setFormOne } = useContext(UserContext) 
+  const { getUser, userdata, isadmin } = useContext(UserContext) 
   const navigate = useNavigate(); 
   const location = useLocation();
 
@@ -26,6 +26,9 @@ export default function Template() {
       if (!result) { 
         navigate("/login");
       } 
+      if (isadmin == true) {
+        navigate("/admin")
+      }
     }
     jwtVerify()
   }, [location])

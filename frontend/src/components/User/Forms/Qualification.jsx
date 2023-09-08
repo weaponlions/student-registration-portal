@@ -3,19 +3,27 @@ import Field from "../Items/Field";
 import Select from "../Items/Select";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context-api/UserState";
-import { initialize_StepTwo } from "../../../api";
+import { initialize_StepTwo, userEduc } from "../../../api";
 
-export default function Qualification() {
-  const { formTwo, setFormTwo } = useContext(UserContext)
+export default function Qualification({ Salert }) {
+  
   const dummy = {
-    other: {}, 
-    tenth: formTwo.tenth || { exam_name: 10, passing_year: 2017, percentage: 72, institute: 'RPS', university: 'UK', division: 'First', exam_type: 10}, 
-    twelfth: formTwo.twelfth || {exam_name: 12, passing_year: 2019, percentage: 70, institute: 'SRIC', university: 'UK', division: 'First', exam_type: 12}, 
-    graduation: {}, postGraduation: {}, highest: ''
+    tenth: { exam_name: 10, passing_year: 2017, percentage: 72, institute: 'RPS', university: 'UK', division: 'First', exam_type: 10}, 
+    twelfth: {exam_name: 12, passing_year: 2019, percentage: 70, institute: 'SRIC', university: 'UK', division: 'First', exam_type: 12}, 
   }
-  const [examData, setExamData] = useState(dummy) 
+  const [examData, setExamData] = useState({tenth: {}, twelfth: {}}) 
+  const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    userEduc().then(({ data }) => {
+      setExamData({tenth: data.result[0], twelfth: data.result[1]});      
+    }).catch((e) => {
+      console.log(e);
+    })
+  }, [])
+  
   
   const isValid = (e) => { 
     const currEle = e.target; 
@@ -68,11 +76,16 @@ export default function Qualification() {
     } 
   } 
 
-  const handleSubmit = async (e) => {
+  const handleForm = (e) => { 
     e.preventDefault();
+    setDisabled(true);
+    Salert('Info', "Please check all info before next step!!!!!!!!!!!", "info") 
+  }
+
+  const handleSubmit = async (e) => { 
     await initialize_StepTwo({ tenth: examData.tenth, twelfth: examData.twelfth })
       .then((res) => {
-        setFormTwo({tenth: examData.tenth, twelfth: examData.twelfth})
+        // setFormTwo({tenth: examData.tenth, twelfth: examData.twelfth})
         navigate('../user/step_three') 
         console.log(res);
       })
@@ -116,20 +129,13 @@ export default function Qualification() {
   }
   const avail_list = []
   const [highest, setHighest] = useState()
-
-  // useEffect(() => {
-  //   console.log(highest);
-  //   // if (educ_list.includes(highest) && !avail_list.includes(highest)) { 
-  //   //   document.getElementById('form').innerHTML += objHtml(highest)
-  //   // }
-  // }, [highest])
   
   
   return (
     <>
       <div className="container my-5" style={{border: '20px solid #e7e7e7', borderRadius: 5}}>
         <div className="row p-4" style={{border: '1px solid #0d6efd', borderRadius: 2}}>
-          <form id="form" onSubmit={handleSubmit}>
+          <form id="form" onSubmit={handleForm}>
             {/* <div className="col-12 d-flex justify-content-center">
               <Select value={highest} required={true} handleChange={(e) => {setHighest(e.target.value)}} label={'Select Highest Qualification'} simple={educ_list} name={'highest'} />
             </div>  */}
@@ -238,12 +244,12 @@ export default function Qualification() {
                 </div>
               </div>
             </div> */}
-            
-            <div className="col-12 d-flex justify-content-center">
-              <button className="btn btn-primary" type="submit">
-                Submit form
-              </button>
-            </div>
+             
+          <div className="col-12 d-flex justify-content-center"> 
+            <button className={`btn btn-primary m-3 ${disabled ? '': 'disabled'}`} onClick={() => setDisabled(false)} type="button" > Edit </button>
+            <button className={`btn btn-primary m-3 ${disabled ? 'disabled': ''}`} type="submit" > Save </button>
+            <button className={`btn btn-primary m-3 ${disabled ? '': 'disabled'}`} type="button" onClick={handleSubmit} > Next </button>
+          </div>
           </form>
         </div>
       </div>

@@ -1,6 +1,8 @@
 import { paymentModel } from '../models/Payment.js';
 import Razorpay from 'razorpay';
 import { batchModel, courseModel } from '../models/Course.js';
+import { validatePaymentVerification, validateWebhookSignature } from 'razorpay/dist/utils/razorpay-utils.js';
+
 
 const PaymentGatway = new Razorpay({key_secret: 'Azr8oeTi1Tf7RT0zXmwfJREo', key_id: 'rzp_test_Va8zcPCazlNao1'});
 
@@ -16,7 +18,7 @@ export const createOrder = async (req, res) => {
                 course_id,
                 course_name
             }
-        })
+        });
 
         console.log(order);
         const model = new paymentModel({user_id, course_id, course_name, amount: order.amount, order_id: order.id, status: order.status, order_at: order.created_at})
@@ -45,7 +47,9 @@ export const paidOrder = async (req, res) => {
         console.log({user_id, order_id, signature_hash});
         const payment = await PaymentGatway.payments.fetch(payent_id)
         console.log(payment);
-
+        const secret = 'Azr8oeTi1Tf7RT0zXmwfJREo';
+        const result = validatePaymentVerification({"order_id": order_id, "payment_id": payent_id }, signature_hash, secret);
+        console.log(result);
         return res.json({message: 'done'})
     } catch (err) {
         console.log(err);
@@ -56,6 +60,4 @@ export const paidOrder = async (req, res) => {
 // pay_MWketEHiStIpNE
 // pay_MWkjyX5gIAEc9K
 // model -> user_id , order_id, payment_id, course_nm, price, status 
-
-// var { validatePaymentVerification, validateWebhookSignature } = require('./dist/utils/razorpay-utils');
-// validatePaymentVerification({"order_id": razorpayOrderId, "payment_id": razorpayPaymentId }, signature, secret);
+ 
