@@ -44,14 +44,14 @@ function SingnUp(props) {
       .then (({ data }) => {
         if (data.jwtToken) {
           loadUser(data.jwtToken);
+          Salert( 'Success','SignUp Successfull','success');
           navigate("/dashboard");
         } else {
-          alert(jso.error);
+          alert(data.error);
         } 
       }) 
     } else {
       Salert( 'ERROR','Captcha Does Not Match','error')
-
       setCaptchaValue("");
     }
   };

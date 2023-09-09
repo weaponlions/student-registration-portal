@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User.js';
+// import { userModel } from '../models/userModel.js';
  
 const jwt_sing = "nielit_123";
 

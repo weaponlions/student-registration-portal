@@ -8,7 +8,7 @@ routes.post('/step_one', verifyJwt, userStepOne)
 routes.post('/step_two', verifyJwt, userStepTwo)
 routes.post('/step_three', verifyJwt, userStepThree)
 routes.post('/user_info', verifyJwt, userInformation)
-routes.post('/recieve',  verifyJwt, fileReciever)
+routes.post('/file_reciever',  verifyJwt, fileReciever)
 
 
 export default routes;

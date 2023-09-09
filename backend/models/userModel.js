@@ -6,12 +6,11 @@ const userSchema = new mongoose.Schema({
     password: {type: mongoose.Mixed, require : true },
     status: {type:  String, require : true, enum: ['unverified', 'verified', 'admin'], default: 'unverified' },
     created_at: {type: Date, default : Date.now },
-    
 })
-  
+
 
 const infoSchema = new mongoose.Schema({
-    user_id: {type: Object, required: true, unique: true },
+    user_id: {type: Object, required: true, unique: true, ref: 'Users' },
     name: {type : String, require : true },
     father: {type : String, require : true },
     mother: {type : String, require : true },
@@ -43,7 +42,7 @@ const infoSchema = new mongoose.Schema({
 
 
 const educationSchema = mongoose.Schema({ 
-    user_id: {type: Object, required: true },
+    user_id: {type: Object, required: true, ref: 'Users' },
     exam_name: {type : String, require : true },
     exam_type: {type : String, require : true, enum: ['Graduation', 'Post Graduation', '10', '12', 'other'] },
     institute: {type : String, require : true },
@@ -57,7 +56,7 @@ const educationSchema = mongoose.Schema({
 
 
 const docSchema = mongoose.Schema({
-    user_id: {type: Object, required: true, unique: true },
+    user_id: {type: Object, required: true, unique: true, ref: 'Users' },
     aadhar: {type: String },
     photo: {type: String },
     leftThumb: {type: String },
@@ -66,7 +65,7 @@ const docSchema = mongoose.Schema({
 })
 
 
-export const User = mongoose.model('Users', userSchema);
+export const userModel = mongoose.model('Users', userSchema);
 export const educationModel = mongoose.model('Education', educationSchema)
 export const docModel = mongoose.model('User_Documents', docSchema)
 export const infoModel = mongoose.model('Information', infoSchema) 

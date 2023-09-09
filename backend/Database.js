@@ -1,8 +1,8 @@
 import mongoose from "mongoose"; 
-import { courseModel } from "./models/Course.js"; 
+import { courseModel } from "./models/courseModel.js"; 
 
-const uri = "mongodb+srv://nick4800:hellonicK847786@cluster0.kgr8onc.mongodb.net/Student_RP?retryWrites=true&w=majority";
-// const uri = "mongodb://0.0.0.0:27017";
+// const uri = "mongodb+srv://nick4800:hellonicK847786@cluster0.kgr8onc.mongodb.net/Student_RP?retryWrites=true&w=majority";
+const uri = "mongodb://0.0.0.0:27017";
 const connectToDataBase = mongoose.connect(uri, { dbName: "STUDENT_PORTAL" })
 
 export default connectToDataBase;

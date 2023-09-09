@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const paymentSchema = Schema({
-    user_id: { type: Schema.ObjectId, required: true },
+    user_id: { type: Schema.ObjectId, required: true, ref: 'Users' },
     order_id: { type: String, required: true, unique: true },
     payment_id: { type: String },
     signature_hash: { type: String },

@@ -1,39 +1,31 @@
-import { batchModel, courseModel } from "../models/Course.js";
+import { batchModel, courseModel } from "../models/courseModel.js";
 import { isRequired } from "../middleware/fieldMiddleware.js";
  
-
-export const tempCourse = async (req, res) => {
-    try { 
-        for (const iterator in CoursesObj) {
-            let arr = CoursesObj[iterator];
-            for (const iterator of arr) {
-                // console.log(iterator);
-                let old_course = await courseModel.find({course_name: iterator.course_name})
-                if(old_course.length != 0)
-                    continue; 
-
-                const record = courseModel(iterator);
-                await record.save();
-                console.log(record);
-            }
-        }
-        return res.json({ status: "done", data: [] });
-        const record = courseModel(data);
-        await record.save();
-        console.log(record);
-      } catch (err) {
-        console.log(err.message);
-        return res.json({ status: "failed", error: err.message });
-      }
-}
+ export const getCourses = async (req, res) => { 
+  try {
+    const category = req.query.category;
+    let courses = null;
+    if (category && category !== null) {
+      courses = await courseModel.find({course_category: category})
+    }
+    else{
+      courses = await courseModel.find(); 
+    } 
+    return res.json({ status: "done", result: courses });
+  } catch (err) {
+    console.log(err.message);
+    return res.json({ status: "failed", error: err.message });
+  }
+ };
 
 export const createCourse = async (req, res) => {
   try {
     const data = isRequired(req.body, [
       "course_name",
-      "course_fees",
-      "course_duration",
-      "course_category",
+      "fees",
+      "duration_time",
+      "duration_type",
+      "category",
     ]);
     const record = courseModel(data);
     await record.save();
@@ -44,6 +36,7 @@ export const createCourse = async (req, res) => {
     return res.json({ status: "failed", error: err.message });
   }
 };
+
 
 export const createBatch = async (req, res) => {
   try {
@@ -76,8 +69,7 @@ export const createBatch = async (req, res) => {
   }
 };
 
-// 64d8a35d1eb7a31ff140168e U
-// 64d1cd19691f5d611c23a655 U
+
 
 export const enrollBatch = async (req, res) => {
   try {

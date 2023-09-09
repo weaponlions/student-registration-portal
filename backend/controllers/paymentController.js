@@ -1,6 +1,6 @@
-import { paymentModel } from '../models/Payment.js';
+import { paymentModel } from '../models/paymentModel.js';
 import Razorpay from 'razorpay';
-import { batchModel, courseModel } from '../models/Course.js';
+import { batchModel, courseModel } from '../models/courseModel.js';
 
 const PaymentGatway = new Razorpay({key_secret: 'Azr8oeTi1Tf7RT0zXmwfJREo', key_id: 'rzp_test_Va8zcPCazlNao1'});
 

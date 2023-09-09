@@ -6,8 +6,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from './../../context-api/UserState';
 import {
   loadCaptchaEnginge,
-  LoadCanvasTemplate,
-  LoadCanvasTemplateNoReload,
+  LoadCanvasTemplate, 
   validateCaptcha,
 } from "react-simple-captcha"; 
 import { loginUser } from "../../api";
@@ -35,13 +34,16 @@ function Login(props) {
       loginUser({ email: credientials.email, password: credientials.password })
         .then(async ({data}) => {
           loadUser(data.jwtToken);
+          Salert( 'Success','SignIn Successfull','success') 
           navigate("/dashboard");
         })
-        .catch((err) => console.log("Message", err),
-        Salert('Error',err,'error')) 
+        .catch((err) => {
+          console.log("Message", err);
+          Salert('Error', err.message,'error');
+        })
+        
     } else {
-      Salert( 'ERROR','Captcha Does Not Match','error')
-      // alert("Captcha Does Not Match");
+      Salert( 'ERROR','Captcha Does Not Match','error') 
       setCaptchaValue("");
     }
   };

@@ -1,4 +1,4 @@
-import { docModel, infoModel, educationModel } from '../models/User.js';
+import { docModel, infoModel, educationModel } from '../models/userModel.js';
 import { isRequired } from '../middleware/fieldMiddleware.js';
 
 // user_id, name, father, mother, mobile, whatsapp, gender
