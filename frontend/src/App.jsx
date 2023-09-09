@@ -14,11 +14,10 @@ import Login from "./components/Auth/Login";
 import SingnUp from "./components/Auth/SingnUp";
 
 // Admin Folder
-import AdminTemplate from "./components/Admin/AdminTemplate";
-import AdminHome from "./components/Admin/AdminHome";
-import AdminCourses from "./components/Admin/Courses/AdminCourses"; 
-import Users from './components/Admin/Courses/Users'
-import UserEdit from './components/Admin/UserEdit'
+import AdminTemplate from "./components/Admin/Template";
+import AdminHome from "./components/Admin/component/Home";
+import AdminCourses from "./components/Admin/Courses/Courses"; 
+import Users from './components/Admin/Courses/Users';
 
 // User Folder 
 import Template from "./components/User/Template";
@@ -66,7 +65,6 @@ const ShowAlert =(title,text,icon)=>{
             <Route exact path="/admin" element={<AdminHome Salert={ShowAlert}/>} /> 
             <Route exact path="/admin/courses" element={<AdminCourses />} />
             <Route exact path="/admin/courses/users" element={<Users />} />
-            <Route exact path="/admin/courses/users/edit" element={<UserEdit />} />
           </Route>
 
           <Route exact path="/signup" element={<SingnUp Salert={ShowAlert}/>} /> 

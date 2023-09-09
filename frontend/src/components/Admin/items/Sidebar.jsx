@@ -7,7 +7,7 @@ import
  import {AiFillCaretRight} from "react-icons/ai"
 import { useNavigate, Outlet,Link } from "react-router-dom";
 
-import nielit from '../../assets/images/nielit.png'
+import nielit from '../../../assets/images/nielit.png'
 
  
 function Sidebar({openSidebarToggle, OpenSidebar,history}) {

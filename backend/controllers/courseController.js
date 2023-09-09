@@ -3,10 +3,14 @@ import { isRequired } from "../middleware/fieldMiddleware.js";
  
 export const getCourses = async (req, res) => { 
   try {
-    const { category } = req.query;
+    const { category, course_name } = req.query;
+    
     let courses = null; 
     if (category && category != null) {
       courses = await courseModel.find({category: category})
+    }
+    else if (course_name && course_name != null) {
+      courses = await courseModel.find({course_name: {$regex : `.*${course_name.toLowerCase()}.*`}})
     }
     else{
       courses = await courseModel.find(); 

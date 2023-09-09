@@ -1,9 +1,9 @@
 import React from 'react'
 
-function AdminHome() {
+function Home() {
   return (
     <div className='container'>Welcome Admin</div>
   )
 }
 
-export default AdminHome
+export default Home
