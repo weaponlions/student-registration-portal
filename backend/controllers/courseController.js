@@ -1,12 +1,12 @@
-import { batchModel, courseModel } from "../models/courseModel.js";
+import { batchModel, courseModel, categoryModel } from "../models/courseModel.js";
 import { isRequired } from "../middleware/fieldMiddleware.js";
  
- export const getCourses = async (req, res) => { 
+export const getCourses = async (req, res) => { 
   try {
-    const category = req.query.category;
+    const { category } = req.query;
     let courses = null;
     if (category && category !== null) {
-      courses = await courseModel.find({course_category: category})
+      courses = await courseModel.find({category: category})
     }
     else{
       courses = await courseModel.find(); 
@@ -16,20 +16,20 @@ import { isRequired } from "../middleware/fieldMiddleware.js";
     console.log(err.message);
     return res.json({ status: "failed", error: err.message });
   }
- };
+};
+
 
 export const createCourse = async (req, res) => {
   try {
     const data = isRequired(req.body, [
       "course_name",
-      "fees",
       "duration_time",
       "duration_type",
       "category",
+      "fees",
     ]);
     const record = courseModel(data);
-    await record.save();
-    console.log(record);
+    await record.save(); 
     return res.json({ status: "done", data: record });
   } catch (err) {
     console.log(err.message);
@@ -69,8 +69,6 @@ export const createBatch = async (req, res) => {
   }
 };
 
-
-
 export const enrollBatch = async (req, res) => {
   try {
     const data = isRequired(req.body, ["user_id", "course_id"]);
@@ -92,3 +90,48 @@ export const enrollBatch = async (req, res) => {
     return res.json({ status: "failed", error: err.message });
   }
 };
+
+
+export const createCategory = async (req, res) => {
+  try {
+    const data = isRequired(req.body, ["category"]);
+    const result = categoryModel(data);
+    await result.save();
+    return res.json({ status: "done", data: result });
+  } catch (err) {
+    console.log(err.message);
+    return res.json({ status: "failed", error: err.message });
+  }
+}
+
+export const updateCategory = async (req, res) => {
+  try {
+    const data = isRequired(req.body, ["category"]);
+    const result = await categoryModel.findByIdAndUpdate(
+      req.query.id,
+      data,
+      { new: true }
+    );
+    return res.json({ status: "done", data: result });
+  } catch (err) {
+    console.log(err.message);
+    return res.json({ status: "failed", error: err.message });
+  }
+}
+
+export const getCategories = async (req, res) => {
+  try {
+    const { category } =  req.query;
+    let result = null;
+    if (category && category !== null) {
+      result = await categoryModel.find({ category: category });
+    }
+    else {
+      result = await categoryModel.find();
+    }
+    return res.json({ status: "done", data: result });
+  } catch (err) {
+    console.log(err.message);
+    return res.json({ status: "failed", error: err.message });
+  }
+}

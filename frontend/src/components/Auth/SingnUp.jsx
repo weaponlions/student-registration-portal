@@ -49,7 +49,16 @@ function SingnUp(props) {
         } else {
           alert(data.error);
         } 
-      }) 
+      })
+      .catch(({ response={} }) => {
+        const { status, data } = response;
+        if (status === 400)
+          Salert('Error', data.error, 'error');
+        else if (status === 500) 
+          Salert('Error', data.error, 'error');
+        else 
+          Salert('Error', 'Internal Server Error', 'error');
+      })
     } else {
       Salert( 'ERROR','Captcha Does Not Match','error')
       setCaptchaValue("");

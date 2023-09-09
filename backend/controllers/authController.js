@@ -45,66 +45,67 @@ export const signUp = async (req, res) => {
 
     /////////////////////////// sending mail to the user ////////////////////////////////////////////////////////////
 
-    if (jwtToken) {
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "nk999549@gmail.com",
-          pass: "mqitkvdjuzrzwago",
-        },
-      });
+    // if (jwtToken) {
+    //   const transporter = nodemailer.createTransport({
+    //     service: "gmail",
+    //     auth: {
+    //       user: "nk999549@gmail.com",
+    //       pass: "mqitkvdjuzrzwago",
+    //     },
+    //   });
 
-      async function main() {
-        const info = await transporter.sendMail({
-          from: "<nk999549@gmail.com>",
-          to: email,
-          subject: "User Details",
+    //   async function main() {
+    //     const info = await transporter.sendMail({
+    //       from: "<nk999549@gmail.com>",
+    //       to: email,
+    //       subject: "User Details",
 
-          html: `<div style={{border: 2px solid:black}}>
-                      <h2>Dear Applicant,</h2>
+    //       html: `<div style={{border: 2px solid:black}}>
+    //                   <h2>Dear Applicant,</h2>
             
-                      <h2>Welcome to Student Registration Portal NIELIT Haridwar</h2>
+    //                   <h2>Welcome to Student Registration Portal NIELIT Haridwar</h2>
                       
-                      <h2>Your login account details are as follows:
-                      <br>
-                      Registered Email: ${email}
-                      <br>
-                      Username: ${email}
-                      <br>
-                      Password: ${password}</h2>
+    //                   <h2>Your login account details are as follows:
+    //                   <br>
+    //                   Registered Email: ${email}
+    //                   <br>
+    //                   Username: ${email}
+    //                   <br>
+    //                   Password: ${password}</h2>
                       
-                    </div>`,
-        });
+    //                 </div>`,
+    //     });
 
-        console.log("Message sent");
-      }
+    //     console.log("Message sent");
+    //   }
 
-      main().catch(console.error);
-    }
+    //   main().catch(console.error);
+    // }
   } catch (error) {
-    res.status(500).json({ error: "Internal Server error" });
     console.log(error);
+    res.status(500).json({ error: "Internal Server error" });
   }
 };
 
 export const singIn = async (req, res) => {
   try {
     const { email, password } = isRequired(req.body, ["email", "password"]);
-
+    
     const user = await userModel.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ error: "User Not Found" });
-    }
+    } 
 
-    const comparePass = await bcrypt.compare(password, userModel.password);
+    const comparePass = await bcrypt.compare(password, user.password);
+
     if (!comparePass) {
       return res.status(400).json({ error: "Incorrect password" });
     }
 
     const jwtToken = jwt.sign(
       {
-        user_id: userModel.id,
+        user_id: userModel._id,
         name: userModel.name,
         email: userModel.email,
         status: userModel.status,

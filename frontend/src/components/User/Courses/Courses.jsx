@@ -1,10 +1,20 @@
 import React, { useContext, useEffect, useState } from "react"; 
 import { UserContext } from "../../../context-api/UserState";
 import { Link } from "react-router-dom";
-import { getCourses } from "../../../api";
+import { getCourses, getCategories } from "../../../api";
 
 const Courses = () => {
   const [CATEGORY, setCATEGORY] = useState('') 
+
+  const [list, setList] = useState([])
+
+  useEffect(() => { 
+    (async () => {
+      const { data } = await getCategories();
+      console.log(data);
+    })()
+  }, [])
+  
 
   useEffect(() => { 
     if (CATEGORY != '') {

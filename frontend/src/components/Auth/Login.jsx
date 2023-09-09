@@ -37,11 +37,15 @@ function Login(props) {
           Salert( 'Success','SignIn Successfull','success') 
           navigate("/dashboard");
         })
-        .catch((err) => {
-          console.log("Message", err);
-          Salert('Error', err.message,'error');
-        })
-        
+        .catch(({ response={} }) => {
+          const { status, data } = response;
+          if (status === 404)
+            Salert('Error', data.error, 'error');
+          else if (status === 400) 
+            Salert('Error', data.error, 'error');
+          else 
+            Salert('Error', 'Internal Server Error', 'error');
+        }) 
     } else {
       Salert( 'ERROR','Captcha Does Not Match','error') 
       setCaptchaValue("");
