@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, Outlet } from "react-router-dom";
 
 function AdminCourses() {
+  const [CATEGORY, setCATEGORY] = useState('') 
+
+  const [categoryList, setCategoryList] = useState([]) 
+
+  useEffect(() => { 
+    (async () => {
+      const { data } = await getCategories(); 
+      setCategoryList(data.result)
+    })()
+  }, [])
+
   return (
     <div className="container">
       {/* ------------------------------------ nav to search courses ------------------------------------- */}
 
       <nav class="navbar  justify-content-between mt-4">
         <div>
-          <select class="form-select">
-            <option>----Select Course Category----</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
+        <select className="form-control" onChange={(e) => setCATEGORY(e.target.value)} >
+          <option value={''}>------ Choose One -----</option>
+          {
+            categoryList.length > 0 && categoryList.map((e, i) => {
+              return (
+                <option key={i} value={e.category}>{(e.category.replace('-', ' ')).toUpperCase()} COURSE</option>
+              )
+            })
+          }
+        </select>
         </div>
 
         <form class="form-inline d-flex ">

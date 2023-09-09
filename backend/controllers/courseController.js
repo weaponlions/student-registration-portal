@@ -4,8 +4,8 @@ import { isRequired } from "../middleware/fieldMiddleware.js";
 export const getCourses = async (req, res) => { 
   try {
     const { category } = req.query;
-    let courses = null;
-    if (category && category !== null) {
+    let courses = null; 
+    if (category && category != null) {
       courses = await courseModel.find({category: category})
     }
     else{
@@ -123,13 +123,13 @@ export const getCategories = async (req, res) => {
   try {
     const { category } =  req.query;
     let result = null;
-    if (category && category !== null) {
-      result = await categoryModel.find({ category: category });
+    if (category && category != null) {
+      result = await categoryModel.find({ category: category }, {category: 1, _id: 0});
     }
     else {
-      result = await categoryModel.find();
+      result = await categoryModel.find({}, {category: 1, _id: 0}).lean();
     }
-    return res.json({ status: "done", data: result });
+    return res.json({ status: "done", result });
   } catch (err) {
     console.log(err.message);
     return res.json({ status: "failed", error: err.message });
