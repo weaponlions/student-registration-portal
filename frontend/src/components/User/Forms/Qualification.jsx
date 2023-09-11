@@ -6,11 +6,11 @@ import { UserContext } from "../../../context-api/UserState";
 import { initialize_StepTwo } from "../../../api";
 
 export default function Qualification() {
-  const { formTwo, setFormTwo } = useContext(UserContext)
+  // const { formTwo, setFormTwo } = useContext(UserContext)
   const dummy = {
     other: {}, 
-    tenth: formTwo.tenth || { exam_name: 10, passing_year: 2017, percentage: 72, institute: 'RPS', university: 'UK', division: 'First', exam_type: 10}, 
-    twelfth: formTwo.twelfth || {exam_name: 12, passing_year: 2019, percentage: 70, institute: 'SRIC', university: 'UK', division: 'First', exam_type: 12}, 
+    tenth: { exam_name: 10, passing_year: 2017, percentage: 72, institute: 'RPS', university: 'UK', division: 'First', exam_type: 10}, 
+    twelfth: {exam_name: 12, passing_year: 2019, percentage: 70, institute: 'SRIC', university: 'UK', division: 'First', exam_type: 12}, 
     graduation: {}, postGraduation: {}, highest: ''
   }
   const [examData, setExamData] = useState(dummy) 

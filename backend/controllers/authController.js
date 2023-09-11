@@ -30,10 +30,10 @@ export const signUp = async (req, res) => {
 
     const jwtToken = jwt.sign(
       {
-        user_id: userModel.id,
-        name: userModel.name,
-        email: userModel.email,
-        status: userModel.status,
+        user_id: user._id,
+        name: user.name,
+        email: user.email,
+        status: user.status,
       },
       jwt_sing,
       {

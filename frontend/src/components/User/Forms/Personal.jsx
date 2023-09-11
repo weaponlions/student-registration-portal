@@ -49,7 +49,10 @@ export default function Personal({ Salert }) {
   const [userAdrs1, setUserAdrs1] = useState(address1); // permanent addrs
   const [userAdrs2, setUserAdrs2] = useState(address2); // corespond addrs
   const [disabled, setDisabled] = useState(false);
-  const [update, setUpdate] = useState(false);
+
+  const [update, setUpdate] = useState(false); 
+  const [serverdata, setServerdata] = useState(null)
+
   const [trigger, setTrigger] = useState(true); // corespond addrs same
   const location = useLocation();
   const navigate = useNavigate();
@@ -71,17 +74,17 @@ export default function Personal({ Salert }) {
       userInfo({})
         .then(({ data }) => {
           const { result } = data;
-          if (result.length != 0) {
-            console.log(result);
+          if (result.length != 0) {  
             setUserAdrs1(result[0].permanent);
             setUserAdrs2(result[0].correspond);
             setUserData({...result[0].userData, dob: result[0].userData.dob.split('T')[0]});
+            setServerdata({userAdrs1: result[0].permanent, userAdrs2: result[0].correspond, userData: {...result[0].userData, dob: result[0].userData.dob.split('T')[0]}});
             setDisabled(true);
-            setUpdate(true);
+            // setUpdate(true);
           }
         })
         .catch((err) => {
-          console.log(err.message);
+          // console.log(err.message);
         });
     }
   }, []);
@@ -143,30 +146,44 @@ export default function Personal({ Salert }) {
     Salert.info("Please check all info before next step!!"); 
   };
 
-  const handleSubmit = async () => {
-    const prom = new Promise(async (res, rej) => {
-      try {
-        const { data } = await initialize_StepOne({
-          userData,
-          permanent: userAdrs1,
-          correspond: userAdrs2,
-          update,
-        });
-        console.log(data);
-        res();
-      } catch (error) {
-        rej(error);
-      }
-    });
-    prom
-      .then((res) => {
+  const handleSubmit = async () => { 
+    let custom_params = {}
+    if (serverdata != null){
+      let obj1 = {userAdrs1, userAdrs2, userData};
+      let obj2 = serverdata;
+      if(JSON.stringify(obj1) === JSON.stringify(obj2)) {
         Salert.success("Personal Detail Save Successfully");
         navigate("../user/step_two");
-      })
-      .catch((err) => {
-        console.log(err.message);
-        Salert.error(err.message);
-      });
+        return;
+      }
+      else {
+        custom_params = {update: true, userData: {}, permanent: {}, correspond: {}};
+
+        for (const key in userData) {
+          if(userData[key] !== serverdata.userData[key])
+            custom_params.userData[key] = userData[key];
+        }
+        for (const key in userAdrs1) {
+          if(userAdrs1[key] !== serverdata.userAdrs1[key])
+            custom_params.permanent[key] = userAdrs1[key];
+        }
+        for (const key in userAdrs2) {
+          if(userAdrs2[key] !== serverdata.userAdrs2[key])
+            custom_params.correspond[key] = userAdrs2[key];
+        }
+      }
+    } 
+    else{
+      custom_params = { userData, permanent: userAdrs1, correspond: userAdrs2, update: false };
+    }  
+    initialize_StepOne(custom_params)
+    .then(() => {
+      Salert.success("Personal Detail Save Successfully");
+      navigate("../user/step_two"); 
+    })
+    .catch((err) => {
+      Salert.error(err.message); 
+    })
   };
 
   const sameAdrs = (e) => {
@@ -380,6 +397,7 @@ export default function Personal({ Salert }) {
                   value={trigger}
                   role="switch"
                   id="flexSwitchCheckChecked"
+                  disabled={disabled}
                 />
               </div>
               <Field

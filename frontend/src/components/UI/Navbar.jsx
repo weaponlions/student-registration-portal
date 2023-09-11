@@ -2,7 +2,7 @@ import {useContext,useEffect, useState} from 'react'
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './../../context-api/UserState'; 
-import { BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify } from 'react-icons/bs';
+import { BsJustify } from 'react-icons/bs';
 
 export default function Navbar(props) {
 

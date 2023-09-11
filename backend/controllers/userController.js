@@ -8,9 +8,22 @@ import { isRequired } from '../middleware/fieldMiddleware.js';
 export const userStepOne = async (req, res) => {
     try {
         const old = await infoModel.findOne({user_id: req.body.user_id}) || undefined;
-        const update = req.body || undefined;
-        if (old && !update)
-            return res.json({message: 'Please user is old', error: 'exist'});
+        const update = req.body.update; 
+        if (old && update == true){
+            let updatedData = {};
+            
+            if(Object.keys(req.body.userData).length !== 0){
+                updatedData = {...req.body.userData};
+            }
+            for (const keys in (req.body.permanent)){
+                updatedData[`permanent.${keys}`] = req.body.permanent[keys];
+            }
+            for (const keys in (req.body.correspond)){
+                updatedData[`correspond.${keys}`] = req.body.correspond[keys];
+            } 
+            const result = await infoModel.updateOne({user_id: req.body.user_id}, {$set: updatedData});
+            return res.json({status: 'success', result}) 
+        }
 
         const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews', 'dob', 'whatsapp']);
         const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address']);
@@ -19,16 +32,10 @@ export const userStepOne = async (req, res) => {
         data.correspond = correspond;
         data.user_id = req.body.user_id;
         
-        if (update === true) {
-            old.updateOne(data)
-            await old.save()
-            return res.json({status: 'success', data: [old]})  
-        }
-        else {
-            const new_data = infoModel(data);
-            await new_data.save() 
-            return res.json({status: 'success', data: [new_data]})  
-        }
+        const result = infoModel(data);
+        await result.save() 
+        return res.json({status: 'success', result})  
+        
     } catch (err) {
         console.log(err.message); 
         return res.status(400).json({status: 'failed', error: err.message})
@@ -72,13 +79,12 @@ export const userStepThree = async (req, res) => {
 export const userInformation = async (req, res) => {
     try {
         const { user_id } = req.body;
-        const userData = await infoModel.findOne({user_id}).lean()
+        const userData = await infoModel.findOne({user_id: user_id}, {user_id: 0, _id: 0, __v: 0, updated_at: 0}).lean();
         if (userData) {
             const permanent = userData?.permanent
             const correspond = userData?.correspond
             delete userData.correspond
             delete userData.permanent
-            console.log(userData);
             return res.json({result: [{ userData, permanent, correspond }]});            
         }
         else
@@ -125,5 +131,3 @@ export const fileReciever = async (req, res) => {
             
     }
 }
-
-

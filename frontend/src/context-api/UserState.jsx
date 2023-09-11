@@ -45,7 +45,7 @@ export default function UserState(props) {
 
   const logoutUser = () => { 
     localStorage.removeItem('jwtToken');
-    axios.defaults = {jwtToken: ''};
+    axios.defaults.headers = {jwtToken: ''};
     setUserdata({}); 
   }
  
