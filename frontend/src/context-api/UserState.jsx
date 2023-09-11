@@ -22,18 +22,10 @@ export default function UserState(props) {
     }
     axios.defaults.headers = {jwtToken: token} 
     const user = jwtDecode(token); 
-    setUserdata({name: user.name, email: user.email, status: user.status}); 
+    getSetUserData({name: user.name, email: user.email, status: user.status}); 
   }
- 
-  const personalData = {
-    userData: {name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '2003-08-13', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
-    userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
-    userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
-  }
-  const [formOne, setFormOne] = useState({})
   
-  
-  const getUser = async () => {  
+  const validateUser = async () => {  
     try { 
       let token = localStorage.getItem('jwtToken') || undefined; 
       if (!token) {
@@ -57,12 +49,18 @@ export default function UserState(props) {
     setUserdata({}); 
   }
  
+  const getSetUserData = (data) => {
+    if (data) {
+      setUserdata(data);
+    }
+    return userdata;
+  }
  
   return (
     <UserContext.Provider
       value={{
-        getUser, userdata, setUserdata, setFormOne,
-        formOne, loader, setLoader, formTwo, setFormTwo, loadUser,
+        validateUser, userdata, setUserdata, getSetUserData,
+        loader, setLoader, loadUser,
         selectedCourse, setSelectedCourse, logoutUser
       }}
     >
@@ -72,3 +70,11 @@ export default function UserState(props) {
 }
 
 export { UserContext };
+
+
+
+// const personalData = {
+//   userData: {name: 'Harsh Saini', father: 'Naresh Saini', mother: 'Pushpa Saini', gender: 'M', dob: '2003-08-13', marital: 'SINGLE', category: 'OBC', pwd: 'NO', ews: 'NO', religion: 'Hinduism', mobile: '8433480253', whatsapp: '8433480253' },
+//   userAdrs1: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'},
+//   userAdrs2: {full_address: 'Mohammadpur Kunhari', state: 'UK', city: 'Haridwar', district: 'Haridwar', pincode: '247663'}
+// }

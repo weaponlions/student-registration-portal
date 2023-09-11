@@ -7,20 +7,19 @@ import { BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify
 export default function Navbar(props) {
 
   const context = useContext(UserContext)
-  const { userdata, getUser, logoutUser } = context;
+  const { getSetUserData, validateUser, logoutUser } = context;
 
   let navigate= useNavigate();
   const [islogin, setIslogin] = useState(false);
-
+  const userdata = getSetUserData();
+  
   const LogoutBtn = () => {
     logoutUser();
     navigate("/login");
   }
   
-
-
   useEffect(() => {
-    (async () => { setIslogin(await getUser()) })()
+    (async () => { setIslogin(await validateUser()) })()
   }, [])
   
 

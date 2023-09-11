@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 const Field = ({label, name, disabled, value, isValid, handleChange, adrs, required=true, min, max, step, type='text'}) => {
 
   useEffect(() => { 
-    let ele = document.getElementById(`validation${name}_${adrs}`); 
+    let ele = document.getElementById(`validation${name}${adrs ? `_${adrs}`: ''}`); 
     if (required == false) {
       ele.removeAttribute('required') 
     } 
@@ -19,14 +19,14 @@ const Field = ({label, name, disabled, value, isValid, handleChange, adrs, requi
   }
    
   return (
-    <div className="col-md-4">
-      <label htmlFor={`validation${name}_${adrs}`} className={`form-label ${required && 'mandatory'}`}>
+    <div className="col mb-3">
+      <label htmlFor={`validation${name}${adrs ? `_${adrs}`: ''}`} className={`form-label ${required && 'mandatory'}`}>
         {label}
       </label>
       <input
         type={type}
         className="form-control"
-        id={`validation${name}_${adrs}`}
+        id={`validation${name}${adrs ? `_${adrs}`: ''}`}
         name={name}
         disabled={disabled || false}
         value={value || ''}

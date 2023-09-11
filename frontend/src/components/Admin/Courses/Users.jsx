@@ -46,9 +46,9 @@ function IT() {
           </form>
         </div>
       </div>
-
+{/* 
       <div>
-        <table className="table  table-hover  ">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th scope="col">S no.</th>
@@ -84,7 +84,7 @@ function IT() {
             })}
           </tbody>
         </table>
-      </div>
+      </div> */}
     </div>
   );
 }

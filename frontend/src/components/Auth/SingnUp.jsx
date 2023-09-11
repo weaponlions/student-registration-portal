@@ -12,17 +12,15 @@ import {
 } from "react-simple-captcha";
 import { signUpUser } from "../../api";
 
-function SingnUp(props) {
-  const {Salert}=props;
-
+function SingnUp({ Salert }) { 
   const [credientials, setCredientials] = useState({
     name: "",
     email: "",
     password: "",
   });
   const [CaptchaValue, setCaptchaValue] = useState("");
+  const { validateUser, loadUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const { getUser, loadUser } = useContext(UserContext);
 
   const onchangeButton = (e) => {
     if (e.target.name == "user_captcha_input") {
@@ -44,7 +42,7 @@ function SingnUp(props) {
       .then (({ data }) => {
         if (data.jwtToken) {
           loadUser(data.jwtToken);
-          Salert( 'Success','SignUp Successfull','success');
+          Salert.success('SignUp Successfull');
           navigate("/dashboard");
         } else {
           alert(data.error);
@@ -53,21 +51,21 @@ function SingnUp(props) {
       .catch(({ response={} }) => {
         const { status, data } = response;
         if (status === 400)
-          Salert('Error', data.error, 'error');
+          Salert.error(data.error);
         else if (status === 500) 
-          Salert('Error', data.error, 'error');
+          Salert.error(data.error);
         else 
-          Salert('Error', 'Internal Server Error', 'error');
+          Salert.error('Internal Server Error');
       })
     } else {
-      Salert( 'ERROR','Captcha Does Not Match','error')
+      Salert.error('Captcha Does Not Match')
       setCaptchaValue("");
     }
   };
 
   useEffect(() => { 
     const jwtVerify = async () => {
-      const result = await getUser()
+      const result = await validateUser()
       if (result == true) {
         navigate('/dashboard')
       }  

@@ -15,7 +15,7 @@ const Select = ({
 
   
   useEffect(() => { 
-    let ele = document.getElementById(`validation${name}_${adrs}`); 
+    let ele = document.getElementById(`validation${name}${adrs ? `_${adrs}`: ''}`); 
     if (required == false) {
       ele.removeAttribute('required') 
     } 
@@ -32,11 +32,11 @@ const Select = ({
   }
  
   return (
-    <div className="col-md-4">
-      <label htmlFor={`validation${name}_${adrs}`} className="form-label mandatory"> {label} </label>
+    <div className="col mb-3">
+      <label htmlFor={`validation${name}${adrs ? `_${adrs}`: ''}`} className="form-label mandatory"> {label} </label>
       <select
         name={name}
-        id={`validation${name}_${adrs}`}
+        id={`validation${name}${adrs ? `_${adrs}`: ''}`}
         className="form-select" 
         value={value || ""}
         onChange={handleAdrs}
@@ -50,8 +50,7 @@ const Select = ({
           simple.map((ele, i) => {
             return (
               <option key={i} value={ele}>
-                {" "}
-                {ele}{" "}
+                {ele}
               </option>
             );
           })}
@@ -60,8 +59,7 @@ const Select = ({
           multi.map((ele, i) => {
             return (
               <option key={i} value={ele.short}>
-                {" "}
-                {ele.full}{" "}
+                {ele.full}
               </option>
             );
           })}

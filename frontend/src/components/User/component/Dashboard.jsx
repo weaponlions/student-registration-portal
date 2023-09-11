@@ -6,10 +6,9 @@ import { AiFillCaretRight } from "react-icons/ai";
 
 export default function Dashboard(props) {
   const context = useContext(UserContext);
-  const { getUser, userdata } = context;
+
+  // const { validateUser, getSetUserData } = context;
   let navigate = useNavigate();
-
-
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
 
   const OpenSidebar = () => {

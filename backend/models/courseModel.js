@@ -12,7 +12,7 @@ const courseSchema = mongoose.Schema({
     duration_type: { type: String, required: true, enum: ['y', 'm', 'd', 'h'], set: (val) => val.toLowerCase() },
     fees: { type: Number, required: true },
     eligibility: { type: [String] },
-    category: { type: String, required: true, ref: 'Course_Category', set: (val) => val.toLowerCase() },
+    category: { type: mongoose.Schema.ObjectId, required: true, ref: 'Course_Category', set: (val) => val.toLowerCase() },
     description: { type: String, required: true },
     created_at: { type: Date, required: true, default: Date.now },
 })

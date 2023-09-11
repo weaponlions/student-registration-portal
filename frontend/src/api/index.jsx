@@ -8,7 +8,10 @@ export const signUpUser = async (data) => axios.post('auth/signup', data);
 
 export const userInfo = async () => axios.post('user/user_info');
 export const getCourses = async ({category, course_name}) => axios.get(`course/?${category?`category=${category}`:''}${course_name?`course_name=${course_name}`:''}`);
+export const createCourse = async (data) => axios.post(`course/`, data);
+
 export const getCategories = async () => axios.get(`course/category`);
+export const createCategories = async (data) => axios.post(`course/category`, data);
 
 export const initialize_StepOne = async (data) => axios.post('/user/step_one', data);
 export const initialize_StepTwo = async (data) => axios.post('/user/step_two', data);

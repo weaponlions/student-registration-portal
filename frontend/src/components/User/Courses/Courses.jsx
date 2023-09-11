@@ -68,7 +68,7 @@ const Courses = () => {
           {
             categoryList.length > 0 && categoryList.map((e, i) => {
               return (
-                <option key={i} value={e.category}>{(e.category.replace('-', ' ')).toUpperCase()} COURSE</option>
+                <option key={i} value={e._id}>{e.category.toUpperCase()} COURSE</option>
               )
             })
           }

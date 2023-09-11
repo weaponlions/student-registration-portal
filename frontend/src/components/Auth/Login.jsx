@@ -10,13 +10,14 @@ import {
   validateCaptcha,
 } from "react-simple-captcha"; 
 import { loginUser } from "../../api";
+import jwtDecode from "jwt-decode";
 
-function Login(props) {
-  const {Salert}=props;
+function Login({ Salert }) {
+  
   const [credientials, setCredientials] = useState({ email: "sainfans@gmail.com", password: "12345" });
   const [CaptchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
-  const { getUser, loadUser } = useContext(UserContext);
+  const { validateUser, loadUser } = useContext(UserContext);
 
   const onchangeButton = (e) => {
     if (e.target.name == "user_captcha_input") {
@@ -34,27 +35,29 @@ function Login(props) {
       loginUser({ email: credientials.email, password: credientials.password })
         .then(async ({data}) => {
           loadUser(data.jwtToken);
-          Salert( 'Success','SignIn Successfull','success') 
+          const { status } = jwtDecode(data.jwtToken);
+          console.log({status});
+          Salert.success('SignIn Successfull') 
           navigate("/dashboard");
         })
         .catch(({ response={} }) => {
           const { status, data } = response;
           if (status === 404)
-            Salert('Error', data.error, 'error');
+            Salert.error(data.error);
           else if (status === 400) 
-            Salert('Error', data.error, 'error');
+            Salert.error(data.error);
           else 
-            Salert('Error', 'Internal Server Error', 'error');
+            Salert.error('Internal Server Error');
         }) 
     } else {
-      Salert( 'ERROR','Captcha Does Not Match','error') 
+      Salert.error('Captcha Does Not Match') 
       setCaptchaValue("");
     }
   };
 
   useEffect(() => {
     const jwtVerify = async () => {
-      const result = await getUser()
+      const result = await validateUser()
       if (result == true) {
         navigate('/dashboard')
       }  

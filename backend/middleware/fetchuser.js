@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-// import { userModel } from '../models/userModel.js';
+import { userModel } from '../models/userModel.js';
  
 const jwt_sing = "nielit_123";
 
@@ -25,7 +25,7 @@ export const verifyJwt = async (req, res, next) => {
   try {
     jwt.verify(jwtToken, jwt_sing);
     const { user_id } = jwt.decode(jwtToken);
-    const user = await User.findById(user_id).lean();
+    const user = await userModel.findById(user_id).lean();
     req.body.user_id = user._id;
     req.body.user_name = user.name; 
     next()

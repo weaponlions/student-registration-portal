@@ -27,57 +27,75 @@ import Template from "./components/User/Template";
     import Qualification from "./components/User/Forms/Qualification";
   // Course
     import Courses from "./components/User/Courses/Courses";
-  // Item
-    import Table from "./components/User/Items/Table";
   // component
     import Dashboard from "./components/User/component/Dashboard"; 
+    import UserProfile from "./components/User/profile/UserProfile"; 
 
 //other
   import Swal from 'sweetalert2'; 
 
 function App() {
   const { loadUser } = useContext(UserContext)
+  
+  class ShowAlert {
+
+    error = (message) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: message,
+      })
+    }
+
+    success = (message) => {
+      Swal.fire({
+        icon:'success',
+        title: "Success",
+        showConfirmButton: false,
+        timer: 1500,
+        text: message
+      })
+    }
+
+    info = (message) => {
+      Swal.fire({
+        icon: 'info',
+        title: 'Information!!',
+        text: message,
+      })
+    }
+  }
+  const Salert = new ShowAlert;
+ 
   useEffect(() => {
     loadUser()
   }, [])
-
-  
-const ShowAlert =(title,text,icon)=>{
-  
-  Swal.fire({
-    title: title,
-    text: text,
-    icon: icon,
-   
-  })
-}
-  
+ 
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/online-payment" element={<Payment Salert={ShowAlert}/>} />
-          <Route exact path="/online-payment-success" element={<Success Salert={ShowAlert} />} />
+          <Route exact path="/online-payment" element={<Payment Salert={Salert}/>} />
+          <Route exact path="/online-payment-success" element={<Success Salert={Salert} />} />
           <Route exact path="/about" element={<About />} />
           
-          <Route exact path="/admin" element={<AdminTemplate Salert={ShowAlert}/>} > 
-            <Route exact path="/admin" element={<AdminHome Salert={ShowAlert}/>} /> 
-            <Route exact path="/admin/courses" element={<AdminCourses />} />
+          <Route exact path="/admin" element={<AdminTemplate Salert={Salert}/>} > 
+            <Route exact path="/admin" element={<AdminHome Salert={Salert}/>} /> 
+            <Route exact path="/admin/courses" element={<AdminCourses Salert={Salert} />} />
             <Route exact path="/admin/courses/users" element={<Users />} />
           </Route>
 
-          <Route exact path="/signup" element={<SingnUp Salert={ShowAlert}/>} /> 
-          <Route exact path="/login" element={<Login Salert={ShowAlert}/>} />
+          <Route exact path="/signup" element={<SingnUp Salert={Salert}/>} /> 
+          <Route exact path="/login" element={<Login Salert={Salert}/>} />
 
-          <Route exact path="/dashboard" element={<Template Salert={ShowAlert}/>}>
-            <Route exact path="/dashboard" element={<Dashboard Salert={ShowAlert}/>} />
-            {/* <Route exact path="/dashboard/profile" element={<UserProfile Salert={ShowAlert}/>}></Route> */}
-            <Route exact path="/dashboard/courses" element={<Courses Salert={ShowAlert}/>} />
-            <Route exact path="/dashboard/user/step_one" element={<Personal Salert={ShowAlert} />} />
-            <Route exact path="/dashboard/user/step_two" element={<Qualification Salert={ShowAlert}/>} /> 
-            <Route exact path="/dashboard/user/step_three" element={<Documents Salert={ShowAlert}/>} />
-            <Route exact path="/dashboard/user/preview" element={<Table Salert={ShowAlert}/>} />
+          <Route exact path="/dashboard" element={<Template Salert={Salert}/>}>
+            <Route exact path="/dashboard" element={<Dashboard Salert={Salert}/>} />
+            <Route exact path="/dashboard/profile" element={<UserProfile Salert={Salert}/>}></Route>
+            <Route exact path="/dashboard/courses" element={<Courses Salert={Salert}/>} />
+            <Route exact path="/dashboard/user/step_one" element={<Personal Salert={Salert} />} />
+            <Route exact path="/dashboard/user/step_two" element={<Qualification Salert={Salert}/>} /> 
+            <Route exact path="/dashboard/user/step_three" element={<Documents Salert={Salert}/>} /> 
           </Route>
         </Routes>
       </BrowserRouter>

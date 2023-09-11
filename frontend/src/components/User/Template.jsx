@@ -1,15 +1,13 @@
 import  { useEffect, useContext, useState } from 'react'
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { UserContext } from '../../context-api/UserState';
-import Sidebar from './Items/Sidebar';
-import Footer from '../UI/Footer';
+import Sidebar from './Items/Sidebar'; 
 import Navbar from '../UI/Navbar';
-import "./Items/animation.css";
-import { initialize_StepOne, userInfo } from '../../api/index';
+import "./Items/animation.css"; 
 
 export default function Template() {
 
-  const { getUser, userdata, setFormOne } = useContext(UserContext) 
+  const { validateUser } = useContext(UserContext) 
   const navigate = useNavigate(); 
   const location = useLocation();
 
@@ -19,15 +17,13 @@ export default function Template() {
     setOpenSidebarToggle(!openSidebarToggle)
   }
  
-
   useEffect(() => {
-    const jwtVerify = async () => {
-      const result = await getUser();
+    (async () => {
+      const result = await validateUser();
       if (!result) { 
         navigate("/login");
       } 
-    }
-    jwtVerify()
+    })()
   }, [location])
  
   return (

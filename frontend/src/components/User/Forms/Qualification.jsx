@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import Field from "../Items/Field";
-import Select from "../Items/Select";
+import Field from "../../Item/Field";
+import Select from "../../Item/Select";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context-api/UserState";
 import { initialize_StepTwo } from "../../../api";

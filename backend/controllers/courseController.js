@@ -29,15 +29,16 @@ export const createCourse = async (req, res) => {
       "course_name",
       "duration_time",
       "duration_type",
+      "description",
       "category",
-      "fees",
+      "fees"
     ]);
-    const record = courseModel(data);
-    await record.save(); 
-    return res.json({ status: "done", data: record });
+    const result = courseModel(data);
+    await result.save(); 
+    return res.status(200).json({ status: "done", result });
   } catch (err) {
     console.log(err.message);
-    return res.json({ status: "failed", error: err.message });
+    return res.status(400).json({ status: "failed", error: err.message });
   }
 };
 
@@ -101,7 +102,7 @@ export const createCategory = async (req, res) => {
     const data = isRequired(req.body, ["category"]);
     const result = categoryModel(data);
     await result.save();
-    return res.json({ status: "done", data: result });
+    return res.json({ status: "done", result });
   } catch (err) {
     console.log(err.message);
     return res.json({ status: "failed", error: err.message });
@@ -131,7 +132,7 @@ export const getCategories = async (req, res) => {
       result = await categoryModel.find({ category: category }, {category: 1, _id: 0});
     }
     else {
-      result = await categoryModel.find({}, {category: 1, _id: 0}).lean();
+      result = await categoryModel.find({}, {category: 1}).lean();
     }
     return res.json({ status: "done", result });
   } catch (err) {

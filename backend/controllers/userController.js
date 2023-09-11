@@ -12,14 +12,13 @@ export const userStepOne = async (req, res) => {
         if (old && !update)
             return res.json({message: 'Please user is old', error: 'exist'});
 
-        const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews', 'dob']);
+        const data = isRequired(req.body.userData, ['name', 'father', 'mother', 'mobile', 'gender', 'category', 'marital', 'religion', 'pwd', 'ews', 'dob', 'whatsapp']);
         const permanent = isRequired(req.body.permanent, ['state', 'district', 'city', 'pincode', 'full_address']);
         const correspond = isRequired(req.body.correspond, ['state', 'district', 'city', 'pincode', 'full_address']);
         data.permanent = permanent;
         data.correspond = correspond;
         data.user_id = req.body.user_id;
-        console.log({update});
-        console.log({data});
+        
         if (update === true) {
             old.updateOne(data)
             await old.save()
@@ -34,8 +33,7 @@ export const userStepOne = async (req, res) => {
         console.log(err.message); 
         return res.status(400).json({status: 'failed', error: err.message})
     }
-}
-
+} 
 
 // user_id, exam_name, institute, university, passing_year, percentage, division, exam_type
 export const userStepTwo = async (req, res) => {
@@ -70,7 +68,6 @@ export const userStepThree = async (req, res) => {
         return res.json({status: 'failed', error: err.message})
     }
 }
-
 
 export const userInformation = async (req, res) => {
     try {

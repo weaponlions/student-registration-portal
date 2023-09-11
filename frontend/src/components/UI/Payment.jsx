@@ -5,19 +5,19 @@ import { UserContext } from '../../context-api/UserState';
 
 
 const Payment = () => { 
-    const { userdata, selectedCourse } = useContext(UserContext)
+    const { getSetUserData, selectedCourse } = useContext(UserContext)
     const location = useLocation();
     const navigate = useNavigate()
 
     const { course_name, course_id } = {...selectedCourse};
+    const userdata = getSetUserData();
 
     useEffect(() => {
         if (!course_id) {
             navigate('/dashboard')
         } 
     }, [])
-    
-    
+     
     const paymentResponse = (res) => {
         console.log(res);
         navigate('/online-payment-success', {state: {order_id: res.order_id}})
