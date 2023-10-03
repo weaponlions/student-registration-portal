@@ -1,4 +1,5 @@
 import "./style/App.css";
+
 import { useContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserContext } from "./context-api/UserState";
@@ -18,6 +19,7 @@ import AdminTemplate from "./components/Admin/Template";
 import AdminHome from "./components/Admin/component/Home";
 import AdminCourses from "./components/Admin/Courses/Courses"; 
 import Users from './components/Admin/Courses/Users';
+import Batches from './components/Admin/component/Batches'
 
 // User Folder 
 import Template from "./components/User/Template";
@@ -33,6 +35,9 @@ import Template from "./components/User/Template";
 
 //other
   import Swal from 'sweetalert2'; 
+import FResult from "./components/UI/FResult";
+import AppHistory from "./components/User/Items/AppHistory";
+import AddBatchForm from "./components/Admin/component/AddBatchForm";
 
 function App() {
   const { loadUser } = useContext(UserContext)
@@ -79,10 +84,13 @@ function App() {
           <Route exact path="/online-payment" element={<Payment Salert={Salert}/>} />
           <Route exact path="/online-payment-success" element={<Success Salert={Salert} />} />
           <Route exact path="/about" element={<About />} />
+          <Route exact path="/Fresult" element={<FResult/>} />
           
           <Route exact path="/admin" element={<AdminTemplate Salert={Salert}/>} > 
             <Route exact path="/admin" element={<AdminHome Salert={Salert}/>} /> 
             <Route exact path="/admin/courses" element={<AdminCourses Salert={Salert} />} />
+            <Route exact path="/admin/batches" element={<Batches Salert={Salert} />} />
+            <Route exact path="/admin/batches/create" element={<AddBatchForm Salert={Salert} />} />
             <Route exact path="/admin/courses/users" element={<Users />} />
           </Route>
 
@@ -96,6 +104,7 @@ function App() {
             <Route exact path="/dashboard/user/step_one" element={<Personal Salert={Salert} />} />
             <Route exact path="/dashboard/user/step_two" element={<Qualification Salert={Salert}/>} /> 
             <Route exact path="/dashboard/user/step_three" element={<Documents Salert={Salert}/>} /> 
+            <Route exact path="/dashboard/user/enroll" element={<AppHistory Salert={Salert}/>} /> 
           </Route>
         </Routes>
       </BrowserRouter>

@@ -72,7 +72,7 @@ export default function Qualification() {
     e.preventDefault();
     await initialize_StepTwo({ tenth: examData.tenth, twelfth: examData.twelfth })
       .then((res) => {
-        setFormTwo({tenth: examData.tenth, twelfth: examData.twelfth})
+        // setFormTwo({tenth: examData.tenth, twelfth: examData.twelfth})
         navigate('../user/step_three') 
         console.log(res);
       })

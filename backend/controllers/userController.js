@@ -1,4 +1,5 @@
 import { docModel, infoModel, educationModel } from '../models/userModel.js';
+import { paymentModel } from '../models/paymentModel.js'
 import { isRequired } from '../middleware/fieldMiddleware.js';
 
 // user_id, name, father, mother, mobile, whatsapp, gender
@@ -77,22 +78,60 @@ export const userStepThree = async (req, res) => {
 }
 
 export const userInformation = async (req, res) => {
+ 
+
     try {
         const { user_id } = req.body;
-        const userData = await infoModel.findOne({user_id: user_id}, {user_id: 0, _id: 0, __v: 0, updated_at: 0}).lean();
-        if (userData) {
-            const permanent = userData?.permanent
-            const correspond = userData?.correspond
-            delete userData.correspond
-            delete userData.permanent
-            return res.json({result: [{ userData, permanent, correspond }]});            
+        const { ask } = req.query;
+        const responseArr = [];
+        if (ask == "personal" || ask == "all") {
+            const userData = await infoModel.findOne({user_id: user_id}, {user_id: 0, _id: 0, __v: 0, updated_at: 0}).lean();
+            if (userData) {
+                const permanent = userData?.permanent
+                const correspond = userData?.correspond
+                delete userData.correspond
+                delete userData.permanent
+                responseArr.push({ userData, permanent, correspond }); 
+            } 
+            
+            if (ask == "personal")
+                return res.json({result: [responseArr[0]]});
         }
-        else
-            return res.json({result: []})
+
+        if (ask == "education" || ask == "all") {
+            const educationData = await educationModel.findOne({user_id: user_id}, {user_id: 0, _id: 0, __v: 0, updated_at: 0}).lean();
+            
+            if (ask == "education"){
+                if (educationData == null) {
+                    return res.json({result: []});
+                }
+                return res.json({result: [educationData]});
+            }
+
+            if (educationData)
+                responseArr.push(educationData);  
+
+        }
+
+        if (ask == "document" || ask == "all") {
+            const documentData = await docModel.findOne({user_id: user_id}, {user_id: 0, _id: 0, __v: 0, updated_at: 0}).lean();
+            
+            if (ask == "document"){
+                if (documentData == null) {
+                    return res.json({result: []});
+                }
+                return res.json({result: [documentData]});
+            }
+
+            if (documentData != null)
+                responseArr.push(documentData); 
+        }
+
+        return res.json({result: responseArr});
     } catch (err) {
         console.log(err.message);
         return res.status(400).json({error: err.message})
-    }
+   }
 }
 
 import fs from 'fs';
@@ -115,11 +154,11 @@ export const fileReciever = async (req, res) => {
         let model = await docModel.find({user_id});
 
         if (model.length == 1) {
-            model = await docModel.findOneAndUpdate({user_id}, {[fieldname]: path});
+            model = await docModel.findOneAndUpdate({user_id}, {[fieldname]: path.split("./upload")[1]});
             model.save();
         }
         else{
-            model = await docModel.create({user_id, [fieldname]: path}) 
+            model = await docModel.create({user_id, [fieldname]: path.split("./upload")[1]}) 
         } 
         fs.writeFileSync(path, file.buffer); 
         return res.status(200).json({message: 'done'})
@@ -130,4 +169,21 @@ export const fileReciever = async (req, res) => {
 
             
     }
+}
+
+
+export const AppHistory =async(req,res)=>{
+    try{
+        const userId = req.body.user_id;
+        const paymentRecords = await paymentModel.find({user_id:userId});
+
+        // const Enrolled_Courses = paymentRecords[0].course_name;
+        // const Enrolled_Courses = paymentRecords.map((e)=>{return e.course_name})
+    
+        return res.status(200).json(paymentRecords);
+    } catch (err) {
+        return res.status(401).json({error: err.message})
+    }
+
+
 }

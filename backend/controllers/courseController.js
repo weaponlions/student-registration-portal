@@ -50,27 +50,36 @@ export const createBatch = async (req, res) => {
       "batch_name",
       "end_date",
       "start_date",
+    
     ]);
 
-    data["start_date"] = `${data.start_date}.000+00:00`;
-    data["end_date"] = `${data.end_date}.000+00:00`;
+    
+    // data["start_date"] = `${data.start_date}T00:00:00.000+00:00`
+    // data["end_date"] = `${data.end_date}T00:00:00.000+00:00`
+
+
+    data["fees"] = (
+      await courseModel.findById(data.course_id, "fees")
+    ).fees;
 
     let isUnique = await batchModel.find({
-      course_id: data.course_id,
-      end_date: { $gte: data.start_date },
+
+      course_id: data.course_id
+      // end_date: { $gte: data.start_date },
+      
+
     });
+    
     if (isUnique.length > 0) throw Error("Batch is Exists");
 
-    data["batch_fees"] = (
-      await courseModel.findById(data.course_id, "course_fees")
-    ).course_fees;
+   
     data["status"] = "ongoing";
     const result = batchModel(data);
     await result.save();
-    return res.json({ status: "done", data: result });
+    return res.json({ status: "success",message: "Successful Batch Created", data: result });
   } catch (err) {
     console.log(err.message);
-    return res.json({ status: "failed", error: err.message });
+    return res.json({ status: "failed",message: "Batch failed", error: err.message });
   }
 };
 

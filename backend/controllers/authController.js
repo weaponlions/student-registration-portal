@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import { isRequired } from "../middleware/fieldMiddleware.js";
+import { otpModel } from "../models/otpModel.js";
 
 const jwt_sing = "nielit_123";
 const jwt_time = "1h";
@@ -123,3 +124,77 @@ export const singIn = async (req, res) => {
   }
 };
 
+
+export const forgetPass = async (req, res) => {
+  try {
+    const { email } = isRequired(req.body, ["email"]);
+    const user = await userModel.findOne({email})
+    if (user == null) {
+      throw Error("User not Found")
+    } 
+ 
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "nk999549@gmail.com",
+          pass: "mqitkvdjuzrzwago",
+        },
+      });
+
+      
+      await otpModel.findOneAndDelete({ email });
+
+      const otp = Math.floor(Math.random() * 1000000)
+      const user_id = user._id
+
+      const new_otp = await otpModel.create({user_id, otp});
+ 
+        await transporter.sendMail({
+          from: "<nk999549@gmail.com>", to: email,
+          subject: "User Forget Password", 
+          html: `<div style={{border: 2px solid:black}}>
+                      <h2>Dear Applicant,</h2> 
+                      <h2>Your forget Password Otp is:
+                      <br> 
+                      Otp: ${otp}</h2> 
+                    </div>`,
+        });  
+
+        console.log("Sent");
+        return res.json({message: "Otp Send"})
+
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({message: "Otp Error"})
+  }
+}
+
+export const checkOtp = async (req, res) => {
+  try {
+    const { email, otp, new_password } = isRequired(req.body, ["email", "otp", "new_password"]);
+    
+    const user = await userModel.findOne({email});
+    const old_otp = await otpModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: "User Not Found" });
+    } 
+    if (!old_otp) {
+      return res.status(404).json({ error: "User Not Found" });
+    } 
+
+    if (otp != old_otp.otp) {
+      return res.status(404).json({ error: "Otp Not MAtch" });
+    } 
+    await otpModel.findOneAndDelete({ email });
+
+    const salt = await bcrypt.genSalt(10);
+    const encryptPass = await bcrypt.hash(new_password, salt);
+    const new_user = await userModel.updateOne({email}, {$set: {password: encryptPass}})
+ 
+    return res.status(200).json({ message: done });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};

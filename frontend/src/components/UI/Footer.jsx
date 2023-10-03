@@ -1,4 +1,5 @@
 import React from 'react'
+// import "./../../style/style.css";
 import fb from './../../assets/images/social-logo/fb.png'
 import tw from './../../assets/images/social-logo/tw.png'
 import yt from './../../assets/images/social-logo/yt.png'
@@ -48,6 +49,8 @@ export default function Footer() {
         <p className="text-center text-secondary  border-top p-0 m-0" id="copyright">Copyright &copy; 2022, all rights reserved. This website design and develop by <a href="https://nielit.gov.in/haridwar/" target="_blank" className='text-decoration-none'>NIELIT Haridwar</a></p>
       </div>
     </footer>
+
+
     </div>
   )
 }

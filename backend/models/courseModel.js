@@ -15,6 +15,7 @@ const courseSchema = mongoose.Schema({
     category: { type: mongoose.Schema.ObjectId, required: true, ref: 'Course_Category', set: (val) => val.toLowerCase() },
     description: { type: String, required: true },
     created_at: { type: Date, required: true, default: Date.now },
+  
 })
 
 const batchSchema = mongoose.Schema({
@@ -27,7 +28,7 @@ const batchSchema = mongoose.Schema({
     status: { type: String, required: true, enum: ['upcoming', 'ended', 'ongoing', 'cancel'] },
     user_list: { type: [
         {
-            user_id : {type: mongoose.Schema.ObjectId, required: true }, 
+            user_id : {type: mongoose.Schema.ObjectId, required: true, ref:'Users' }, 
             applied_at: {type: Date, default: Date.now, required: true }
         }
     ]},

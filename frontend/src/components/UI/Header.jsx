@@ -42,21 +42,9 @@ export default function Header() {
                   src={lions}
                 />
               </td>
+            
 
-              <td>
-                <p style={{ fontSize: "1.2vw" }}>
-                  An Autonomous Scientific Society of Ministry of Electronics &
-                  Information Technology (MeitY), Government of India
-                </p>
-              </td>
-
-              <td style={{}}>
-                <img
-                  className="img-fluid"
-                  style={{ width: "6rem" }}
-                  src={lions}
-                />
-              </td>
+       
             </tr>
           </tbody>
         </table>

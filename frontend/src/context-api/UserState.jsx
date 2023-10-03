@@ -6,7 +6,7 @@ const UserContext = createContext();
 
 export default function UserState(props) {
   const [userdata, setUserdata] = useState({});
-  const [formTwo, setFormTwo] = useState({})
+  // const [formTwo, setFormTwo] = useState({})
   const [loader, setLoader] = useState(false) 
   const [selectedCourse, setSelectedCourse] = useState(null) 
   

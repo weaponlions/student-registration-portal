@@ -7,7 +7,7 @@ import "./Items/animation.css";
 
 export default function Template() {
 
-  const { validateUser } = useContext(UserContext) 
+  const { validateUser,userdata } = useContext(UserContext) 
   const navigate = useNavigate(); 
   const location = useLocation();
 
@@ -18,12 +18,20 @@ export default function Template() {
   }
  
   useEffect(() => {
+    if(userdata && userdata!=undefined){
+      // console.log(location)
+       const status = userdata.status;
+       if(status==="admin"){
+        navigate('/admin')
+       }
+    }
     (async () => {
       const result = await validateUser();
       if (!result) { 
         navigate("/login");
       } 
     })()
+
   }, [location])
  
   return (

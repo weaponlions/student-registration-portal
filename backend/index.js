@@ -13,8 +13,9 @@ const PORT = 5000;
 
 app.use(cors());
 app.use(express.json({limit: '2mb'}));
-
+app.use(express.static("upload"));
 app.use("/auth", authRoute);
+
 app.use("/course", multer().array() , courseRoute);
 app.use("/user", multer().any() , userRoute);
 app.use("/payment", paymentRoute);

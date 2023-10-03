@@ -6,9 +6,13 @@ axios.defaults.headers = { jwtToken: localStorage.getItem("jwtToken") };
 export const loginUser = async (data) => axios.post('auth/signin', data);
 export const signUpUser = async (data) => axios.post('auth/signup', data);
 
-export const userInfo = async () => axios.post('user/user_info');
+// export const userInfo = async () => axios.post('user/user_info');
+export const userInfo = async ({ask}) => axios.post(`user/user_info?ask=${ask}`);
+
 export const getCourses = async ({category, course_name}) => axios.get(`course/?${category?`category=${category}`:''}${course_name?`course_name=${course_name}`:''}`);
 export const createCourse = async (data) => axios.post(`course/`, data);
+export const enrollBatch = async (data) => axios.post(`course/batch/enroll`, data);
+export const createBatch = async (data) => axios.post(`course/batch/create`, data);
 
 export const getCategories = async () => axios.get(`course/category`);
 export const createCategories = async (data) => axios.post(`course/category`, data);
@@ -18,5 +22,5 @@ export const initialize_StepTwo = async (data) => axios.post('/user/step_two', d
 export const initialize_StepThree = async (data) => axios.post('/user/step_three', data);
 
 export const createOrder = async (data) => axios.post('/payment/createOrder', data);
-
+export const App_History = async(courses)=> axios.post('/user/app_history',courses);
 export { axios };

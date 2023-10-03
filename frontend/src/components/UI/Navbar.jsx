@@ -15,7 +15,7 @@ export default function Navbar(props) {
   
   const LogoutBtn = () => {
     logoutUser();
-    navigate("/login");
+    return navigate("/login");
   }
   
   useEffect(() => {
@@ -41,8 +41,8 @@ export default function Navbar(props) {
                       </li>
                       <li className="nav-item mx-2">
                         <Link className="nav-link text-light" aria-current="page" to="/about">About</Link>
-                      </li>
-                      {
+                      </li> 
+                     {
                         !islogin && (
                           <>
                             <li  className="nav-item mx-2">
@@ -66,9 +66,9 @@ export default function Navbar(props) {
                             <div className="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                               {`Hi, ${userdata.name}`}
                             </div>
-                            <ul className="dropdown-menu" >
-                              <li className="nav-item px-2">
-                                <Link className="nav-link " style={{padding:"0",margin:"0",color:"red"}}onClick={LogoutBtn}>Logout</Link>
+                            <ul className="dropdown-menu " >
+                              <li className="nav-item px-2 ">
+                                <Link className="nav-link  logout" style={{padding:"0",margin:"0"}}onClick={LogoutBtn}>Logout</Link>
                               </li>
                             </ul>
                           </li>

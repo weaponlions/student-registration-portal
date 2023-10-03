@@ -34,6 +34,11 @@ function Sidebar({openSidebarToggle, OpenSidebar,history}) {
                     <AiFillCaretRight className='icon'/>Courses
                     </Link> 
             </li>
+            <li className='sidebar-list-item'>
+            <Link to="/admin/batches" style={{textDecoration:'none',color:'white'}}>
+                    <AiFillCaretRight className='icon'/>Batches
+                    </Link> 
+            </li>
        
 
 

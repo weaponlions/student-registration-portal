@@ -14,6 +14,7 @@ export const religionList = [
 ];
 
 
+
 export const stateList = [
   {short: "AP", full:  "Andhra Pradesh",},
   {short: "AR", full:  "Arunachal Pradesh",},

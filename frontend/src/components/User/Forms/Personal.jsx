@@ -71,7 +71,7 @@ export default function Personal({ Salert }) {
   // for load data
   useEffect(() => {
     if (location.state && location.state.course_id) {
-      userInfo({})
+      userInfo({ask: "personal"})
         .then(({ data }) => {
           const { result } = data;
           if (result.length != 0) {  
@@ -114,15 +114,16 @@ export default function Personal({ Salert }) {
       currEle.name == "whatsapp"
     ) {
       currEle.value = currEle.value.replaceAll(" ", "");
-      if (isNaN(currEle.value)) return;
+      if (isNaN(currEle.value)) {return};
 
       let len = currEle.value.split("").length;
       if (currEle.name == "pincode" && len > 6) return;
       else if (
         (currEle.name == "mobile" || currEle.name == "whatsapp") &&
         len > 10
-      )
+      ){
         return;
+      }
     }
 
     if (currEle.name == "ews" || currEle.name == "pwd") {
@@ -200,13 +201,20 @@ export default function Personal({ Salert }) {
       <div style={{ position: "relative" }}>
         <div className="container my-5">
           <form className="row g-3 needs-validation" onSubmit={handleForm}>
+            <div className="col-md-4">
+
             <Field
               name={"course_name"}
               label={"Course Name"}
               value={course_name && course_name}
               required={false}
               disabled={true}
-            />
+              />
+
+              </div>
+
+            <div className="col-md-4">
+
 
             <Field
               name={"name"}
@@ -215,7 +223,12 @@ export default function Personal({ Salert }) {
               isValid={isFieldValid}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+
+              </div>
+
+            <div className="col-md-4">
+
 
             <Field
               name={"father"}
@@ -224,7 +237,12 @@ export default function Personal({ Salert }) {
               isValid={isFieldValid}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+
+              </div>
+
+            <div className="col-md-4">
+
 
             <Field
               name={"mother"}
@@ -233,7 +251,12 @@ export default function Personal({ Salert }) {
               isValid={isFieldValid}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+
+            <div className="col-md-4">
+
+
 
             <Select
               label={"Gender"}
@@ -243,7 +266,12 @@ export default function Personal({ Salert }) {
               isValid={isFieldValid}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+
+              </div>
+
+            <div className="col-md-4">
+
 
             <Field
               name={"dob"}
@@ -253,7 +281,10 @@ export default function Personal({ Salert }) {
               isValid={isFieldValid}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+              <div className="col-md-4">
+
 
             <Field
               name={"email"}
@@ -262,7 +293,11 @@ export default function Personal({ Salert }) {
               value={loginData.email}
               handleChange={handleChange}
               disabled={true}
-            />
+              />
+
+              </div>
+            <div className="col-md-4">
+
 
             <Select
               label={"Marital Status"}
@@ -272,7 +307,10 @@ export default function Personal({ Salert }) {
               simple={maritalList}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+              <div className="col-md-4">
+
 
             <Select
               label={"Category"}
@@ -282,7 +320,10 @@ export default function Personal({ Salert }) {
               simple={categoryList}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+              <div className="col-md-4">
+
 
             <Select
               label={"PWD"}
@@ -292,7 +333,10 @@ export default function Personal({ Salert }) {
               simple={["YES", "NO"]}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+              <div className="col-md-4">
+
 
             <Select
               label={"EWS"}
@@ -302,7 +346,11 @@ export default function Personal({ Salert }) {
               simple={["YES", "NO"]}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+
+              </div>
+            <div className="col-md-4">
+
 
             <Select
               label={"Religion"}
@@ -312,7 +360,10 @@ export default function Personal({ Salert }) {
               multi={religionList}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+              <div className="col-md-4">
+
 
             <Field
               name={"mobile"}
@@ -321,7 +372,10 @@ export default function Personal({ Salert }) {
               isValid={isFieldValid}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
+              </div>
+              <div className="col-md-4">
+                
 
             <Field
               name={"whatsapp"}
@@ -330,8 +384,9 @@ export default function Personal({ Salert }) {
               value={userData.whatsapp}
               handleChange={handleChange}
               disabled={disabled}
-            />
+              />
 
+              </div>
             <div className="row g-3">
               <Field
                 name={"full_address"}

@@ -40,7 +40,7 @@ const Courses = () => {
                     <div className="card-body">
                       <h5 className="card-title">{e.course_name}</h5>
                       <p className="card-text">{e.description ? e.description : "Some quick example text to build on the card title and make up the bulk of the card's content."}</p>
-                      <Link to="/dashboard/user/step_one" state={{course_id: e._id, course_name: e.course_name}} className="btn btn-danger">Apply Now</Link>
+                      <Link to="/dashboard/user/step_one"  className="btn btn-danger"  state={{course_id: e._id, course_name: e.course_name}}>Apply Now</Link>
                     </div>
                   </div>
                 </div>
@@ -63,12 +63,14 @@ const Courses = () => {
         <p style={{marginBottom:'0',color:'black'}} className="mandatory">SELECT COURSES CATEGORY</p> 
         </div>
         <div className="mx-2" >
-        <select className="form-control" onChange={(e) => setCATEGORY(e.target.value)} >
+        <select className="form-control" onChange={(e) => {setCATEGORY(e.target.value)
+}}
+>
           <option value={''}>------ Choose One -----</option>
           {
             categoryList.length > 0 && categoryList.map((e, i) => {
               return (
-                <option key={i} value={e._id}>{e.category.toUpperCase()} COURSE</option>
+                <option key={i} value={e._id} >{e.category.toUpperCase()} COURSE</option>
               )
             })
           }

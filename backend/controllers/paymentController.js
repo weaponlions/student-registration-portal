@@ -7,6 +7,7 @@ const PaymentGatway = new Razorpay({key_secret: 'Azr8oeTi1Tf7RT0zXmwfJREo', key_
 export const createOrder = async (req, res) => {
     try {
         const { user_id, course_id, course_name } = req.body
+     
         const order = await PaymentGatway.orders.create({
             amount: 5000 * 100,
             currency: 'INR',
@@ -41,9 +42,15 @@ export const fetchOrder = async (req, res) => {
 
 export const paidOrder = async (req, res) => {
     try {
-        const { user_id, order_id, payent_id, signature_hash } = req.body;
-        console.log({user_id, order_id, signature_hash});
-        const payment = await PaymentGatway.payments.fetch(payent_id)
+        // const { user_id, order_id, payent_id, signature_hash } = req.body;
+        const {user_id, razorpay_order_id
+            , razorpay_payment_id
+            , razorpay_signature
+        } = req.body
+        console.log({user_id, razorpay_order_id
+            , razorpay_payment_id
+            , razorpay_signature});
+        const payment = await PaymentGatway.payments.fetch(razorpay_payment_id)
         console.log(payment);
 
         return res.json({message: 'done'})

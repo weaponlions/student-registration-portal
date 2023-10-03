@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-    name : {type : String, require : true },
-    email: {type:  String, require : true, unique: true },
+    name : {type : String, require : true , uppercase: true},
+    email: {type:  String, require : true, unique: true, },
     password: {type: mongoose.Mixed, require : true },
     status: {type:  String, require : true, enum: ['unverified', 'verified', 'admin'], default: 'unverified' },
     created_at: {type: Date, default : Date.now },
+    App:{type:String, require:true, set:(value)=> value.concat(userSchema.path('name').json()) , default:`NWH`} 
 })
 
 

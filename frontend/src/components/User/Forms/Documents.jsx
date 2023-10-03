@@ -38,7 +38,7 @@ export default function Documents() {
     data.append(fieldname, file)
     data.append('fieldname', fieldname)
     try {
-      await axios.post('http://localhost:5000/user/recieve', data)
+      await axios.post('http://localhost:5000/user/file_reciever', data);
       return true;
     } catch (err) { 
       console.log(err);

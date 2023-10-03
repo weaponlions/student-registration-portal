@@ -13,14 +13,16 @@ const Payment = () => {
     const userdata = getSetUserData();
 
     useEffect(() => {
-        if (!course_id) {
-            navigate('/dashboard')
-        } 
+        // console.log(course_id);
+        // if (!course_id) {
+        //     navigate('/Fresult')
+        // } 
     }, [])
      
     const paymentResponse = (res) => {
         console.log(res);
-        navigate('/online-payment-success', {state: {order_id: res.order_id}})
+        // navigate('/online-payment-success', {state: {order_id: res.order_id}});
+        navigate('/online-payment-success', {state: {order_id: res.razorpay_order_id}});
     }
 
     const failedResponse = (res) => {

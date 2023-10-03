@@ -27,8 +27,8 @@ export const verifyJwt = async (req, res, next) => {
     const { user_id } = jwt.decode(jwtToken);
     
     const user = await userModel.findById(user_id).lean();
-    if (user == null)  
-        throw Error("User not found");
+    if (user == null){  
+        throw Error("User not found");}
     req.body.user_id = user._id;
     req.body.user_name = user.name; 
     next()

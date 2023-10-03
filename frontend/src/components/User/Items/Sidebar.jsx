@@ -46,7 +46,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar, history }) {
         </li>
         <li className="sidebar-list-item">
           <Link
-            to="/dashboard/history"
+            to="./user/enroll"
             style={{ textDecoration: "none", color: "white" }}
           >
             <FaHistory

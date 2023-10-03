@@ -14,7 +14,7 @@ import jwtDecode from "jwt-decode";
 
 function Login({ Salert }) {
   
-  const [credientials, setCredientials] = useState({ email: "sainfans@gmail.com", password: "12345" });
+  const [credientials, setCredientials] = useState({ email:"", password: "" });
   const [CaptchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
   const { validateUser, loadUser } = useContext(UserContext);
@@ -29,16 +29,21 @@ function Login({ Salert }) {
 
   const submitButton = async (e) => {
     e.preventDefault(); 
-    if (!(validateCaptcha(CaptchaValue) === true)) {
+    if ((validateCaptcha(CaptchaValue) === true)) {
       loadCaptchaEnginge(6);
       setCaptchaValue(""); 
       loginUser({ email: credientials.email, password: credientials.password })
         .then(async ({data}) => {
           loadUser(data.jwtToken);
-          const { status } = jwtDecode(data.jwtToken);
-          console.log({status});
+          console.log(data.jwtToken);
+          const { status } = await jwtDecode(data.jwtToken);
+
+          if(status==="admin"){
+            return navigate('/admin')
+          }
           Salert.success('SignIn Successfull') 
           navigate("/dashboard");
+          
         })
         .catch(({ response={} }) => {
           const { status, data } = response;
